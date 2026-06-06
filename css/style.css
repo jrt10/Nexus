@@ -1,102 +1,174 @@
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
 }
 
 body{
-    background:#050505;
-    color:white;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
+  background:#050505;
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
 }
 
 .login-container{
-    flex:1;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:30px 20px;
 }
 
 .login-card{
-    width:100%;
-    max-width:420px;
-    background:#111;
-    border:1px solid #222;
-    border-radius:20px;
-    padding:40px;
-    box-shadow:0 0 30px rgba(0,0,0,.5);
+  width:100%;
+  max-width:430px;
+  background:#0d0d0d;
+  border:1px solid #222;
+  border-radius:22px;
+  padding:42px;
+  box-shadow:0 0 35px rgba(0,0,0,.7);
 }
 
 .logo-area{
-    text-align:center;
-    margin-bottom:35px;
+  text-align:center;
+  margin-bottom:35px;
 }
 
 .logo{
-    width:120px;
-    margin-bottom:15px;
+  width:125px;
+  max-width:70%;
+  margin-bottom:18px;
 }
 
 .logo-area h1{
-    font-size:42px;
-    letter-spacing:3px;
-    color:#fff;
+  font-size:42px;
+  letter-spacing:2px;
+  font-weight:700;
+  color:#fff;
+  margin-top:8px;
 }
 
-.logo-area p{
-    color:#00BCD4;
-    margin-top:5px;
+.marca{
+  color:#fff;
+  font-size:20px;
+  margin-top:6px;
+}
+
+.marca span{
+  color:#00bcd4;
+  font-weight:bold;
 }
 
 .input-group{
-    margin-bottom:20px;
+  margin-bottom:22px;
 }
 
 .input-group label{
-    display:block;
-    margin-bottom:8px;
-    color:#aaa;
+  display:block;
+  margin-bottom:8px;
+  color:#cfcfcf;
+  font-size:16px;
 }
 
 .input-group input{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:10px;
-    background:#1c1c1c;
-    color:white;
+  width:100%;
+  padding:15px;
+  border:none;
+  outline:none;
+  border-radius:11px;
+  background:#1b1b1b;
+  color:#fff;
+  font-size:15px;
+}
+
+.input-group input::placeholder{
+  color:#777;
 }
 
 button{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:10px;
-    background:#00BCD4;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:11px;
+  background:#14bdd1;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:4px;
 }
 
 button:hover{
-    opacity:.9;
+  filter:brightness(1.08);
 }
 
 footer{
-    text-align:center;
-    padding:30px 20px;
-    border-top:1px solid #222;
+  text-align:center;
+  padding:32px 20px;
+  border-top:1px solid #222;
 }
 
 footer h3{
-    margin-bottom:10px;
+  margin-bottom:10px;
+  font-size:20px;
+  color:#fff;
 }
 
 footer p{
-    color:#999;
-    margin-top:5px;
+  color:#aaa;
+  margin-top:6px;
+  font-size:16px;
+}
+
+@media(max-width:600px){
+  .login-card{
+    padding:32px 24px;
+    border-radius:18px;
+  }
+
+  .logo-area h1{
+    font-size:42px;
+  }
+
+  .marca{
+    font-size:17px;
+  }
+
+  footer p{
+    font-size:14px;
+  }
+}
+.senha-container{
+  position:relative;
+}
+
+.senha-container input{
+  padding-right:50px;
+}
+
+.olho{
+  position:absolute;
+  right:15px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  user-select:none;
+}
+.senha-container{
+  position:relative;
+}
+
+.senha-container input{
+  padding-right:50px;
+}
+
+.olho{
+  position:absolute;
+  right:15px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  user-select:none;
 }
