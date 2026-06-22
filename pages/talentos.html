@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talentos - Nexus</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
+</head>
+
+<body class="sistema-body">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="../assets/logo.png" alt="Nexus">
+      <h2>Nexus</h2>
+    </div>
+
+    <nav class="menu">
+      <a href="dashboard-master.html">🏠 Dashboard</a>
+      <a href="agencias.html">🏢 Agências</a>
+      <a href="talentos.html">👥 Talentos</a>
+      <a href="#">📅 Eventos</a>
+      <a href="#">⭐ Casting</a>
+      <a href="#">🏢 Contratantes</a>
+      <a href="#">📄 Documentos</a>
+      <a href="#">🔔 Notificações</a>
+      <a href="#">💳 Financeiro</a>
+      <a href="#">📊 Relatórios</a>
+      <a href="#">⚙️ Configurações</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="linha"></div>
+
+      <p class="footer-label">Nome</p>
+      <p id="nomeUsuario">Jessyca</p>
+
+      <p class="footer-label">Função</p>
+      <p id="funcaoUsuario">Master</p>
+
+      <button class="btn-sair" id="btnSair">Sair</button>
+
+      <div class="linha"></div>
+
+      <p>Nexus v1.0</p>
+      <p>© JRTecnologia - Soluções Criativas</p>
+      <p>Desenvolvido por Jessyca Rocha Tavares</p>
+    </div>
+  </aside>
+
+  <main class="conteudo">
+
+    <header class="topo">
+      <div>
+        <h1>Talentos</h1>
+        <p>Banco geral de staffs, currículos e disponibilidade</p>
+      </div>
+
+      <button class="btn-topo" id="btnMostrarDisponiveis">
+        ⚡ Disponíveis agora
+      </button>
+    </header>
+
+    <section class="painel-filtro painel-filtro-talentos">
+      <div class="campo-busca campo-busca-principal">
+        <span>🔍</span>
+        <input
+          type="text"
+          id="campoPesquisa"
+          placeholder="Pesquisar por nome, cidade, função ou idioma"
+        >
+      </div>
+
+      <div class="filtros-talentos">
+        <select id="filtroFuncao" class="input-select">
+          <option value="">Função</option>
+        </select>
+
+        <select id="filtroIdioma" class="input-select">
+          <option value="">Idioma</option>
+          <option value="Português">Português</option>
+          <option value="Inglês">Inglês</option>
+          <option value="Espanhol">Espanhol</option>
+          <option value="Francês">Francês</option>
+          <option value="Italiano">Italiano</option>
+          <option value="Alemão">Alemão</option>
+          <option value="Libras">Libras</option>
+        </select>
+
+        <select id="filtroMei" class="input-select">
+          <option value="">MEI</option>
+          <option value="qualquer">Qualquer</option>
+          <option value="sem_mei">Sem MEI</option>
+          <option value="mei_proprio">MEI próprio</option>
+          <option value="mei_terceiro">MEI terceiro</option>
+        </select>
+
+        <select id="filtroStatus" class="input-select">
+          <option value="">Status</option>
+          <option value="aprovado">Aprovado</option>
+          <option value="pendente">Pendente</option>
+          <option value="pausado_inatividade">Pausado</option>
+          <option value="bloqueado">Bloqueado</option>
+        </select>
+      </div>
+
+      <div class="botoes-filtro">
+        <button id="btnPesquisar">Pesquisar</button>
+        <button class="btn-secundario-clean" id="btnMostrarTodos">Mostrar todos</button>
+      </div>
+    </section>
+
+    <section id="resultadoTalentos" class="grid-talentos">
+      <p class="mensagem-vazia">
+        Pesquise um talento ou clique em “Mostrar todos”.
+      </p>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="modalCurriculo">
+    <div class="modal-card modal-card-grande">
+      <div class="modal-header">
+        <div>
+          <h2 id="curriculoNome">Currículo</h2>
+          <p id="curriculoSubtitulo">Informações profissionais da staff.</p>
+        </div>
+
+        <button class="btn-fechar" id="btnFecharCurriculo">×</button>
+      </div>
+
+      <div id="conteudoCurriculo" class="curriculo-layout">
+        Carregando...
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secundario-clean" id="btnFecharCurriculoRodape">Fechar</button>
+        <button id="btnImprimirCurriculo">Gerar / imprimir currículo</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const usuario = JSON.parse(localStorage.getItem("nexus_usuario"));
+
+if (!usuario || !["master", "agencia"].includes(usuario.tipo)) {
+  window.location.href = "../index.html";
+}
+
+document.getElementById("nomeUsuario").textContent = usuario.nome || "Usuário";
+document.getElementById("funcaoUsuario").textContent =
+  usuario.tipo === "master" ? "Master" : "Agência";
+
+document.getElementById("btnSair").addEventListener("click", () => {
+  localStorage.removeItem("nexus_usuario");
+  window.location.href = "../index.html";
+});
+
+const modalCurriculo = document.getElementById("modalCurriculo");
+
+document.getElementById("btnFecharCurriculo").addEventListener("click", fecharCurriculo);
+document.getElementById("btnFecharCurriculoRodape").addEventListener("click", fecharCurriculo);
+
+document.getElementById("btnImprimirCurriculo").addEventListener("click", () => {
+  window.print();
+});
+
+function fecharCurriculo() {
+  modalCurriculo.classList.remove("ativo");
+}
+
+async function carregarFuncoesCatalogo() {
+  const { data, error } = await supabaseClient
+    .from("nexus_funcoes_catalogo")
+    .select("nome_funcao")
+    .eq("ativo", true)
+    .order("nome_funcao", { ascending: true });
+
+  if (error || !data) return;
+
+  const select = document.getElementById("filtroFuncao");
+
+  data.forEach(item => {
+    select.innerHTML += `<option value="${item.nome_funcao}">${item.nome_funcao}</option>`;
+  });
+}
+
+function selo(texto, classe = "") {
+  return `<span class="selo-talento ${classe}">${texto}</span>`;
+}
+
+function montarSelos(staff, resumo, idiomas, perfis) {
+  let selos = "";
+
+  if (resumo?.perfil_verificado) selos += selo("✔ Verificado", "azul");
+  if (resumo?.selo_experiente) selos += selo("🏆 Experiente", "dourado");
+  if (resumo?.selo_confiavel) selos += selo("⭐ Confiável", "azul");
+  if (staff.disponivel_agora) selos += selo("⚡ Disponível agora", "verde");
+  if (staff.tem_mei && staff.mei_proprio) selos += selo("📄 MEI próprio", "azul");
+  if (staff.tem_mei && !staff.mei_proprio) selos += selo("📄 MEI terceiro", "");
+  if (idiomas.some(i => ["Inglês", "Espanhol", "Libras"].includes(i.idioma))) {
+    selos += selo("🌎 Idiomas", "azul");
+  }
+
+  if (!selos) {
+    selos = selo("Perfil em análise");
+  }
+
+  return selos;
+}
+
+function primeiraFoto(staff) {
+  const fotos = staff.nexus_staff_fotos || [];
+  const principal = fotos.find(f => f.principal);
+  return principal?.url_foto || fotos[0]?.url_foto || "../assets/logo.png";
+}
+
+function renderizarTalentos(lista) {
+  const container = document.getElementById("resultadoTalentos");
+  container.innerHTML = "";
+
+  if (!lista || lista.length === 0) {
+    container.innerHTML = `
+      <p class="mensagem-vazia">
+        Nenhum talento encontrado.
+      </p>
+    `;
+    return;
+  }
+
+  lista.forEach(staff => {
+    const idiomas = staff.nexus_staff_idiomas || [];
+    const perfis = staff.nexus_staff_perfis || [];
+    const resumo = staff.nexus_staff_resumo?.[0];
+
+    const idiomaTexto = idiomas.map(i => i.idioma || i.outro_idioma).filter(Boolean).join(", ") || "-";
+    const perfilTexto = perfis.map(p => p.perfil).filter(Boolean).slice(0, 3).join(", ") || "-";
+    const media = resumo?.media_avaliacao ? Number(resumo.media_avaliacao).toFixed(1) : "-";
+
+    container.innerHTML += `
+      <article class="card-talento">
+        <div class="foto-talento-wrap">
+          <img src="${primeiraFoto(staff)}" alt="Foto staff" class="foto-talento">
+        </div>
+
+        <div class="card-talento-corpo">
+          <div class="card-talento-topo">
+            <div>
+              <h3>${staff.nome_apresentacao || staff.nome_social || staff.nome_documento || "-"}</h3>
+              <p>${staff.cidade || "-"}${staff.estado ? "/" + staff.estado : ""}</p>
+            </div>
+
+            <span class="nota-talento">⭐ ${media}</span>
+          </div>
+
+          <div class="selos-talento">
+            ${montarSelos(staff, resumo, idiomas, perfis)}
+          </div>
+
+          <div class="info-talento">
+            <p><strong>Funções:</strong> ${perfilTexto}</p>
+            <p><strong>Idiomas:</strong> ${idiomaTexto}</p>
+            <p><strong>Status:</strong> ${staff.status || "-"}</p>
+          </div>
+
+          <div class="card-talento-actions">
+            <button onclick="abrirCurriculo('${staff.id}')">Ver currículo</button>
+            <button class="btn-secundario-clean" onclick="favoritarStaff('${staff.id}')">Favoritar</button>
+            <button class="btn-secundario-clean" onclick="selecionarStaff('${staff.id}')">Selecionar</button>
+          </div>
+        </div>
+      </article>
+    `;
+  });
+}
+
+async function carregarTalentos(mostrarTodos = false, somenteDisponiveisAgora = false) {
+  const termo = document.getElementById("campoPesquisa").value.trim();
+  const funcao = document.getElementById("filtroFuncao").value;
+  const idioma = document.getElementById("filtroIdioma").value;
+  const mei = document.getElementById("filtroMei").value;
+  const status = document.getElementById("filtroStatus").value;
+
+  if (!mostrarTodos && !somenteDisponiveisAgora && !termo && !funcao && !idioma && !mei && !status) {
+    document.getElementById("resultadoTalentos").innerHTML = `
+      <p class="mensagem-vazia">
+        Pesquise um talento ou clique em “Mostrar todos”.
+      </p>
+    `;
+    return;
+  }
+
+  let query = supabaseClient
+    .from("nexus_staffs")
+    .select(`
+      *,
+      nexus_staff_fotos (
+        url_foto,
+        principal
+      ),
+      nexus_staff_idiomas (
+        idioma,
+        outro_idioma
+      ),
+      nexus_staff_perfis (
+        perfil,
+        nivel
+      ),
+      nexus_staff_resumo (
+        total_eventos,
+        total_agencias,
+        total_faltas,
+        total_atrasos,
+        media_avaliacao,
+        perfil_verificado,
+        selo_experiente,
+        selo_confiavel
+      )
+    `)
+    .order("created_at", { ascending: false });
+
+  if (termo) {
+    query = query.or(
+      `nome_documento.ilike.%${termo}%,nome_social.ilike.%${termo}%,nome_apresentacao.ilike.%${termo}%,cidade.ilike.%${termo}%,estado.ilike.%${termo}%`
+    );
+  }
+
+  if (status) {
+    query = query.eq("status", status);
+  }
+
+  if (somenteDisponiveisAgora) {
+    query = query.eq("disponivel_agora", true);
+  }
+
+  if (mei === "sem_mei") {
+    query = query.eq("tem_mei", false);
+  }
+
+  if (mei === "mei_proprio") {
+    query = query.eq("tem_mei", true).eq("mei_proprio", true);
+  }
+
+  if (mei === "mei_terceiro") {
+    query = query.eq("tem_mei", true).eq("mei_proprio", false);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    alert("Erro ao carregar talentos: " + error.message);
+    return;
+  }
+
+  let resultado = data || [];
+
+  if (funcao) {
+    resultado = resultado.filter(staff =>
+      (staff.nexus_staff_perfis || []).some(p => p.perfil === funcao)
+    );
+  }
+
+  if (idioma) {
+    resultado = resultado.filter(staff =>
+      (staff.nexus_staff_idiomas || []).some(i => i.idioma === idioma)
+    );
+  }
+
+  renderizarTalentos(resultado);
+}
+
+document.getElementById("btnPesquisar").addEventListener("click", () => {
+  carregarTalentos(false, false);
+});
+
+document.getElementById("btnMostrarTodos").addEventListener("click", () => {
+  carregarTalentos(true, false);
+});
+
+document.getElementById("btnMostrarDisponiveis").addEventListener("click", () => {
+  carregarTalentos(true, true);
+});
+
+document.getElementById("campoPesquisa").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") carregarTalentos(false, false);
+});
+
+async function abrirCurriculo(id) {
+  const { data, error } = await supabaseClient
+    .from("nexus_staffs")
+    .select(`
+      *,
+      nexus_staff_fotos (
+        url_foto,
+        principal
+      ),
+      nexus_staff_idiomas (
+        idioma,
+        outro_idioma
+      ),
+      nexus_staff_perfis (
+        perfil,
+        nivel
+      ),
+      nexus_staff_resumo (
+        total_eventos,
+        total_agencias,
+        total_faltas,
+        total_atrasos,
+        media_avaliacao,
+        perfil_verificado,
+        selo_experiente,
+        selo_confiavel
+      ),
+      nexus_staff_historico_eventos (
+        funcao,
+        data_inicio,
+        data_fim,
+        dias_trabalhados,
+        status_final,
+        teve_atraso,
+        teve_falta,
+        avaliacao_agencia,
+        avaliacao_contratante
+      )
+    `)
+    .eq("id", id)
+    .single();
+
+  if (error || !data) {
+    alert("Erro ao carregar currículo.");
+    return;
+  }
+
+  const idiomas = data.nexus_staff_idiomas || [];
+  const perfis = data.nexus_staff_perfis || [];
+  const resumo = data.nexus_staff_resumo?.[0];
+  const historico = data.nexus_staff_historico_eventos || [];
+
+  document.getElementById("curriculoNome").textContent =
+    data.nome_apresentacao || data.nome_social || data.nome_documento || "Currículo";
+
+  document.getElementById("curriculoSubtitulo").textContent =
+    `${data.cidade || "-"}${data.estado ? "/" + data.estado : ""} • ${data.status || "-"}`;
+
+  const fotosHtml = (data.nexus_staff_fotos || [])
+    .slice(0, 6)
+    .map(f => `<img src="${f.url_foto}" class="foto-curriculo-mini">`)
+    .join("");
+
+  const perfisHtml = perfis.length
+    ? perfis.map(p => `<span class="tag-curriculo">${p.perfil}${p.nivel ? " • " + p.nivel : ""}</span>`).join("")
+    : `<span class="tag-curriculo">Nenhuma função cadastrada</span>`;
+
+  const idiomasHtml = idiomas.length
+    ? idiomas.map(i => `<span class="tag-curriculo">${i.idioma || i.outro_idioma}</span>`).join("")
+    : `<span class="tag-curriculo">Nenhum idioma cadastrado</span>`;
+
+  const historicoHtml = historico.length
+    ? historico.slice(0, 5).map(h => `
+      <div class="linha-curriculo">
+        <span>${h.funcao || "Função"}</span>
+        <strong>${h.status_final || "-"}</strong>
+      </div>
+    `).join("")
+    : `<p class="texto-fraco">Sem histórico registrado ainda.</p>`;
+
+  document.getElementById("conteudoCurriculo").innerHTML = `
+    <div class="curriculo-coluna-principal">
+      <div class="curriculo-foto-principal">
+        <img src="${primeiraFoto(data)}" alt="Foto">
+      </div>
+
+      <div class="selos-talento">
+        ${montarSelos(data, resumo, idiomas, perfis)}
+      </div>
+
+      <div class="curriculo-fotos-grid">
+        ${fotosHtml}
+      </div>
+    </div>
+
+    <div class="curriculo-dados">
+      <section class="bloco-curriculo">
+        <h3>Resumo</h3>
+        <div class="metricas-curriculo">
+          <div><strong>${resumo?.total_eventos || 0}</strong><span>Eventos</span></div>
+          <div><strong>${resumo?.total_agencias || 0}</strong><span>Agências</span></div>
+          <div><strong>${resumo?.media_avaliacao || 0}</strong><span>Média</span></div>
+          <div><strong>${resumo?.total_faltas || 0}</strong><span>Faltas</span></div>
+        </div>
+      </section>
+
+      <section class="bloco-curriculo">
+        <h3>Funções</h3>
+        <div class="tags-curriculo">${perfisHtml}</div>
+      </section>
+
+      <section class="bloco-curriculo">
+        <h3>Idiomas</h3>
+        <div class="tags-curriculo">${idiomasHtml}</div>
+      </section>
+
+      <section class="bloco-curriculo">
+        <h3>Dados profissionais</h3>
+        <div class="linha-curriculo"><span>MEI</span><strong>${data.tem_mei ? (data.mei_proprio ? "Próprio" : "Terceiro") : "Não possui"}</strong></div>
+        <div class="linha-curriculo"><span>Valor mínimo diária</span><strong>${data.valor_minimo_diaria ? "R$ " + data.valor_minimo_diaria : "-"}</strong></div>
+        <div class="linha-curriculo"><span>Disponível agora</span><strong>${data.disponivel_agora ? "Sim" : "Não"}</strong></div>
+        <div class="linha-curriculo"><span>Veículo</span><strong>${data.possui_veiculo || "-"}</strong></div>
+      </section>
+
+      <section class="bloco-curriculo">
+        <h3>Histórico recente</h3>
+        ${historicoHtml}
+      </section>
+    </div>
+  `;
+
+  modalCurriculo.classList.add("ativo");
+}
+
+function favoritarStaff(id) {
+  alert("Favoritar staff será ligado na próxima etapa.");
+}
+
+function selecionarStaff(id) {
+  alert("Selecionar staff para evento/casting será ligado na próxima etapa.");
+}
+
+carregarFuncoesCatalogo();
+</script>
+
+</body>
+</html>

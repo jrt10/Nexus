@@ -26,16 +26,21 @@
           <label for="email">E-mail</label>
           <input id="email" type="email" placeholder="Digite seu e-mail">
         </div>
-<div class="input-group">
-  <label for="senha">Senha</label>
 
-  <div class="senha-container">
-    <input id="senha" type="password" placeholder="Digite sua senha">
-    <span id="toggleSenha" class="olho">👁️</span>
-  </div>
-</div>
+        <div class="input-group">
+          <label for="senha">Senha</label>
+
+          <div class="senha-container">
+            <input id="senha" type="password" placeholder="Digite sua senha">
+            <span id="toggleSenha" class="olho">👁️</span>
+          </div>
+        </div>
 
         <button type="submit">Entrar</button>
+
+        <button type="button" class="btn-link-login" id="btnEsqueciSenha">
+          Esqueci minha senha
+        </button>
       </form>
 
     </section>
@@ -49,10 +54,37 @@
     </div>
   </footer>
 
+  <div class="modal-overlay" id="modalSenha">
+    <div class="modal-card modal-card-menor">
+      <div class="modal-header">
+        <div>
+          <h2>Redefinir senha</h2>
+          <p>Informe seu e-mail de acesso para gerar uma senha temporária.</p>
+        </div>
+
+        <button class="btn-fechar" id="btnFecharSenha">×</button>
+      </div>
+
+      <div class="input-group">
+        <label for="emailRedefinir">E-mail</label>
+        <input id="emailRedefinir" type="email" placeholder="Digite seu e-mail">
+      </div>
+
+      <div class="box-aviso">
+        <p>
+          Será gerada uma senha temporária. No próximo acesso, o sistema solicitará a troca obrigatória.
+        </p>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secundario-clean" id="btnCancelarSenha">Cancelar</button>
+        <button type="button" id="btnGerarSenha">Gerar senha temporária</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase.js"></script>
-      <script src="js/app.js"></script>
-      </body>
-      </html>
+  <script src="js/supabase.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
