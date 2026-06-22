@@ -68,8 +68,7 @@
     <section class="talentos-hero">
       <div class="talentos-hero-topo">
         <div>
-          <h2>Encontre o perfil certo sem poluir a tela</h2>
-          <p>Pesquise por nome, cidade, função, idioma, MEI ou disponibilidade.</p>
+          <h2>Banco de Talentos</h2>
         </div>
 
         <div class="talentos-mini-metricas">
@@ -161,8 +160,52 @@
       </div>
 
       <div class="modal-actions">
+        <button class="btn-alerta" id="btnAbrirBloqueio">Bloquear staff</button>
         <button class="btn-secundario-clean" id="btnFecharCurriculoRodape">Fechar</button>
         <button id="btnImprimirCurriculo">Gerar / imprimir currículo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalBloqueio">
+    <div class="modal-card modal-card-menor">
+      <div class="modal-header">
+        <div>
+          <h2>Bloquear staff</h2>
+          <p>Use com cuidado. O bloqueio pode ser apenas da agência ou enviado para análise Nexus.</p>
+        </div>
+
+        <button class="btn-fechar" id="btnFecharBloqueio">×</button>
+      </div>
+
+      <div class="input-group">
+        <label for="tipoBloqueio">Tipo de bloqueio</label>
+        <select id="tipoBloqueio">
+          <option value="agencia">Bloquear apenas para minha agência</option>
+          <option value="analise_nexus">Reportar para análise Nexus</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="motivoBloqueio">Motivo</label>
+        <select id="motivoBloqueio">
+          <option value="Falta sem avisar">Falta sem avisar</option>
+          <option value="Atrasos recorrentes">Atrasos recorrentes</option>
+          <option value="Comportamento inadequado">Comportamento inadequado</option>
+          <option value="Documento irregular">Documento irregular</option>
+          <option value="Abandono de posto">Abandono de posto</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="detalhesBloqueio">Detalhes</label>
+        <textarea id="detalhesBloqueio" rows="4" placeholder="Descreva brevemente o ocorrido"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secundario-clean" id="btnCancelarBloqueio">Cancelar</button>
+        <button class="btn-alerta" id="btnConfirmarBloqueio">Confirmar bloqueio</button>
       </div>
     </div>
   </div>
@@ -184,9 +227,24 @@ document.getElementById("btnSair").addEventListener("click", () => {
 });
 
 const modalCurriculo = document.getElementById("modalCurriculo");
+const modalBloqueio = document.getElementById("modalBloqueio");
+let staffAtualId = null;
 
 document.getElementById("btnFecharCurriculo").addEventListener("click", fecharCurriculo);
 document.getElementById("btnFecharCurriculoRodape").addEventListener("click", fecharCurriculo);
+
+document.getElementById("btnAbrirBloqueio").addEventListener("click", () => {
+  if (!staffAtualId) {
+    alert("Abra um currículo antes de bloquear.");
+    return;
+  }
+
+  modalBloqueio.classList.add("ativo");
+});
+
+document.getElementById("btnFecharBloqueio").addEventListener("click", fecharBloqueio);
+document.getElementById("btnCancelarBloqueio").addEventListener("click", fecharBloqueio);
+document.getElementById("btnConfirmarBloqueio").addEventListener("click", confirmarBloqueioStaff);
 
 document.getElementById("btnImprimirCurriculo").addEventListener("click", () => {
   window.print();
@@ -194,6 +252,13 @@ document.getElementById("btnImprimirCurriculo").addEventListener("click", () => 
 
 function fecharCurriculo() {
   modalCurriculo.classList.remove("ativo");
+}
+
+function fecharBloqueio() {
+  modalBloqueio.classList.remove("ativo");
+  document.getElementById("detalhesBloqueio").value = "";
+  document.getElementById("tipoBloqueio").value = "agencia";
+  document.getElementById("motivoBloqueio").value = "Falta sem avisar";
 }
 
 async function carregarFuncoesCatalogo() {
@@ -405,6 +470,8 @@ document.getElementById("campoPesquisa").addEventListener("keydown", (event) => 
 });
 
 async function abrirCurriculo(id) {
+  staffAtualId = id;
+
   const { data, error } = await supabaseClient
     .from("nexus_staffs")
     .select(`
@@ -538,12 +605,95 @@ async function abrirCurriculo(id) {
   modalCurriculo.classList.add("ativo");
 }
 
-function favoritarStaff(id) {
-  alert("Favoritar staff será ligado na próxima etapa.");
+async function favoritarStaff(id) {
+  const agenciaId = usuario.agencia_id || null;
+
+  let busca = supabaseClient
+    .from("nexus_staff_preferencias_agencia")
+    .select("id")
+    .eq("staff_id", id)
+    .eq("tipo", "favorito");
+
+  if (agenciaId) {
+    busca = busca.eq("agencia_id", agenciaId);
+  } else {
+    busca = busca.is("agencia_id", null);
+  }
+
+  const { data: existente, error: erroBusca } = await busca.maybeSingle();
+
+  if (erroBusca) {
+    alert("Erro ao verificar favorito: " + erroBusca.message);
+    return;
+  }
+
+  if (existente) {
+    alert("Esse talento já está nos favoritos.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("nexus_staff_preferencias_agencia")
+    .insert({
+      agencia_id: agenciaId,
+      staff_id: id,
+      tipo: "favorito",
+      observacao: usuario.tipo === "master"
+        ? "Favoritado pelo Master"
+        : "Favoritado pela agência"
+    });
+
+  if (error) {
+    alert("Erro ao favoritar: " + error.message);
+    return;
+  }
+
+  alert("Talento favoritado com sucesso.");
 }
 
 function selecionarStaff(id) {
   alert("Selecionar staff para evento/casting será ligado na próxima etapa.");
+}
+
+async function confirmarBloqueioStaff() {
+  if (!staffAtualId) {
+    alert("Nenhum staff selecionado.");
+    return;
+  }
+
+  const tipoBloqueio = document.getElementById("tipoBloqueio").value;
+  const motivo = document.getElementById("motivoBloqueio").value;
+  const detalhes = document.getElementById("detalhesBloqueio").value.trim();
+
+  if (!motivo) {
+    alert("Informe o motivo do bloqueio.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("nexus_staff_blacklist")
+    .insert({
+      staff_id: staffAtualId,
+      agencia_id: usuario.agencia_id || null,
+      usuario_id: usuario.id || null,
+      tipo_bloqueio: tipoBloqueio,
+      motivo,
+      detalhes,
+      status: tipoBloqueio === "analise_nexus" ? "em_analise" : "ativo"
+    });
+
+  if (error) {
+    alert("Erro ao bloquear staff: " + error.message);
+    return;
+  }
+
+  fecharBloqueio();
+
+  if (tipoBloqueio === "analise_nexus") {
+    alert("Staff enviado para análise Nexus.");
+  } else {
+    alert("Staff bloqueado para esta agência.");
+  }
 }
 
 carregarFuncoesCatalogo();

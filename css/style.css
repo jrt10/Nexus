@@ -93,6 +93,7 @@ body{
 
 .input-group input,
 .input-group textarea,
+.input-group select,
 .input-select{
   width:100%;
   padding:14px 15px;
@@ -104,8 +105,14 @@ body{
   font-size:15px;
 }
 
-.input-group input::placeholder{
+.input-group input::placeholder,
+.input-group textarea::placeholder{
   color:var(--muted2);
+}
+
+.input-group textarea{
+  resize:vertical;
+  min-height:105px;
 }
 
 .senha-container{
