@@ -5,13 +5,32 @@
   font-family:Arial, sans-serif;
 }
 
+:root{
+  --bg:#050505;
+  --card:#0d0d0d;
+  --card2:#111;
+  --field:#1b1b1b;
+  --line:#222;
+  --line2:#333;
+  --text:#fff;
+  --muted:#aaa;
+  --muted2:#777;
+  --blue:#14bdd1;
+  --blue2:#00bcd4;
+  --green:#4ade80;
+  --gold:#fbbf24;
+  --danger:#ff6b6b;
+}
+
 body{
-  background:#050505;
-  color:#fff;
+  background:var(--bg);
+  color:var(--text);
   min-height:100vh;
   display:flex;
   flex-direction:column;
 }
+
+/* ===== LOGIN ===== */
 
 .login-container{
   flex:1;
@@ -24,8 +43,8 @@ body{
 .login-card{
   width:100%;
   max-width:430px;
-  background:#0d0d0d;
-  border:1px solid #222;
+  background:var(--card);
+  border:1px solid var(--line);
   border-radius:22px;
   padding:42px;
   box-shadow:0 0 35px rgba(0,0,0,.7);
@@ -37,7 +56,7 @@ body{
 }
 
 .logo{
-  width:125px;
+  width:110px;
   max-width:70%;
   margin-bottom:18px;
 }
@@ -46,351 +65,590 @@ body{
   font-size:42px;
   letter-spacing:2px;
   font-weight:700;
-  color:#fff;
+  color:var(--text);
   margin-top:8px;
 }
 
 .marca{
-  color:#fff;
+  color:var(--text);
   font-size:20px;
   margin-top:6px;
 }
 
 .marca span{
-  color:#00bcd4;
+  color:var(--blue2);
   font-weight:bold;
 }
 
 .input-group{
-  margin-bottom:22px;
+  margin-bottom:18px;
 }
 
 .input-group label{
   display:block;
   margin-bottom:8px;
   color:#cfcfcf;
-  font-size:16px;
+  font-size:15px;
 }
 
-.input-group input{
+.input-group input,
+.input-group textarea,
+.input-select{
   width:100%;
-  padding:15px;
+  padding:14px 15px;
   border:none;
   outline:none;
-  border-radius:11px;
-  background:#1b1b1b;
-  color:#fff;
+  border-radius:12px;
+  background:var(--field);
+  color:var(--text);
   font-size:15px;
 }
 
 .input-group input::placeholder{
-  color:#777;
+  color:var(--muted2);
+}
+
+.senha-container{
+  position:relative;
+}
+
+.senha-container input{
+  padding-right:50px;
+}
+
+.olho{
+  position:absolute;
+  right:15px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  user-select:none;
 }
 
 button{
   width:100%;
-  padding:16px;
+  padding:14px 18px;
   border:none;
-  border-radius:11px;
-  background:#14bdd1;
-  color:#fff;
-  font-size:16px;
+  border-radius:12px;
+  background:var(--blue);
+  color:var(--text);
+  font-size:15px;
   font-weight:bold;
   cursor:pointer;
-  margin-top:4px;
+  transition:.2s;
 }
 
 button:hover{
   filter:brightness(1.08);
 }
 
+.btn-link-login{
+  background:transparent;
+  color:var(--blue);
+  margin-top:12px;
+  padding:10px;
+  font-weight:500;
+}
+
+.btn-link-login:hover{
+  background:#111;
+}
+
 footer{
   text-align:center;
   padding:32px 20px;
-  border-top:1px solid #222;
+  border-top:1px solid var(--line);
 }
 
 footer h3{
   margin-bottom:10px;
   font-size:20px;
-  color:#fff;
 }
 
 footer p{
-  color:#aaa;
+  color:var(--muted);
   margin-top:6px;
-  font-size:16px;
+  font-size:15px;
 }
 
-@media(max-width:600px){
-  .login-card{
-    padding:32px 24px;
-    border-radius:18px;
-  }
+/* ===== SISTEMA ===== */
 
-  .logo-area h1{
-    font-size:42px;
-  }
-
-  .marca{
-    font-size:17px;
-  }
-
-  footer p{
-    font-size:14px;
-  }
-}
-.senha-container{
-  position:relative;
-}
-
-.senha-container input{
-  padding-right:50px;
-}
-
-.olho{
-  position:absolute;
-  right:15px;
-  top:50%;
-  transform:translateY(-50%);
-  cursor:pointer;
-  user-select:none;
-}
-.senha-container{
-  position:relative;
-}
-
-.senha-container input{
-  padding-right:50px;
-}
-
-.olho{
-  position:absolute;
-  right:15px;
-  top:50%;
-  transform:translateY(-50%);
-  cursor:pointer;
-  user-select:none;
-}
 .sistema-body{
-    min-height:100vh;
-      background:#050505;
-        color:#fff;
-          display:flex;
-          }
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+}
 
-          .sidebar{
-            width:280px;
-              min-height:100vh;
-                background:#0d0d0d;
-                  border-right:1px solid #222;
-                    display:flex;
-                      flex-direction:column;
-                        padding:24px 18px;
-                          position:fixed;
-                            left:0;
-                              top:0;
-                              }
+.sidebar{
+  width:280px;
+  min-height:100vh;
+  background:var(--card);
+  border-right:1px solid var(--line);
+  display:flex;
+  flex-direction:column;
+  padding:24px 18px;
+  position:fixed;
+  left:0;
+  top:0;
+}
 
-                              .sidebar-logo{
-                                text-align:center;
-                                  margin-bottom:28px;
-                                  }
+.sidebar-logo{
+  text-align:center;
+  margin-bottom:24px;
+}
 
-                                  .sidebar-logo img{
-                                    width:70px;
-                                      margin-bottom:10px;
-                                      }
+.sidebar-logo img{
+  width:70px;
+  margin-bottom:10px;
+}
 
-                                      .sidebar-logo h2{
-                                        font-size:26px;
-                                          letter-spacing:2px;
-                                          }
+.sidebar-logo h2{
+  font-size:26px;
+  letter-spacing:2px;
+}
 
-                                          .menu{
-                                            display:flex;
-                                              flex-direction:column;
-                                                gap:8px;
-                                                  flex:1;
-                                                  }
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  flex:1;
+}
 
-                                                  .menu a{
-                                                    color:#d6d6d6;
-                                                      text-decoration:none;
-                                                        padding:12px 14px;
-                                                          border-radius:10px;
-                                                            background:transparent;
-                                                              transition:.2s;
-                                                              }
+.menu a{
+  color:#d6d6d6;
+  text-decoration:none;
+  padding:12px 14px;
+  border-radius:10px;
+  background:transparent;
+  transition:.2s;
+  font-size:15px;
+}
 
-                                                              .menu a:hover{
-                                                                background:#171717;
-                                                                  color:#14bdd1;
-                                                                  }
+.menu a:hover,
+.menu a.ativo{
+  background:#171717;
+  color:var(--blue);
+}
 
-                                                                  .sidebar-footer{
-                                                                    font-size:13px;
-                                                                      color:#aaa;
-                                                                        text-align:left;
-                                                                          line-height:1.5;
-                                                                          }
+.sidebar-footer{
+  font-size:13px;
+  color:var(--muted);
+  text-align:left;
+  line-height:1.5;
+}
 
-                                                                          .sidebar-footer .linha{
-                                                                            height:1px;
-                                                                              background:#333;
-                                                                                margin:14px 0;
-                                                                                }
+.sidebar-footer .linha{
+  height:1px;
+  background:var(--line2);
+  margin:14px 0;
+}
 
-                                                                                .footer-label{
-                                                                                  color:#14bdd1;
-                                                                                    font-size:12px;
-                                                                                      margin-top:8px;
-                                                                                      }
+.footer-label{
+  color:var(--blue);
+  font-size:12px;
+  margin-top:8px;
+}
 
-                                                                                      .btn-sair{
-                                                                                        margin-top:10px;
-                                                                                          padding:10px;
-                                                                                            font-size:14px;
-                                                                                            }
+.btn-sair{
+  margin-top:10px;
+  padding:10px;
+  font-size:14px;
+}
 
-                                                                                            .conteudo{
-                                                                                              margin-left:280px;
-                                                                                                padding:34px;
-                                                                                                  width:calc(100% - 280px);
-                                                                                                  }
+.conteudo{
+  margin-left:280px;
+  padding:34px;
+  width:calc(100% - 280px);
+}
 
-                                                                                                  .topo{
-                                                                                                    display:flex;
-                                                                                                      justify-content:space-between;
-                                                                                                        align-items:center;
-                                                                                                          margin-bottom:30px;
-                                                                                                          }
+.topo{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  margin-bottom:24px;
+}
 
-                                                                                                          .topo h1{
-                                                                                                            font-size:34px;
-                                                                                                            }
+.topo h1{
+  font-size:34px;
+}
 
-                                                                                                            .topo p{
-                                                                                                              color:#aaa;
-                                                                                                                margin-top:6px;
-                                                                                                                }
+.topo p{
+  color:var(--muted);
+  margin-top:6px;
+}
 
-                                                                                                                .sino{
-                                                                                                                  background:#111;
-                                                                                                                    border:1px solid #222;
-                                                                                                                      padding:14px 16px;
-                                                                                                                        border-radius:14px;
-                                                                                                                          font-size:22px;
-                                                                                                                          }
+.sino{
+  background:#111;
+  border:1px solid var(--line);
+  padding:14px 16px;
+  border-radius:14px;
+  font-size:22px;
+}
 
-                                                                                                                          .cards-dashboard{
-                                                                                                                            display:grid;
-                                                                                                                              grid-template-columns:repeat(4, 1fr);
-                                                                                                                                gap:18px;
-                                                                                                                                  margin-bottom:32px;
-                                                                                                                                  }
+.btn-topo{
+  width:auto;
+  min-width:180px;
+  padding:14px 22px;
+}
 
-                                                                                                                                  .card-info{
-                                                                                                                                    background:#0d0d0d;
-                                                                                                                                      border:1px solid #222;
-                                                                                                                                        border-radius:18px;
-                                                                                                                                          padding:24px;
-                                                                                                                                          }
+.btn-secundario-clean{
+  width:auto;
+  padding:13px 18px;
+  border-radius:12px;
+  background:var(--field);
+  border:1px solid var(--line2);
+  color:var(--text);
+}
 
-                                                                                                                                          .card-info h3{
-                                                                                                                                            font-size:16px;
-                                                                                                                                              color:#bbb;
-                                                                                                                                                margin-bottom:18px;
-                                                                                                                                                }
+.btn-alerta{
+  background:#2a1111;
+  border:1px solid #5a2222;
+}
 
-                                                                                                                                                .card-info strong{
-                                                                                                                                                  display:block;
-                                                                                                                                                    font-size:38px;
-                                                                                                                                                      color:#14bdd1;
-                                                                                                                                                        margin-bottom:8px;
-                                                                                                                                                        }
+/* ===== DASHBOARD ===== */
 
-                                                                                                                                                        .card-info span{
-                                                                                                                                                          color:#888;
-                                                                                                                                                            font-size:14px;
-                                                                                                                                                            }
+.cards-dashboard{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:18px;
+  margin-bottom:32px;
+}
 
-                                                                                                                                                            .atalhos,
-                                                                                                                                                            .painel-lista{
-                                                                                                                                                              background:#0d0d0d;
-                                                                                                                                                                border:1px solid #222;
-                                                                                                                                                                  border-radius:18px;
-                                                                                                                                                                    padding:24px;
-                                                                                                                                                                      margin-bottom:26px;
-                                                                                                                                                                      }
+.card-info,
+.atalhos,
+.painel-lista,
+.painel-filtro{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:24px;
+}
 
-                                                                                                                                                                      .atalhos h2,
-                                                                                                                                                                      .painel-lista h2{
-                                                                                                                                                                        margin-bottom:18px;
-                                                                                                                                                                        }
+.card-info h3{
+  font-size:16px;
+  color:#bbb;
+  margin-bottom:18px;
+}
 
-                                                                                                                                                                        .atalhos-grid{
-                                                                                                                                                                          display:grid;
-                                                                                                                                                                            grid-template-columns:repeat(3, 1fr);
-                                                                                                                                                                              gap:14px;
-                                                                                                                                                                              }
+.card-info strong{
+  display:block;
+  font-size:38px;
+  color:var(--blue);
+  margin-bottom:8px;
+}
 
-                                                                                                                                                                              .lista-item{
-                                                                                                                                                                                display:flex;
-                                                                                                                                                                                  justify-content:space-between;
-                                                                                                                                                                                    align-items:center;
-                                                                                                                                                                                      padding:16px 0;
-                                                                                                                                                                                        border-bottom:1px solid #222;
-                                                                                                                                                                                        }
+.card-info span{
+  color:#888;
+  font-size:14px;
+}
 
-                                                                                                                                                                                        .lista-item:last-child{
-                                                                                                                                                                                          border-bottom:none;
-                                                                                                                                                                                          }
+.atalhos,
+.painel-lista{
+  margin-bottom:26px;
+}
 
-                                                                                                                                                                                          .lista-item span{
-                                                                                                                                                                                            color:#bbb;
-                                                                                                                                                                                            }
+.atalhos h2,
+.painel-lista h2{
+  margin-bottom:18px;
+}
 
-                                                                                                                                                                                            .lista-item strong{
-                                                                                                                                                                                              color:#14bdd1;
-                                                                                                                                                                                              }
+.atalhos-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:14px;
+}
 
-                                                                                                                                                                                              @media(max-width:900px){
-                                                                                                                                                                                                .sistema-body{
-                                                                                                                                                                                                    flex-direction:column;
-                                                                                                                                                                                                      }
+.lista-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 0;
+  border-bottom:1px solid var(--line);
+}
 
-                                                                                                                                                                                                        .sidebar{
-                                                                                                                                                                                                            position:relative;
-                                                                                                                                                                                                                width:100%;
-                                                                                                                                                                                                                    min-height:auto;
-                                                                                                                                                                                                                      }
+.lista-item:last-child{
+  border-bottom:none;
+}
 
-                                                                                                                                                                                                                        .conteudo{
-                                                                                                                                                                                                                            margin-left:0;
-                                                                                                                                                                                                                                width:100%;
-                                                                                                                                                                                                                                    padding:24px 18px;
-                                                                                                                                                                                                                                      }
+.lista-item span{
+  color:#bbb;
+}
 
-                                                                                                                                                                                                                                        .cards-dashboard{
-                                                                                                                                                                                                                                            grid-template-columns:1fr;
-                                                                                                                                                                                                                                              }
+.lista-item strong{
+  color:var(--blue);
+}
 
-                                                                                                                                                                                                                                                .atalhos-grid{
-                                                                                                                                                                                                                                                    grid-template-columns:1fr;
-                                                                                                                                                                                                                                                      }
+/* ===== FILTROS GERAIS ===== */
 
-                                                                                                                                                                                                                                                        .topo{
-                                                                                                                                                                                                                                                            align-items:flex-start;
-                                                                                                                                                                                                                                                                gap:16px;
-                                                                                                                                                                                                                                                                  }
-                                                                                                                                                                                                                                                                  }
+.painel-filtro{
+  margin-bottom:24px;
+  display:flex;
+  gap:14px;
+  align-items:center;
+}
 
-/* ===== TALENTOS / CURRÍCULOS ===== */
+.campo-busca{
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--field);
+  border-radius:14px;
+  padding:0 14px;
+  border:1px solid transparent;
+}
+
+.campo-busca:focus-within{
+  border-color:rgba(20,189,209,.45);
+}
+
+.campo-busca input{
+  width:100%;
+  padding:15px 0;
+  background:transparent;
+  border:none;
+  outline:none;
+  color:var(--text);
+  font-size:15px;
+}
+
+.botoes-filtro{
+  display:flex;
+  gap:10px;
+}
+
+/* ===== AGÊNCIAS ===== */
+
+.grid-agencias{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(290px, 1fr));
+  gap:18px;
+}
+
+.card-agencia{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px;
+}
+
+.card-agencia-topo{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start;
+  margin-bottom:18px;
+}
+
+.card-agencia h3{
+  font-size:20px;
+  margin-bottom:6px;
+}
+
+.card-agencia p{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.badge-status{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  text-transform:capitalize;
+}
+
+.badge-status.ativo{
+  background:rgba(20,189,209,.15);
+  color:var(--blue);
+}
+
+.badge-status.inativo{
+  background:rgba(255,255,255,.08);
+  color:#999;
+}
+
+.card-agencia-info{
+  display:grid;
+  gap:8px;
+  margin-bottom:18px;
+}
+
+.card-agencia-info strong{
+  color:var(--text);
+}
+
+.card-agencia-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.card-agencia-actions button{
+  width:auto;
+  flex:1;
+  min-width:80px;
+  padding:11px 12px;
+  font-size:14px;
+}
+
+.mensagem-vazia{
+  color:var(--muted);
+  background:var(--card);
+  border:1px dashed var(--line2);
+  border-radius:16px;
+  padding:24px;
+  grid-column:1 / -1;
+}
+
+/* ===== MODAIS ===== */
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  z-index:99;
+}
+
+.modal-overlay.ativo{
+  display:flex;
+}
+
+.modal-card{
+  width:100%;
+  max-width:760px;
+  max-height:90vh;
+  overflow:auto;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:28px;
+  box-shadow:0 0 40px rgba(0,0,0,.8);
+}
+
+.modal-card-grande{
+  max-width:980px;
+}
+
+.modal-card-menor{
+  max-width:520px;
+}
+
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:flex-start;
+  margin-bottom:24px;
+}
+
+.modal-header h2{
+  font-size:28px;
+}
+
+.modal-header p{
+  color:var(--muted);
+  margin-top:6px;
+}
+
+.btn-fechar{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  padding:0;
+  font-size:24px;
+  background:var(--field);
+}
+
+.modal-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:16px;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:12px;
+  margin-top:24px;
+}
+
+.modal-actions button{
+  width:auto;
+  min-width:150px;
+}
+
+/* ===== TALENTOS CLEAN ===== */
+
+.talentos-hero{
+  background:
+    radial-gradient(circle at top right, rgba(20,189,209,.12), transparent 32%),
+    var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:24px;
+  margin-bottom:22px;
+}
+
+.talentos-hero-topo{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:flex-start;
+  margin-bottom:18px;
+}
+
+.talentos-hero h2{
+  font-size:24px;
+  margin-bottom:6px;
+}
+
+.talentos-hero p{
+  color:var(--muted);
+}
+
+.talentos-mini-metricas{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.mini-metrica{
+  background:#111;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 14px;
+  min-width:115px;
+}
+
+.mini-metrica strong{
+  display:block;
+  color:var(--blue);
+  font-size:20px;
+}
+
+.mini-metrica span{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:2px;
+}
 
 .painel-filtro-talentos{
   flex-direction:column;
   align-items:stretch;
+  padding:18px;
+}
+
+.linha-busca-talentos{
+  display:flex;
+  gap:12px;
+  align-items:center;
 }
 
 .campo-busca-principal{
@@ -403,25 +661,43 @@ footer p{
   gap:12px;
 }
 
+.filtros-talentos .input-select{
+  padding:13px 14px;
+}
+
+.acoes-talentos{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+}
+
+.acoes-talentos button{
+  width:auto;
+  min-width:145px;
+}
+
 .grid-talentos{
   display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(330px, 1fr));
+  grid-template-columns:repeat(auto-fill, minmax(315px, 1fr));
   gap:18px;
 }
 
 .card-talento{
-  background:#0d0d0d;
-  border:1px solid #222;
+  background:var(--card);
+  border:1px solid var(--line);
   border-radius:20px;
   overflow:hidden;
   display:flex;
   flex-direction:column;
+  min-height:100%;
 }
 
 .foto-talento-wrap{
-  height:210px;
+  height:190px;
   background:#111;
   overflow:hidden;
+  position:relative;
 }
 
 .foto-talento{
@@ -431,7 +707,7 @@ footer p{
 }
 
 .card-talento-corpo{
-  padding:20px;
+  padding:18px;
 }
 
 .card-talento-topo{
@@ -439,22 +715,22 @@ footer p{
   justify-content:space-between;
   gap:14px;
   align-items:flex-start;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 
 .card-talento h3{
-  font-size:21px;
+  font-size:20px;
   margin-bottom:5px;
 }
 
 .card-talento p{
-  color:#aaa;
+  color:var(--muted);
   font-size:14px;
 }
 
 .nota-talento{
   background:#171717;
-  border:1px solid #333;
+  border:1px solid var(--line2);
   padding:7px 10px;
   border-radius:999px;
   font-size:13px;
@@ -464,67 +740,58 @@ footer p{
 .selos-talento{
   display:flex;
   flex-wrap:wrap;
-  gap:8px;
-  margin:14px 0;
+  gap:7px;
+  margin:13px 0;
 }
 
 .selo-talento{
-  background:#1b1b1b;
-  border:1px solid #333;
+  background:var(--field);
+  border:1px solid var(--line2);
   color:#bbb;
   border-radius:999px;
-  padding:6px 10px;
+  padding:6px 9px;
   font-size:12px;
 }
 
 .selo-talento.azul{
   background:rgba(20,189,209,.13);
   border-color:rgba(20,189,209,.3);
-  color:#14bdd1;
+  color:var(--blue);
 }
 
 .selo-talento.verde{
   background:rgba(34,197,94,.13);
   border-color:rgba(34,197,94,.3);
-  color:#4ade80;
+  color:var(--green);
 }
 
 .selo-talento.dourado{
   background:rgba(245,158,11,.13);
   border-color:rgba(245,158,11,.3);
-  color:#fbbf24;
+  color:var(--gold);
 }
 
 .info-talento{
   display:grid;
   gap:8px;
-  margin:15px 0 18px;
+  margin:14px 0 17px;
 }
 
 .info-talento strong{
-  color:#fff;
+  color:var(--text);
 }
 
 .card-talento-actions{
-  display:flex;
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr;
   gap:8px;
-  flex-wrap:wrap;
 }
 
 .card-talento-actions button{
-  width:auto;
-  flex:1;
-  min-width:110px;
-  padding:12px;
-  font-size:14px;
-}
-
-.modal-card-grande{
-  max-width:980px;
-}
-
-.modal-card-menor{
-  max-width:520px;
+  width:100%;
+  min-width:0;
+  padding:11px 10px;
+  font-size:13px;
 }
 
 .curriculo-layout{
@@ -539,7 +806,7 @@ footer p{
   background:#111;
   border-radius:18px;
   overflow:hidden;
-  border:1px solid #222;
+  border:1px solid var(--line);
 }
 
 .curriculo-foto-principal img{
@@ -560,7 +827,7 @@ footer p{
   height:80px;
   object-fit:cover;
   border-radius:10px;
-  border:1px solid #222;
+  border:1px solid var(--line);
 }
 
 .curriculo-dados{
@@ -570,7 +837,7 @@ footer p{
 
 .bloco-curriculo{
   background:#111;
-  border:1px solid #222;
+  border:1px solid var(--line);
   border-radius:16px;
   padding:18px;
 }
@@ -586,8 +853,8 @@ footer p{
 }
 
 .metricas-curriculo div{
-  background:#0d0d0d;
-  border:1px solid #222;
+  background:var(--card);
+  border:1px solid var(--line);
   border-radius:14px;
   padding:14px;
   text-align:center;
@@ -595,7 +862,7 @@ footer p{
 
 .metricas-curriculo strong{
   display:block;
-  color:#14bdd1;
+  color:var(--blue);
   font-size:24px;
 }
 
@@ -612,8 +879,8 @@ footer p{
 
 .tag-curriculo{
   padding:8px 10px;
-  background:#1b1b1b;
-  border:1px solid #333;
+  background:var(--field);
+  border:1px solid var(--line2);
   border-radius:999px;
   color:#ddd;
   font-size:13px;
@@ -624,7 +891,7 @@ footer p{
   justify-content:space-between;
   gap:15px;
   padding:12px 0;
-  border-bottom:1px solid #222;
+  border-bottom:1px solid var(--line);
 }
 
 .linha-curriculo:last-child{
@@ -632,7 +899,7 @@ footer p{
 }
 
 .linha-curriculo span{
-  color:#aaa;
+  color:var(--muted);
 }
 
 .texto-fraco{
@@ -641,35 +908,111 @@ footer p{
 
 .box-aviso{
   background:#111;
-  border:1px solid #222;
+  border:1px solid var(--line);
   border-radius:14px;
   padding:14px;
-  color:#aaa;
+  color:var(--muted);
   margin:14px 0;
 }
 
-.btn-link-login{
-  background:transparent;
-  color:#14bdd1;
-  margin-top:14px;
-  padding:10px;
-  font-weight:500;
-}
+/* ===== RESPONSIVO ===== */
 
-.btn-link-login:hover{
-  background:#111;
+@media(max-width:1100px){
+  .cards-dashboard{
+    grid-template-columns:repeat(2, 1fr);
+  }
+
+  .filtros-talentos{
+    grid-template-columns:repeat(2, 1fr);
+  }
 }
 
 @media(max-width:900px){
-  .filtros-talentos{
+  .sistema-body{
+    flex-direction:column;
+  }
+
+  .sidebar{
+    position:relative;
+    width:100%;
+    min-height:auto;
+  }
+
+  .conteudo{
+    margin-left:0;
+    width:100%;
+    padding:24px 18px;
+  }
+
+  .cards-dashboard,
+  .atalhos-grid,
+  .grid-talentos,
+  .grid-agencias{
     grid-template-columns:1fr;
   }
 
-  .grid-talentos{
-    grid-template-columns:1fr;
+  .topo,
+  .talentos-hero-topo{
+    align-items:flex-start;
+    flex-direction:column;
   }
 
+  .painel-filtro{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .linha-busca-talentos{
+    flex-direction:column;
+  }
+
+  .botoes-filtro,
+  .acoes-talentos{
+    flex-direction:column;
+  }
+
+  .botoes-filtro button,
+  .acoes-talentos button{
+    width:100%;
+  }
+
+  .modal-grid,
   .curriculo-layout{
+    grid-template-columns:1fr;
+  }
+
+  .modal-actions{
+    flex-direction:column;
+  }
+
+  .modal-actions button{
+    width:100%;
+  }
+
+  .card-talento-actions{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:600px){
+  .login-card{
+    padding:32px 24px;
+    border-radius:18px;
+  }
+
+  .logo-area h1{
+    font-size:40px;
+  }
+
+  .marca{
+    font-size:17px;
+  }
+
+  footer p{
+    font-size:14px;
+  }
+
+  .filtros-talentos{
     grid-template-columns:1fr;
   }
 

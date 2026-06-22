@@ -22,7 +22,7 @@
     <nav class="menu">
       <a href="dashboard-master.html">🏠 Dashboard</a>
       <a href="agencias.html">🏢 Agências</a>
-      <a href="talentos.html">👥 Talentos</a>
+      <a class="ativo" href="talentos.html">👥 Talentos</a>
       <a href="#">📅 Eventos</a>
       <a href="#">⭐ Casting</a>
       <a href="#">🏢 Contratantes</a>
@@ -65,53 +65,76 @@
       </button>
     </header>
 
-    <section class="painel-filtro painel-filtro-talentos">
-      <div class="campo-busca campo-busca-principal">
-        <span>🔍</span>
-        <input
-          type="text"
-          id="campoPesquisa"
-          placeholder="Pesquisar por nome, cidade, função ou idioma"
-        >
+    <section class="talentos-hero">
+      <div class="talentos-hero-topo">
+        <div>
+          <h2>Encontre o perfil certo sem poluir a tela</h2>
+          <p>Pesquise por nome, cidade, função, idioma, MEI ou disponibilidade.</p>
+        </div>
+
+        <div class="talentos-mini-metricas">
+          <div class="mini-metrica">
+            <strong id="miniTotal">0</strong>
+            <span>resultados</span>
+          </div>
+
+          <div class="mini-metrica">
+            <strong id="miniDisponiveis">0</strong>
+            <span>disponíveis</span>
+          </div>
+        </div>
       </div>
 
-      <div class="filtros-talentos">
-        <select id="filtroFuncao" class="input-select">
-          <option value="">Função</option>
-        </select>
+      <section class="painel-filtro painel-filtro-talentos">
+        <div class="linha-busca-talentos">
+          <div class="campo-busca campo-busca-principal">
+            <span>🔍</span>
+            <input
+              type="text"
+              id="campoPesquisa"
+              placeholder="Pesquisar por nome, cidade, função ou idioma"
+            >
+          </div>
 
-        <select id="filtroIdioma" class="input-select">
-          <option value="">Idioma</option>
-          <option value="Português">Português</option>
-          <option value="Inglês">Inglês</option>
-          <option value="Espanhol">Espanhol</option>
-          <option value="Francês">Francês</option>
-          <option value="Italiano">Italiano</option>
-          <option value="Alemão">Alemão</option>
-          <option value="Libras">Libras</option>
-        </select>
+          <div class="acoes-talentos">
+            <button id="btnPesquisar">Pesquisar</button>
+            <button class="btn-secundario-clean" id="btnMostrarTodos">Mostrar todos</button>
+          </div>
+        </div>
 
-        <select id="filtroMei" class="input-select">
-          <option value="">MEI</option>
-          <option value="qualquer">Qualquer</option>
-          <option value="sem_mei">Sem MEI</option>
-          <option value="mei_proprio">MEI próprio</option>
-          <option value="mei_terceiro">MEI terceiro</option>
-        </select>
+        <div class="filtros-talentos">
+          <select id="filtroFuncao" class="input-select">
+            <option value="">Função</option>
+          </select>
 
-        <select id="filtroStatus" class="input-select">
-          <option value="">Status</option>
-          <option value="aprovado">Aprovado</option>
-          <option value="pendente">Pendente</option>
-          <option value="pausado_inatividade">Pausado</option>
-          <option value="bloqueado">Bloqueado</option>
-        </select>
-      </div>
+          <select id="filtroIdioma" class="input-select">
+            <option value="">Idioma</option>
+            <option value="Português">Português</option>
+            <option value="Inglês">Inglês</option>
+            <option value="Espanhol">Espanhol</option>
+            <option value="Francês">Francês</option>
+            <option value="Italiano">Italiano</option>
+            <option value="Alemão">Alemão</option>
+            <option value="Libras">Libras</option>
+          </select>
 
-      <div class="botoes-filtro">
-        <button id="btnPesquisar">Pesquisar</button>
-        <button class="btn-secundario-clean" id="btnMostrarTodos">Mostrar todos</button>
-      </div>
+          <select id="filtroMei" class="input-select">
+            <option value="">MEI</option>
+            <option value="qualquer">Qualquer</option>
+            <option value="sem_mei">Sem MEI</option>
+            <option value="mei_proprio">MEI próprio</option>
+            <option value="mei_terceiro">MEI terceiro</option>
+          </select>
+
+          <select id="filtroStatus" class="input-select">
+            <option value="">Status</option>
+            <option value="aprovado">Aprovado</option>
+            <option value="pendente">Pendente</option>
+            <option value="pausado_inatividade">Pausado</option>
+            <option value="bloqueado">Bloqueado</option>
+          </select>
+        </div>
+      </section>
     </section>
 
     <section id="resultadoTalentos" class="grid-talentos">
@@ -193,7 +216,7 @@ function selo(texto, classe = "") {
   return `<span class="selo-talento ${classe}">${texto}</span>`;
 }
 
-function montarSelos(staff, resumo, idiomas, perfis) {
+function montarSelos(staff, resumo, idiomas) {
   let selos = "";
 
   if (resumo?.perfil_verificado) selos += selo("✔ Verificado", "azul");
@@ -206,11 +229,7 @@ function montarSelos(staff, resumo, idiomas, perfis) {
     selos += selo("🌎 Idiomas", "azul");
   }
 
-  if (!selos) {
-    selos = selo("Perfil em análise");
-  }
-
-  return selos;
+  return selos || selo("Perfil em análise");
 }
 
 function primeiraFoto(staff) {
@@ -219,9 +238,17 @@ function primeiraFoto(staff) {
   return principal?.url_foto || fotos[0]?.url_foto || "../assets/logo.png";
 }
 
+function atualizarMiniMetricas(lista) {
+  document.getElementById("miniTotal").textContent = lista?.length || 0;
+  document.getElementById("miniDisponiveis").textContent =
+    (lista || []).filter(staff => staff.disponivel_agora).length;
+}
+
 function renderizarTalentos(lista) {
   const container = document.getElementById("resultadoTalentos");
   container.innerHTML = "";
+
+  atualizarMiniMetricas(lista || []);
 
   if (!lista || lista.length === 0) {
     container.innerHTML = `
@@ -258,7 +285,7 @@ function renderizarTalentos(lista) {
           </div>
 
           <div class="selos-talento">
-            ${montarSelos(staff, resumo, idiomas, perfis)}
+            ${montarSelos(staff, resumo, idiomas)}
           </div>
 
           <div class="info-talento">
@@ -268,7 +295,7 @@ function renderizarTalentos(lista) {
           </div>
 
           <div class="card-talento-actions">
-            <button onclick="abrirCurriculo('${staff.id}')">Ver currículo</button>
+            <button onclick="abrirCurriculo('${staff.id}')">Currículo</button>
             <button class="btn-secundario-clean" onclick="favoritarStaff('${staff.id}')">Favoritar</button>
             <button class="btn-secundario-clean" onclick="selecionarStaff('${staff.id}')">Selecionar</button>
           </div>
@@ -291,6 +318,7 @@ async function carregarTalentos(mostrarTodos = false, somenteDisponiveisAgora = 
         Pesquise um talento ou clique em “Mostrar todos”.
       </p>
     `;
+    atualizarMiniMetricas([]);
     return;
   }
 
@@ -329,25 +357,12 @@ async function carregarTalentos(mostrarTodos = false, somenteDisponiveisAgora = 
     );
   }
 
-  if (status) {
-    query = query.eq("status", status);
-  }
+  if (status) query = query.eq("status", status);
+  if (somenteDisponiveisAgora) query = query.eq("disponivel_agora", true);
 
-  if (somenteDisponiveisAgora) {
-    query = query.eq("disponivel_agora", true);
-  }
-
-  if (mei === "sem_mei") {
-    query = query.eq("tem_mei", false);
-  }
-
-  if (mei === "mei_proprio") {
-    query = query.eq("tem_mei", true).eq("mei_proprio", true);
-  }
-
-  if (mei === "mei_terceiro") {
-    query = query.eq("tem_mei", true).eq("mei_proprio", false);
-  }
+  if (mei === "sem_mei") query = query.eq("tem_mei", false);
+  if (mei === "mei_proprio") query = query.eq("tem_mei", true).eq("mei_proprio", true);
+  if (mei === "mei_terceiro") query = query.eq("tem_mei", true).eq("mei_proprio", false);
 
   const { data, error } = await query;
 
@@ -476,7 +491,7 @@ async function abrirCurriculo(id) {
       </div>
 
       <div class="selos-talento">
-        ${montarSelos(data, resumo, idiomas, perfis)}
+        ${montarSelos(data, resumo, idiomas)}
       </div>
 
       <div class="curriculo-fotos-grid">
@@ -532,6 +547,7 @@ function selecionarStaff(id) {
 }
 
 carregarFuncoesCatalogo();
+atualizarMiniMetricas([]);
 </script>
 
 </body>
