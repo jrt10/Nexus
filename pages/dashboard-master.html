@@ -3,44 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus - Dashboard Master</title>
+  <title>Nexus - Dashboard</title>
   <link rel="stylesheet" href="../css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
 </head>
 <body class="sistema-body">
 
-  <aside class="sidebar">
+<aside class="sidebar">
     <div class="sidebar-logo">
       <img src="../assets/logo.png" alt="Nexus">
       <h2>Nexus</h2>
     </div>
 
     <nav class="menu">
-      <a href="#">🏠 Dashboard</a>
-      <a href="#">🏢 Agências</a>
-     <a href="talentos.html">👥 Talentos</a>
-      <a href="#">📅 Eventos</a>
-      <a href="#">⭐ Casting</a>
-      <a href="#">🏢 Contratantes</a>
-      <a href="#">📄 Documentos</a>
-      <a href="#">🔔 Notificações</a>
-      <a href="#">💳 Cobranças</a>
-      <a href="#">📊 Relatórios</a>
-      <a href="#">⚙️ Configurações</a>
+      <a href="dashboard-master.html" data-menu="dashboard">🏠 Dashboard</a>
+      <a href="agencias.html" data-menu="agencias">🏢 Agências</a>
+      <a href="talentos.html" data-menu="talentos">👥 Talentos</a>
+      <a href="eventos.html" data-menu="eventos">📅 Eventos</a>
+      <a href="casting.html" data-menu="casting">⭐ Casting</a>
+      <a href="#" data-menu="contratantes">🏢 Contratantes</a>
+      <a href="#" data-menu="documentos">📄 Documentos</a>
+      <a href="#" data-menu="notificacoes">🔔 Notificações</a>
+      <a href="#" data-menu="financeiro">💳 Financeiro</a>
+      <a href="#" data-menu="relatorios">📊 Relatórios</a>
+      <a href="#" data-menu="configuracoes">⚙️ Configurações</a>
     </nav>
 
     <div class="sidebar-footer">
       <div class="linha"></div>
-
       <p class="footer-label">Nome</p>
       <p id="nomeUsuario">Jessyca</p>
-
       <p class="footer-label">Função</p>
       <p id="funcaoUsuario">Master</p>
-
       <button class="btn-sair" id="btnSair">Sair</button>
-
       <div class="linha"></div>
-
       <p>Nexus v1.0</p>
       <p>© JRTecnologia - Soluções Criativas</p>
       <p>Desenvolvido por Jessyca Rocha Tavares</p>
@@ -50,94 +47,107 @@
   <main class="conteudo">
     <header class="topo">
       <div>
-        <h1>Dashboard Master</h1>
-        <p>Visão geral da plataforma Nexus</p>
+        <h1>Dashboard</h1>
+        <p>Controle geral da plataforma Nexus</p>
       </div>
-
       <div class="sino">🔔</div>
     </header>
 
     <section class="cards-dashboard">
-      <div class="card-info">
-        <h3>Agências Ativas</h3>
-        <strong>0</strong>
-        <span>Licenças em uso</span>
-      </div>
-
-      <div class="card-info">
-        <h3>Staffs Cadastrados</h3>
-        <strong>0</strong>
-        <span>Base geral Nexus</span>
-      </div>
-
-      <div class="card-info">
-        <h3>Eventos Ativos</h3>
-        <strong>0</strong>
-        <span>Em andamento ou seleção</span>
-      </div>
-
-      <div class="card-info">
-        <h3>Licenças Vencendo</h3>
-        <strong>0</strong>
-        <span>Acompanhar cobrança</span>
-      </div>
+      <div class="card-info"><h3>Agências Ativas</h3><strong id="totalAgencias">0</strong><span>Licenças em uso</span></div>
+      <div class="card-info"><h3>Staffs Cadastrados</h3><strong id="totalStaffs">0</strong><span>Base geral Nexus</span></div>
+      <div class="card-info"><h3>Eventos Ativos</h3><strong id="totalEventos">0</strong><span>Em seleção ou operação</span></div>
+      <div class="card-info"><h3>Cobranças Pendentes</h3><strong id="totalCobrancas">0</strong><span>Pix em aberto</span></div>
     </section>
 
     <section class="atalhos">
       <h2>Ações rápidas</h2>
-
       <div class="atalhos-grid">
-        <button>Criar Agência</button>
-        <button>Criar Evento</button>
-        <button>Ver Staffs</button>
-        <button>Gerar Cobrança Pix</button>
-        <button>Criar Notificação</button>
+        <button onclick="window.location.href='agencias.html'">Criar Agência</button>
+        <button onclick="window.location.href='talentos.html'">Ver Talentos</button>
+        <button onclick="window.location.href='eventos.html'">Criar Evento</button>
+        <button onclick="window.location.href='casting.html'">Ver Casting</button>
+        <button>Notificações</button>
         <button>Relatórios</button>
       </div>
     </section>
 
     <section class="painel-lista">
       <h2>Resumo de atenção</h2>
-
-      <div class="lista-item">
-        <span>Licenças próximas do vencimento</span>
-        <strong>0</strong>
-      </div>
-
-      <div class="lista-item">
-        <span>Staffs pendentes de aprovação</span>
-        <strong>0</strong>
-      </div>
-
-      <div class="lista-item">
-        <span>Documentos pendentes de assinatura</span>
-        <strong>0</strong>
-      </div>
-
-      <div class="lista-item">
-        <span>Cobranças Pix pendentes</span>
-        <strong>0</strong>
-      </div>
+      <div class="lista-item"><span>Licenças próximas do vencimento</span><strong id="licencasVencendo">0</strong></div>
+      <div class="lista-item"><span>Staffs pendentes de aprovação</span><strong id="staffsPendentes">0</strong></div>
+      <div class="lista-item"><span>Documentos pendentes de assinatura</span><strong id="documentosPendentes">0</strong></div>
+      <div class="lista-item"><span>Cobranças Pix pendentes</span><strong id="cobrancasPendentes">0</strong></div>
     </section>
   </main>
 
-  <script>
-    const usuario = JSON.parse(localStorage.getItem("nexus_usuario"));
+<script>
+function iniciarSistema(menuAtivo = "") {
+  const usuario = JSON.parse(localStorage.getItem("nexus_usuario"));
 
-    if (!usuario || usuario.tipo !== "master") {
-      window.location.href = "../index.html";
-    }
+  if (!usuario) {
+    window.location.href = "../index.html";
+    return null;
+  }
 
-    if (usuario) {
-      document.getElementById("nomeUsuario").textContent = usuario.nome || "Usuário";
-      document.getElementById("funcaoUsuario").textContent = "Master";
-    }
+  if (!["master", "agencia"].includes(usuario.tipo)) {
+    window.location.href = "../index.html";
+    return null;
+  }
 
-    document.getElementById("btnSair").addEventListener("click", function() {
-      localStorage.removeItem("nexus_usuario");
-      window.location.href = "../index.html";
-    });
-  </script>
+  document.getElementById("nomeUsuario").textContent = usuario.nome || "Usuário";
+  document.getElementById("funcaoUsuario").textContent =
+    usuario.tipo === "master" ? "Master" : "Agência";
+
+  document.querySelectorAll("[data-menu]").forEach(link => {
+    if (link.dataset.menu === menuAtivo) link.classList.add("ativo");
+  });
+
+  document.getElementById("btnSair").addEventListener("click", () => {
+    localStorage.removeItem("nexus_usuario");
+    window.location.href = "../index.html";
+  });
+
+  return usuario;
+}
+
+const usuario = iniciarSistema("dashboard");
+
+async function contarTabela(tabela, filtro = null) {
+  let query = supabaseClient.from(tabela).select("*", { count: "exact", head: true });
+  if (filtro) query = filtro(query);
+  const { count, error } = await query;
+  if (error) return 0;
+  return count || 0;
+}
+
+async function carregarDashboard() {
+  const hoje = new Date();
+  const limite = new Date();
+  limite.setDate(hoje.getDate() + 7);
+  const hojeStr = hoje.toISOString().split("T")[0];
+  const limiteStr = limite.toISOString().split("T")[0];
+
+  const agencias = await contarTabela("nexus_agencias", q => q.in("status", ["ativa", "ativo"]));
+  const staffs = await contarTabela("nexus_staffs");
+  const eventos = await contarTabela("nexus_eventos", q => q.in("status", ["publicado", "em_selecao", "fechado", "ativo"]));
+  const cobrancas = await contarTabela("nexus_cobrancas_pix", q => q.eq("status", "pendente"));
+  const licencas = await contarTabela("nexus_licencas_agencias", q => q.gte("data_vencimento", hojeStr).lte("data_vencimento", limiteStr));
+  const staffsPendentes = await contarTabela("nexus_staffs", q => q.eq("status", "pendente"));
+  const documentosPendentes = await contarTabela("nexus_documentos_staff", q => q.eq("marcado_assinado", false));
+
+  document.getElementById("totalAgencias").textContent = agencias;
+  document.getElementById("totalStaffs").textContent = staffs;
+  document.getElementById("totalEventos").textContent = eventos;
+  document.getElementById("totalCobrancas").textContent = cobrancas;
+  document.getElementById("licencasVencendo").textContent = licencas;
+  document.getElementById("staffsPendentes").textContent = staffsPendentes;
+  document.getElementById("documentosPendentes").textContent = documentosPendentes;
+  document.getElementById("cobrancasPendentes").textContent = cobrancas;
+}
+
+if (usuario) carregarDashboard();
+</script>
 
 </body>
 </html>

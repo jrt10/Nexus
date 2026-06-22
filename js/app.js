@@ -1,30 +1,51 @@
-console.log("Nexus iniciado");
-
 const loginForm = document.getElementById("loginForm");
-const senhaInput = document.getElementById("senha");
 const toggleSenha = document.getElementById("toggleSenha");
+const senhaInput = document.getElementById("senha");
 
-const btnEsqueciSenha = document.getElementById("btnEsqueciSenha");
-const modalSenha = document.getElementById("modalSenha");
-const btnFecharSenha = document.getElementById("btnFecharSenha");
-const btnCancelarSenha = document.getElementById("btnCancelarSenha");
-const btnGerarSenha = document.getElementById("btnGerarSenha");
-
-if (toggleSenha) {
+if (toggleSenha && senhaInput) {
   toggleSenha.addEventListener("click", () => {
     senhaInput.type = senhaInput.type === "password" ? "text" : "password";
   });
 }
 
+function redirecionarUsuario(usuario) {
+  if (usuario.primeiro_acesso || usuario.alterar_senha) {
+    window.location.href = "pages/primeiro-acesso.html";
+    return;
+  }
+
+  if (usuario.tipo === "master") {
+    window.location.href = "pages/dashboard-master.html";
+    return;
+  }
+
+  if (usuario.tipo === "agencia") {
+    window.location.href = "pages/dashboard-master.html";
+    return;
+  }
+
+  if (usuario.tipo === "contratante") {
+    window.location.href = "pages/dashboard-master.html";
+    return;
+  }
+
+  if (usuario.tipo === "staff") {
+    window.location.href = "pages/talentos.html";
+    return;
+  }
+
+  alert("Tipo de usuário não reconhecido.");
+}
+
 if (loginForm) {
-  loginForm.addEventListener("submit", async function(event) {
+  loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const email = document.getElementById("email").value.trim().toLowerCase();
     const senha = document.getElementById("senha").value.trim();
 
     if (!email || !senha) {
-      alert("Preencha o e-mail e a senha.");
+      alert("Preencha e-mail e senha.");
       return;
     }
 
@@ -33,81 +54,61 @@ if (loginForm) {
       .select("*")
       .eq("email", email)
       .eq("senha", senha)
-      .single();
+      .maybeSingle();
 
-    if (error || !data) {
+    if (error) {
+      alert("Erro ao fazer login: " + error.message);
+      return;
+    }
+
+    if (!data) {
       alert("E-mail ou senha inválidos.");
       return;
     }
 
-    if (data.status !== "ativo") {
-      alert("Usuário inativo ou bloqueado.");
+    if (data.status && !["ativo", "ativa"].includes(data.status)) {
+      alert("Usuário inativo. Fale com o administrador.");
       return;
     }
-
-    localStorage.setItem("nexus_usuario", JSON.stringify(data));
 
     await supabaseClient
       .from("nexus_usuarios")
       .update({ ultimo_acesso: new Date().toISOString() })
       .eq("id", data.id);
 
-    if (data.primeiro_acesso || data.alterar_senha) {
-      window.location.href = "pages/primeiro-acesso.html";
-      return;
-    }
-
-    if (data.tipo === "master") {
-      window.location.href = "pages/dashboard-master.html";
-      return;
-    }
-
-    if (data.tipo === "agencia") {
-      alert("Dashboard da agência será criado no próximo módulo.");
-      return;
-    }
-
-    if (data.tipo === "contratante") {
-      alert("Dashboard do contratante será criado no próximo módulo.");
-      return;
-    }
-
-    if (data.tipo === "staff") {
-      alert("Área do staff/app será criada no próximo módulo.");
-      return;
-    }
-
-    alert("Perfil não identificado.");
+    localStorage.setItem("nexus_usuario", JSON.stringify(data));
+    redirecionarUsuario(data);
   });
 }
 
-function abrirModalSenha() {
-  if (!modalSenha) return;
-  document.getElementById("emailRedefinir").value = "";
-  modalSenha.classList.add("ativo");
-}
+const modalSenha = document.getElementById("modalSenha");
+const btnEsqueciSenha = document.getElementById("btnEsqueciSenha");
+const btnFecharSenha = document.getElementById("btnFecharSenha");
+const btnCancelarSenha = document.getElementById("btnCancelarSenha");
+const btnGerarSenha = document.getElementById("btnGerarSenha");
 
 function fecharModalSenha() {
   if (!modalSenha) return;
   modalSenha.classList.remove("ativo");
+
+  const emailRedefinir = document.getElementById("emailRedefinir");
+  if (emailRedefinir) emailRedefinir.value = "";
 }
 
-function gerarSenhaTemporaria() {
-  const numero = Math.floor(100000 + Math.random() * 900000);
-  return `Nexus@${numero}`;
+function gerarTokenRedefinicao() {
+  const parte1 = Math.random().toString(36).slice(2);
+  const parte2 = Date.now().toString(36);
+  return `${parte1}${parte2}`;
 }
 
-if (btnEsqueciSenha) {
-  btnEsqueciSenha.addEventListener("click", abrirModalSenha);
+if (btnEsqueciSenha && modalSenha) {
+  btnEsqueciSenha.addEventListener("click", () => {
+    modalSenha.classList.add("ativo");
+  });
 }
 
-if (btnFecharSenha) {
-  btnFecharSenha.addEventListener("click", fecharModalSenha);
-}
-
-if (btnCancelarSenha) {
-  btnCancelarSenha.addEventListener("click", fecharModalSenha);
-}
+if (btnFecharSenha) btnFecharSenha.addEventListener("click", fecharModalSenha);
+if (btnCancelarSenha) btnCancelarSenha.addEventListener("click", fecharModalSenha);
 
 if (btnGerarSenha) {
   btnGerarSenha.addEventListener("click", async () => {
@@ -120,35 +121,44 @@ if (btnGerarSenha) {
 
     const { data: usuario, error: erroBusca } = await supabaseClient
       .from("nexus_usuarios")
-      .select("*")
+      .select("id, nome, email")
       .eq("email", email)
-      .single();
+      .maybeSingle();
 
-    if (erroBusca || !usuario) {
+    if (erroBusca) {
+      alert("Erro ao buscar usuário: " + erroBusca.message);
+      return;
+    }
+
+    if (!usuario) {
       alert("E-mail não encontrado.");
       return;
     }
 
-    const novaSenha = gerarSenhaTemporaria();
+    const token = gerarTokenRedefinicao();
+    const expiraEm = new Date(Date.now() + 1000 * 60 * 30).toISOString();
 
-    const { error: erroAtualizar } = await supabaseClient
-      .from("nexus_usuarios")
-      .update({
-        senha: novaSenha,
-        primeiro_acesso: true,
-        alterar_senha: true
-      })
-      .eq("id", usuario.id);
+    const { error: erroSolicitacao } = await supabaseClient
+      .from("nexus_redefinicoes_senha")
+      .insert({
+        usuario_id: usuario.id,
+        email,
+        token,
+        status: "pendente",
+        expira_em: expiraEm
+      });
 
-    if (erroAtualizar) {
-      alert("Erro ao redefinir senha: " + erroAtualizar.message);
+    if (erroSolicitacao) {
+      alert("Erro ao registrar solicitação: " + erroSolicitacao.message);
       return;
     }
 
-    alert(
-      `Senha temporária gerada com sucesso!\n\nE-mail: ${email}\nSenha: ${novaSenha}\n\nNo próximo acesso será obrigatório trocar a senha.`
-    );
-
     fecharModalSenha();
+
+    alert(
+      "Solicitação registrada com sucesso.\n\n" +
+      "Por segurança, o Nexus não mostra mais senha na tela.\n\n" +
+      "Para produção, precisamos ligar envio por e-mail, WhatsApp ou SMS."
+    );
   });
 }

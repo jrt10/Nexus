@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus - Redefinir senha</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
+</head>
+<body>
+
+  <main class="login-container">
+    <section class="login-card">
+
+      <div class="logo-area">
+        <img src="../assets/logo.png" alt="Logo Nexus" class="logo">
+        <h1>NEXUS</h1>
+        <p class="marca"><span>JRT</span>ecnologia</p>
+      </div>
+
+      <form id="redefinirSenhaForm">
+        <div class="input-group">
+          <label for="novaSenha">Nova senha</label>
+          <input id="novaSenha" type="password" placeholder="Digite sua nova senha">
+        </div>
+
+        <div class="input-group">
+          <label for="confirmarSenha">Confirmar senha</label>
+          <input id="confirmarSenha" type="password" placeholder="Confirme sua nova senha">
+        </div>
+
+        <button type="submit" id="btnSalvarSenha">Redefinir senha</button>
+      </form>
+
+    </section>
+  </main>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const token = params.get("token");
+
+if (!token) {
+  alert("Link inválido ou sem token.");
+  window.location.href = "../index.html";
+}
+
+document.getElementById("redefinirSenhaForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const novaSenha = document.getElementById("novaSenha").value.trim();
+  const confirmarSenha = document.getElementById("confirmarSenha").value.trim();
+
+  if (!novaSenha || !confirmarSenha) {
+    alert("Preencha a nova senha e a confirmação.");
+    return;
+  }
+
+  if (novaSenha.length < 6) {
+    alert("A senha precisa ter pelo menos 6 caracteres.");
+    return;
+  }
+
+  if (novaSenha !== confirmarSenha) {
+    alert("As senhas não conferem.");
+    return;
+  }
+
+  const { data: solicitacao, error: erroBusca } = await supabaseClient
+    .from("nexus_redefinicoes_senha")
+    .select("*")
+    .eq("token", token)
+    .eq("status", "pendente")
+    .maybeSingle();
+
+  if (erroBusca || !solicitacao) {
+    alert("Link inválido ou já utilizado.");
+    return;
+  }
+
+  if (solicitacao.expira_em && new Date(solicitacao.expira_em) < new Date()) {
+    alert("Link expirado. Solicite uma nova redefinição.");
+    return;
+  }
+
+  const { data: usuarioAtualizado, error: erroSenha } = await supabaseClient
+    .from("nexus_usuarios")
+    .update({
+      senha: novaSenha,
+      primeiro_acesso: false,
+      alterar_senha: false
+    })
+    .eq("id", solicitacao.usuario_id)
+    .select()
+    .single();
+
+  if (erroSenha) {
+    alert("Erro ao redefinir senha: " + erroSenha.message);
+    return;
+  }
+
+  await supabaseClient
+    .from("nexus_redefinicoes_senha")
+    .update({
+      status: "utilizada",
+      utilizada_em: new Date().toISOString()
+    })
+    .eq("id", solicitacao.id);
+
+  localStorage.setItem("nexus_usuario", JSON.stringify(usuarioAtualizado));
+
+  alert("Senha redefinida com sucesso.");
+  window.location.href = "dashboard-master.html";
+});
+</script>
+
+</body>
+</html>

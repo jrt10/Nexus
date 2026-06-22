@@ -2,156 +2,377 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Agências - Nexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agências - Nexus</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
+</head>
+<body class="sistema-body">
 
-        <link rel="stylesheet" href="../css/style.css">
+<aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="../assets/logo.png" alt="Nexus">
+      <h2>Nexus</h2>
+    </div>
 
-          <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-            <script src="../js/supabase.js"></script>
-            </head>
-            <body class="sistema-body">
+    <nav class="menu">
+      <a href="dashboard-master.html" data-menu="dashboard">🏠 Dashboard</a>
+      <a href="agencias.html" data-menu="agencias">🏢 Agências</a>
+      <a href="talentos.html" data-menu="talentos">👥 Talentos</a>
+      <a href="eventos.html" data-menu="eventos">📅 Eventos</a>
+      <a href="casting.html" data-menu="casting">⭐ Casting</a>
+      <a href="#" data-menu="contratantes">🏢 Contratantes</a>
+      <a href="#" data-menu="documentos">📄 Documentos</a>
+      <a href="#" data-menu="notificacoes">🔔 Notificações</a>
+      <a href="#" data-menu="financeiro">💳 Financeiro</a>
+      <a href="#" data-menu="relatorios">📊 Relatórios</a>
+      <a href="#" data-menu="configuracoes">⚙️ Configurações</a>
+    </nav>
 
-              <aside class="sidebar">
-                  <div class="sidebar-logo">
-                        <img src="../assets/logo.png" alt="Nexus">
-                              <h2>Nexus</h2>
-                                  </div>
+    <div class="sidebar-footer">
+      <div class="linha"></div>
+      <p class="footer-label">Nome</p>
+      <p id="nomeUsuario">Jessyca</p>
+      <p class="footer-label">Função</p>
+      <p id="funcaoUsuario">Master</p>
+      <button class="btn-sair" id="btnSair">Sair</button>
+      <div class="linha"></div>
+      <p>Nexus v1.0</p>
+      <p>© JRTecnologia - Soluções Criativas</p>
+      <p>Desenvolvido por Jessyca Rocha Tavares</p>
+    </div>
+  </aside>
 
-                                      <nav class="menu">
-                                            <a href="dashboard-master.html">🏠 Dashboard</a>
-                                                  <a href="agencias.html">🏢 Agências</a>
-                                                <a href="talentos.html">👥 Talentos</a>      
-                                                </nav>
+  <main class="conteudo">
+    <header class="topo">
+      <div>
+        <h1>Agências</h1>
+        <p>Cadastro e controle das agências que usam o Nexus</p>
+      </div>
+      <button class="btn-topo" id="btnNovaAgencia">+ Nova agência</button>
+    </header>
 
-                                                          <div class="sidebar-footer">
-                                                                <div class="linha"></div>
+    <section class="painel-filtro">
+      <div class="campo-busca">
+        <span>🔍</span>
+        <input type="text" id="campoPesquisa" placeholder="Pesquisar por agência, responsável, e-mail ou CNPJ">
+      </div>
 
-                                                                      <p class="footer-label">Nome</p>
-                                                                            <p id="nomeUsuario">Jessyca</p>
+      <div class="botoes-filtro">
+        <button id="btnPesquisar">Pesquisar</button>
+        <button class="btn-secundario-clean" id="btnMostrarTodas">Mostrar todas</button>
+      </div>
+    </section>
 
-                                                                                  <p class="footer-label">Função</p>
-                                                                                        <p>Master</p>
+    <section id="listaAgencias" class="grid-agencias">
+      <p class="mensagem-vazia">Pesquise uma agência ou clique em “Mostrar todas”.</p>
+    </section>
+  </main>
 
-                                                                                              <button class="btn-sair" id="btnSair">Sair</button>
+  <div class="modal-overlay" id="modalAgencia">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 id="tituloModalAgencia">Nova agência</h2>
+          <p>Cadastre os dados e o acesso inicial da agência.</p>
+        </div>
+        <button class="btn-fechar" id="btnFecharAgencia">×</button>
+      </div>
 
-                                                                                                    <div class="linha"></div>
+      <div class="modal-grid">
+        <div class="input-group"><label>Nome da agência</label><input id="nomeAgencia"></div>
+        <div class="input-group"><label>Razão social</label><input id="razaoSocial"></div>
+        <div class="input-group"><label>CNPJ</label><input id="cnpj"></div>
+        <div class="input-group"><label>Responsável</label><input id="responsavel"></div>
+        <div class="input-group"><label>Telefone</label><input id="telefone"></div>
+        <div class="input-group"><label>E-mail de acesso</label><input id="emailAgencia" type="email"></div>
+        <div class="input-group"><label>Senha inicial</label><input id="senhaInicial" value="123456"></div>
+        <div class="input-group">
+          <label>Status</label>
+          <select id="statusAgencia">
+            <option value="ativa">Ativa</option>
+            <option value="inativa">Inativa</option>
+          </select>
+        </div>
+      </div>
 
-                                                                                                          <p>Nexus v1.0</p>
-                                                                                                                <p>© JRTecnologia - Soluções Criativas</p>
-                                                                                                                      <p>Desenvolvido por Jessyca Rocha Tavares</p>
-                                                                                                                          </div>
-                                                                                                                            </aside>
+      <div class="modal-actions">
+        <button class="btn-secundario-clean" id="btnCancelarAgencia">Cancelar</button>
+        <button id="btnSalvarAgencia">Salvar agência</button>
+      </div>
+    </div>
+  </div>
 
-                                                                                                                              <main class="conteudo">
+<script>
+function iniciarSistema(menuAtivo = "") {
+  const usuario = JSON.parse(localStorage.getItem("nexus_usuario"));
 
-                                                                                                                                  <div class="topo">
-                                                                                                                                        <div>
-                                                                                                                                                <h1>Agências</h1>
-                                                                                                                                                        <p>Gerenciamento de agências cadastradas</p>
-                                                                                                                                                              </div>
+  if (!usuario) {
+    window.location.href = "../index.html";
+    return null;
+  }
 
-                                                                                                                                                                    <button id="btnNovaAgencia">
-                                                                                                                                                                            Nova Agência
-                                                                                                                                                                                  </button>
-                                                                                                                                                                                      </div>
+  if (!["master", "agencia"].includes(usuario.tipo)) {
+    window.location.href = "../index.html";
+    return null;
+  }
 
-                                                                                                                                                                                          <div class="atalhos">
+  document.getElementById("nomeUsuario").textContent = usuario.nome || "Usuário";
+  document.getElementById("funcaoUsuario").textContent =
+    usuario.tipo === "master" ? "Master" : "Agência";
 
-                                                                                                                                                                                                <table style="width:100%">
-                                                                                                                                                                                                        <thead>
-                                                                                                                                                                                                                  <tr>
-                                                                                                                                                                                                                              <th>Agência</th>
-                                                                                                                                                                                                                                          <th>Responsável</th>
-                                                                                                                                                                                                                                                      <th>Email</th>
-                                                                                                                                                                                                                                                                  <th>Status</th>
-                                                                                                                                                                                                                                                                            </tr>
-                                                                                                                                                                                                                                                                                    </thead>
+  document.querySelectorAll("[data-menu]").forEach(link => {
+    if (link.dataset.menu === menuAtivo) link.classList.add("ativo");
+  });
 
-                                                                                                                                                                                                                                                                                            <tbody id="listaAgencias">
-                                                                                                                                                                                                                                                                                                      <tr>
-                                                                                                                                                                                                                                                                                                                  <td colspan="4">Carregando...</td>
-                                                                                                                                                                                                                                                                                                                            </tr>
-                                                                                                                                                                                                                                                                                                                                    </tbody>
+  document.getElementById("btnSair").addEventListener("click", () => {
+    localStorage.removeItem("nexus_usuario");
+    window.location.href = "../index.html";
+  });
 
-                                                                                                                                                                                                                                                                                                                                          </table>
+  return usuario;
+}
 
-                                                                                                                                                                                                                                                                                                                                              </div>
+const usuario = iniciarSistema("agencias");
+let agenciaEditandoId = null;
 
-                                                                                                                                                                                                                                                                                                                                                </main>
+const modalAgencia = document.getElementById("modalAgencia");
 
-                                                                                                                                                                                                                                                                                                                                                <script>
+document.getElementById("btnNovaAgencia").addEventListener("click", abrirNovaAgencia);
+document.getElementById("btnFecharAgencia").addEventListener("click", fecharModalAgencia);
+document.getElementById("btnCancelarAgencia").addEventListener("click", fecharModalAgencia);
+document.getElementById("btnSalvarAgencia").addEventListener("click", salvarAgencia);
+document.getElementById("btnPesquisar").addEventListener("click", () => carregarAgencias(false));
+document.getElementById("btnMostrarTodas").addEventListener("click", () => carregarAgencias(true));
+document.getElementById("campoPesquisa").addEventListener("keydown", event => {
+  if (event.key === "Enter") carregarAgencias(false);
+});
 
-                                                                                                                                                                                                                                                                                                                                                const usuario = JSON.parse(localStorage.getItem("nexus_usuario"));
+function abrirNovaAgencia() {
+  agenciaEditandoId = null;
+  document.getElementById("tituloModalAgencia").textContent = "Nova agência";
+  limparCamposAgencia();
+  modalAgencia.classList.add("ativo");
+}
 
-                                                                                                                                                                                                                                                                                                                                                if (!usuario || usuario.tipo !== "master") {
-                                                                                                                                                                                                                                                                                                                                                    window.location.href = "../index.html";
-                                                                                                                                                                                                                                                                                                                                                    }
+function fecharModalAgencia() {
+  modalAgencia.classList.remove("ativo");
+  agenciaEditandoId = null;
+}
 
-                                                                                                                                                                                                                                                                                                                                                    document.getElementById("nomeUsuario").textContent =
-                                                                                                                                                                                                                                                                                                                                                        usuario.nome || "Usuário";
+function limparCamposAgencia() {
+  document.getElementById("nomeAgencia").value = "";
+  document.getElementById("razaoSocial").value = "";
+  document.getElementById("cnpj").value = "";
+  document.getElementById("responsavel").value = "";
+  document.getElementById("telefone").value = "";
+  document.getElementById("emailAgencia").value = "";
+  document.getElementById("senhaInicial").value = "123456";
+  document.getElementById("statusAgencia").value = "ativa";
+}
 
-                                                                                                                                                                                                                                                                                                                                                        document.getElementById("btnSair").addEventListener("click", () => {
+async function carregarAgencias(mostrarTodas = false) {
+  const termo = document.getElementById("campoPesquisa").value.trim();
 
-                                                                                                                                                                                                                                                                                                                                                            localStorage.removeItem("nexus_usuario");
+  if (!mostrarTodas && !termo) {
+    document.getElementById("listaAgencias").innerHTML =
+      `<p class="mensagem-vazia">Pesquise uma agência ou clique em “Mostrar todas”.</p>`;
+    return;
+  }
 
-                                                                                                                                                                                                                                                                                                                                                                window.location.href = "../index.html";
+  let query = supabaseClient
+    .from("nexus_agencias")
+    .select("*")
+    .order("created_at", { ascending:false });
 
-                                                                                                                                                                                                                                                                                                                                                                });
+  if (termo) {
+    query = query.or(`nome_agencia.ilike.%${termo}%,razao_social.ilike.%${termo}%,responsavel.ilike.%${termo}%,email.ilike.%${termo}%,cnpj.ilike.%${termo}%`);
+  }
 
-                                                                                                                                                                                                                                                                                                                                                                async function carregarAgencias() {
+  const { data, error } = await query;
 
-                                                                                                                                                                                                                                                                                                                                                                    const { data, error } = await supabaseClient
-                                                                                                                                                                                                                                                                                                                                                                            .from("nexus_agencias")
-                                                                                                                                                                                                                                                                                                                                                                                    .select("*")
-                                                                                                                                                                                                                                                                                                                                                                                            .order("id", { ascending: false });
+  if (error) {
+    alert("Erro ao carregar agências: " + error.message);
+    return;
+  }
 
-                                                                                                                                                                                                                                                                                                                                                                                                const tbody =
-                                                                                                                                                                                                                                                                                                                                                                                                        document.getElementById("listaAgencias");
+  renderizarAgencias(data || []);
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                            tbody.innerHTML = "";
+function renderizarAgencias(lista) {
+  const container = document.getElementById("listaAgencias");
+  container.innerHTML = "";
 
-                                                                                                                                                                                                                                                                                                                                                                                                                if (error) {
+  if (!lista.length) {
+    container.innerHTML = `<p class="mensagem-vazia">Nenhuma agência encontrada.</p>`;
+    return;
+  }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                        tbody.innerHTML =
-                                                                                                                                                                                                                                                                                                                                                                                                                                    "<tr><td colspan='4'>Erro ao carregar.</td></tr>";
+  lista.forEach(agencia => {
+    container.innerHTML += `
+      <article class="card-agencia">
+        <div class="card-agencia-topo">
+          <div>
+            <h3>${agencia.nome_agencia || "-"}</h3>
+            <p>${agencia.responsavel || "-"}</p>
+          </div>
+          <span class="badge-status ${agencia.status || ""}">${agencia.status || "-"}</span>
+        </div>
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                            return;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+        <div class="card-agencia-info">
+          <p><strong>E-mail:</strong> ${agencia.email || "-"}</p>
+          <p><strong>Telefone:</strong> ${agencia.telefone || "-"}</p>
+          <p><strong>CNPJ:</strong> ${agencia.cnpj || "-"}</p>
+          <p><strong>Plano:</strong> ${agencia.plano_atual || "-"}</p>
+        </div>
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    if (!data.length) {
+        <div class="card-agencia-actions">
+          <button onclick="editarAgencia('${agencia.id}')">Editar</button>
+          <button class="btn-secundario-clean" onclick="alternarStatusAgencia('${agencia.id}', '${agencia.status || ""}')">Status</button>
+        </div>
+      </article>
+    `;
+  });
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            tbody.innerHTML =
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "<tr><td colspan='4'>Nenhuma agência cadastrada.</td></tr>";
+async function salvarAgencia() {
+  const nomeAgencia = document.getElementById("nomeAgencia").value.trim();
+  const razaoSocial = document.getElementById("razaoSocial").value.trim();
+  const cnpj = document.getElementById("cnpj").value.trim();
+  const responsavel = document.getElementById("responsavel").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
+  const email = document.getElementById("emailAgencia").value.trim().toLowerCase();
+  const senha = document.getElementById("senhaInicial").value.trim();
+  const status = document.getElementById("statusAgencia").value;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                return;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+  if (!nomeAgencia || !responsavel || !email) {
+    alert("Preencha nome da agência, responsável e e-mail.");
+    return;
+  }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        data.forEach(agencia => {
+  if (agenciaEditandoId) {
+    const { error } = await supabaseClient
+      .from("nexus_agencias")
+      .update({
+        nome_agencia:nomeAgencia,
+        razao_social:razaoSocial,
+        cnpj,
+        responsavel,
+        telefone,
+        email,
+        status
+      })
+      .eq("id", agenciaEditandoId);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                tbody.innerHTML += `
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <tr>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <td>${agencia.nome_agencia || ""}</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <td>${agencia.responsavel || ""}</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <td>${agencia.email || ""}</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <td>${agencia.status || ""}</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </tr>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                `;
+    if (error) {
+      alert("Erro ao editar agência: " + error.message);
+      return;
+    }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    });
+    fecharModalAgencia();
+    carregarAgencias(true);
+    alert("Agência atualizada.");
+    return;
+  }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+  const { data: novoUsuario, error: erroUsuario } = await supabaseClient
+    .from("nexus_usuarios")
+    .insert({
+      nome:responsavel,
+      email,
+      senha: senha || "123456",
+      tipo:"agencia",
+      status:"ativo",
+      primeiro_acesso:true,
+      alterar_senha:true
+    })
+    .select()
+    .single();
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    carregarAgencias();
+  if (erroUsuario) {
+    alert("Erro ao criar usuário da agência: " + erroUsuario.message);
+    return;
+  }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    document.getElementById("btnNovaAgencia")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    .addEventListener("click", () => {
+  const { data: novaAgencia, error: erroAgencia } = await supabaseClient
+    .from("nexus_agencias")
+    .insert({
+      usuario_id:novoUsuario.id,
+      nome_agencia:nomeAgencia,
+      razao_social:razaoSocial,
+      cnpj,
+      responsavel,
+      telefone,
+      email,
+      status,
+      pode_criar_eventos:true,
+      pode_criar_contratantes:true,
+      pode_montar_casting:true,
+      pode_exportar_planilha:true,
+      pode_avaliar_staff:true,
+      plano_atual:"teste"
+    })
+    .select()
+    .single();
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        alert("Próximo passo: formulário de cadastro.");
+  if (erroAgencia) {
+    alert("Usuário criado, mas erro ao criar agência: " + erroAgencia.message);
+    return;
+  }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        });
+  await supabaseClient
+    .from("nexus_usuarios")
+    .update({ agencia_id:novaAgencia.id })
+    .eq("id", novoUsuario.id);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </script>
+  fecharModalAgencia();
+  carregarAgencias(true);
+  alert("Agência criada com sucesso.");
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </html>
+async function editarAgencia(id) {
+  const { data, error } = await supabaseClient
+    .from("nexus_agencias")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error || !data) {
+    alert("Erro ao carregar agência.");
+    return;
+  }
+
+  agenciaEditandoId = id;
+  document.getElementById("tituloModalAgencia").textContent = "Editar agência";
+  document.getElementById("nomeAgencia").value = data.nome_agencia || "";
+  document.getElementById("razaoSocial").value = data.razao_social || "";
+  document.getElementById("cnpj").value = data.cnpj || "";
+  document.getElementById("responsavel").value = data.responsavel || "";
+  document.getElementById("telefone").value = data.telefone || "";
+  document.getElementById("emailAgencia").value = data.email || "";
+  document.getElementById("senhaInicial").value = "";
+  document.getElementById("statusAgencia").value = data.status || "ativa";
+  modalAgencia.classList.add("ativo");
+}
+
+async function alternarStatusAgencia(id, statusAtual) {
+  const novoStatus = statusAtual === "ativa" ? "inativa" : "ativa";
+
+  const { error } = await supabaseClient
+    .from("nexus_agencias")
+    .update({ status:novoStatus })
+    .eq("id", id);
+
+  if (error) {
+    alert("Erro ao alterar status: " + error.message);
+    return;
+  }
+
+  carregarAgencias(true);
+}
+
+</script>
+
+</body>
+</html>
