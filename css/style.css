@@ -1027,3 +1027,27 @@ footer p{
     grid-template-columns:repeat(2, 1fr);
   }
 }
+
+
+.check-linha{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  background:#111;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  color:#ddd;
+  margin:8px 0 18px;
+  cursor:pointer;
+}
+
+.check-linha input{
+  width:18px;
+  height:18px;
+  accent-color:var(--blue);
+}
+
+.input-group select{
+  appearance:none;
+}
