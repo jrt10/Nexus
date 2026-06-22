@@ -1,0 +1,15 @@
+{
+  "name": "Nexus Staff",
+  "short_name": "Nexus",
+  "start_url": "pages/app-staff.html",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

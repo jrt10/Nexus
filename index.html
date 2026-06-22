@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexus</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=staff-app-1">
 </head>
 <body>
 
@@ -33,6 +33,7 @@
 
         <button type="submit">Entrar</button>
         <button type="button" class="btn-link-login" id="btnEsqueciSenha">Esqueci minha senha</button>
+        <button type="button" class="btn-link-login" onclick="window.location.href='pages/cadastro-staff.html'">Sou staff / quero me cadastrar</button>
       </form>
 
     </section>
@@ -51,7 +52,7 @@
       <div class="modal-header">
         <div>
           <h2>Redefinir senha</h2>
-          <p>Informe seu e-mail para solicitar uma redefinição segura.</p>
+          <p>Informe seu e-mail para solicitar um link de redefinição.</p>
         </div>
         <button class="btn-fechar" id="btnFecharSenha">×</button>
       </div>
@@ -61,8 +62,17 @@
         <input id="emailRedefinir" type="email" placeholder="Digite seu e-mail">
       </div>
 
+      <div class="input-group">
+        <label for="canalRedefinir">Como deseja receber?</label>
+        <select id="canalRedefinir">
+          <option value="email">E-mail</option>
+          <option value="whatsapp">WhatsApp</option>
+          <option value="sms">SMS</option>
+        </select>
+      </div>
+
       <div class="box-aviso">
-        <p>O Nexus não exibe senha temporária na tela. A solicitação será registrada para envio por e-mail, WhatsApp ou SMS quando a integração estiver ativa.</p>
+        <p>Por segurança, o Nexus não exibe senha na tela. A solicitação fica registrada para envio pelo canal escolhido.</p>
       </div>
 
       <div class="modal-actions">
@@ -73,7 +83,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/supabase.js?v=staff-app-1"></script>
+  <script src="js/app.js?v=staff-app-1"></script>
 </body>
 </html>

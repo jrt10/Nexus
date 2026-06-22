@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro Staff - Nexus</title>
+  <link rel="stylesheet" href="../css/style.css?v=staff-app-1">
+  <link rel="manifest" href="../manifest.json">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js?v=staff-app-1"></script>
+</head>
+<body>
+
+  <main class="login-container">
+    <section class="login-card cadastro-staff-card">
+
+      <div class="logo-area">
+        <img src="../assets/logo.png" alt="Logo Nexus" class="logo">
+        <h1>NEXUS</h1>
+        <p class="marca"><span>Cadastro</span> Staff</p>
+      </div>
+
+      <form id="cadastroStaffForm">
+        <div class="cadastro-staff-grid">
+          <div class="input-group">
+            <label>Nome no documento</label>
+            <input id="nomeDocumento" placeholder="Nome completo" required>
+          </div>
+
+          <div class="input-group">
+            <label>Nome de apresentação</label>
+            <input id="nomeApresentacao" placeholder="Como quer aparecer no casting" required>
+          </div>
+
+          <div class="input-group">
+            <label>Nome social</label>
+            <input id="nomeSocial" placeholder="Opcional">
+          </div>
+
+          <div class="input-group">
+            <label>E-mail</label>
+            <input id="email" type="email" placeholder="seuemail@email.com" required>
+          </div>
+
+          <div class="input-group">
+            <label>Telefone / WhatsApp</label>
+            <input id="telefone" placeholder="(11) 99999-9999" required>
+          </div>
+
+          <div class="input-group">
+            <label>Senha</label>
+            <input id="senha" type="password" placeholder="Crie uma senha" required>
+          </div>
+
+          <div class="input-group">
+            <label>Cidade</label>
+            <input id="cidade" placeholder="São Paulo" required>
+          </div>
+
+          <div class="input-group">
+            <label>Estado</label>
+            <input id="estado" maxlength="2" placeholder="SP" required>
+          </div>
+
+          <div class="input-group">
+            <label>Gênero</label>
+            <select id="genero">
+              <option value="">Prefiro não informar</option>
+              <option value="Feminino">Feminino</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Não binário">Não binário</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Pronome</label>
+            <input id="pronome" placeholder="Ela/dela, ele/dele...">
+          </div>
+
+          <div class="input-group">
+            <label>Altura</label>
+            <input id="altura" placeholder="Ex: 1,70">
+          </div>
+
+          <div class="input-group">
+            <label>Peso</label>
+            <input id="peso" placeholder="Opcional">
+          </div>
+
+          <div class="input-group">
+            <label>Funções</label>
+            <input id="funcoes" placeholder="Ex: Recepção, CAEX, Credenciamento" required>
+          </div>
+
+          <div class="input-group">
+            <label>Idiomas</label>
+            <input id="idiomas" placeholder="Ex: Português, Inglês">
+          </div>
+
+          <div class="input-group">
+            <label>Valor mínimo diária</label>
+            <input id="valorMinimoDiaria" type="number" step="0.01" placeholder="Ex: 180">
+          </div>
+
+          <div class="input-group">
+            <label>Pix</label>
+            <input id="pix" placeholder="Chave Pix">
+          </div>
+
+          <div class="input-group">
+            <label>Banco</label>
+            <input id="banco" placeholder="Banco da conta">
+          </div>
+
+          <div class="input-group">
+            <label>Possui veículo?</label>
+            <select id="possuiVeiculo">
+              <option value="">Não informado</option>
+              <option value="Não">Não</option>
+              <option value="Carro">Carro</option>
+              <option value="Moto">Moto</option>
+              <option value="Carro e moto">Carro e moto</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>MEI</label>
+            <select id="meiTipo">
+              <option value="sem_mei">Não tenho MEI</option>
+              <option value="mei_proprio">Tenho MEI próprio</option>
+              <option value="mei_terceiro">Uso MEI de terceiro</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>CNPJ MEI</label>
+            <input id="cnpjMei" placeholder="Opcional">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Observações</label>
+          <textarea id="observacoes" placeholder="Conte algo importante sobre sua experiência, disponibilidade ou restrições"></textarea>
+        </div>
+
+        <label class="check-linha">
+          <input type="checkbox" id="termosUso" checked>
+          <span>Aceito os Termos de Uso</span>
+        </label>
+
+        <label class="check-linha">
+          <input type="checkbox" id="politicaPrivacidade" checked>
+          <span>Aceito a Política de Privacidade/LGPD</span>
+        </label>
+
+        <button type="submit" id="btnCadastrarStaff">Cadastrar staff</button>
+        <button type="button" class="btn-link-login" onclick="window.location.href='../index.html'">Já tenho login</button>
+      </form>
+
+    </section>
+  </main>
+
+<script>
+function separarLista(valor) {
+  return String(valor || "")
+    .split(",")
+    .map(item => item.trim())
+    .filter(Boolean);
+}
+
+document.getElementById("cadastroStaffForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const btn = document.getElementById("btnCadastrarStaff");
+  btn.disabled = true;
+  btn.textContent = "Cadastrando...";
+
+  const nomeDocumento = document.getElementById("nomeDocumento").value.trim();
+  const nomeApresentacao = document.getElementById("nomeApresentacao").value.trim();
+  const nomeSocial = document.getElementById("nomeSocial").value.trim();
+  const email = document.getElementById("email").value.trim().toLowerCase();
+  const telefone = document.getElementById("telefone").value.trim();
+  const senha = document.getElementById("senha").value.trim();
+  const cidade = document.getElementById("cidade").value.trim();
+  const estado = document.getElementById("estado").value.trim().toUpperCase();
+  const funcoes = separarLista(document.getElementById("funcoes").value);
+  const idiomas = separarLista(document.getElementById("idiomas").value);
+  const meiTipo = document.getElementById("meiTipo").value;
+
+  if (!nomeDocumento || !nomeApresentacao || !email || !telefone || !senha || !cidade || !estado || !funcoes.length) {
+    alert("Preencha os campos obrigatórios.");
+    btn.disabled = false;
+    btn.textContent = "Cadastrar staff";
+    return;
+  }
+
+  if (!document.getElementById("termosUso").checked || !document.getElementById("politicaPrivacidade").checked) {
+    alert("Você precisa aceitar os termos para continuar.");
+    btn.disabled = false;
+    btn.textContent = "Cadastrar staff";
+    return;
+  }
+
+  const { data: usuarioExistente } = await supabaseClient
+    .from("nexus_usuarios")
+    .select("id")
+    .eq("email", email)
+    .maybeSingle();
+
+  if (usuarioExistente) {
+    alert("Já existe um usuário com esse e-mail.");
+    btn.disabled = false;
+    btn.textContent = "Cadastrar staff";
+    return;
+  }
+
+  const { data: novoUsuario, error: erroUsuario } = await supabaseClient
+    .from("nexus_usuarios")
+    .insert({
+      nome: nomeApresentacao || nomeDocumento,
+      email,
+      senha,
+      tipo: "staff",
+      status: "ativo",
+      primeiro_acesso: false,
+      alterar_senha: false
+    })
+    .select()
+    .single();
+
+  if (erroUsuario) {
+    alert("Erro ao criar usuário: " + erroUsuario.message);
+    btn.disabled = false;
+    btn.textContent = "Cadastrar staff";
+    return;
+  }
+
+  const payloadStaff = {
+    usuario_id: novoUsuario.id,
+    nome_documento: nomeDocumento,
+    nome_apresentacao: nomeApresentacao,
+    nome_social: nomeSocial || null,
+    email,
+    telefone,
+    cidade,
+    estado,
+    genero: document.getElementById("genero").value || null,
+    pronome: document.getElementById("pronome").value.trim() || null,
+    altura: document.getElementById("altura").value.trim() || null,
+    peso: document.getElementById("peso").value.trim() || null,
+    valor_minimo_diaria: document.getElementById("valorMinimoDiaria").value || null,
+    pix: document.getElementById("pix").value.trim() || null,
+    banco: document.getElementById("banco").value.trim() || null,
+    possui_veiculo: document.getElementById("possuiVeiculo").value || null,
+    tem_mei: meiTipo !== "sem_mei",
+    mei_proprio: meiTipo === "mei_proprio",
+    cnpj_mei: document.getElementById("cnpjMei").value.trim() || null,
+    observacoes: document.getElementById("observacoes").value.trim() || null,
+    status: "pendente",
+    disponivel_agora: false
+  };
+
+  const { data: novoStaff, error: erroStaff } = await supabaseClient
+    .from("nexus_staffs")
+    .insert(payloadStaff)
+    .select()
+    .single();
+
+  if (erroStaff) {
+    alert("Usuário criado, mas erro ao criar staff: " + erroStaff.message);
+    btn.disabled = false;
+    btn.textContent = "Cadastrar staff";
+    return;
+  }
+
+  await supabaseClient
+    .from("nexus_usuarios")
+    .update({ staff_id: novoStaff.id })
+    .eq("id", novoUsuario.id);
+
+  for (const funcao of funcoes) {
+    await supabaseClient
+      .from("nexus_staff_perfis")
+      .insert({
+        staff_id: novoStaff.id,
+        perfil: funcao,
+        nivel: "Intermediário"
+      });
+  }
+
+  for (const idioma of idiomas) {
+    await supabaseClient
+      .from("nexus_staff_idiomas")
+      .insert({
+        staff_id: novoStaff.id,
+        idioma
+      });
+  }
+
+  await supabaseClient
+    .from("nexus_aceites_termos")
+    .insert([
+      {
+        usuario_id: novoUsuario.id,
+        termo: "termos_uso_staff_v1",
+        aceite: true,
+        data_aceite: new Date().toISOString()
+      },
+      {
+        usuario_id: novoUsuario.id,
+        termo: "politica_privacidade_lgpd_v1",
+        aceite: true,
+        data_aceite: new Date().toISOString()
+      }
+    ]);
+
+  localStorage.setItem("nexus_usuario", JSON.stringify({
+    ...novoUsuario,
+    staff_id: novoStaff.id
+  }));
+
+  alert("Cadastro realizado com sucesso. Agora você já pode testar o app staff.");
+  window.location.href = "app-staff.html";
+});
+</script>
+
+</body>
+</html>

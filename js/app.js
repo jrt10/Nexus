@@ -30,7 +30,7 @@ function redirecionarUsuario(usuario) {
   }
 
   if (usuario.tipo === "staff") {
-    window.location.href = "pages/talentos.html";
+    window.location.href = "pages/app-staff.html";
     return;
   }
 
@@ -113,6 +113,7 @@ if (btnCancelarSenha) btnCancelarSenha.addEventListener("click", fecharModalSenh
 if (btnGerarSenha) {
   btnGerarSenha.addEventListener("click", async () => {
     const email = document.getElementById("emailRedefinir").value.trim().toLowerCase();
+    const canal = document.querySelector("input[name='canalRedefinicao']:checked")?.value || "email";
 
     if (!email) {
       alert("Informe o e-mail.");
@@ -145,7 +146,8 @@ if (btnGerarSenha) {
         email,
         token,
         status: "pendente",
-        expira_em: expiraEm
+        expira_em: expiraEm,
+        canal_envio: canal
       });
 
     if (erroSolicitacao) {
@@ -156,9 +158,9 @@ if (btnGerarSenha) {
     fecharModalSenha();
 
     alert(
-      "Solicitação registrada com sucesso.\n\n" +
-      "Por segurança, o Nexus não mostra mais senha na tela.\n\n" +
-      "Para produção, precisamos ligar envio por e-mail, WhatsApp ou SMS."
+      "Solicitação registrada com sucesso.\\n\\n" +
+      "Quando a integração de envio estiver ativa, o link será enviado por " + canal + ".\\n\\n" +
+      "Por segurança, nenhuma senha é exibida na tela."
     );
   });
 }

@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Casting - Nexus</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style.css?v=senha-termos-1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js"></script>
+  <script src="../js/supabase.js?v=senha-termos-1"></script>
 </head>
 <body class="sistema-body">
 
@@ -50,7 +50,7 @@
         <h1>Casting</h1>
         <p>Talentos selecionados para eventos</p>
       </div>
-      <button class="btn-topo" onclick="window.location.href='talentos.html'">+ Selecionar talento</button>
+      <button class="btn-topo" id="btnSelecionarTalentoCasting">+ Selecionar talento</button>
     </header>
 
     <section class="painel-filtro">
@@ -101,6 +101,12 @@ function iniciarSistema(menuAtivo = "") {
 }
 
 const usuario = iniciarSistema("casting");
+const paramsCasting = new URLSearchParams(window.location.search);
+const eventoFiltroId = paramsCasting.get("evento_id");
+
+document.getElementById("btnSelecionarTalentoCasting").addEventListener("click", () => {
+  window.location.href = eventoFiltroId ? `talentos.html?evento_id=${eventoFiltroId}` : "talentos.html";
+});
 
 document.getElementById("btnPesquisar").addEventListener("click", () => carregarCasting(false));
 document.getElementById("btnMostrarTodos").addEventListener("click", () => carregarCasting(true));
@@ -111,7 +117,7 @@ document.getElementById("campoPesquisa").addEventListener("keydown", event => {
 async function carregarCasting(mostrarTodos = false) {
   const termo = document.getElementById("campoPesquisa").value.trim().toLowerCase();
 
-  if (!mostrarTodos && !termo) {
+  if (!mostrarTodos && !termo && !eventoFiltroId) {
     document.getElementById("listaCasting").innerHTML =
       `<p class="mensagem-vazia">Pesquise um casting ou clique em “Mostrar todos”.</p>`;
     return;
@@ -145,6 +151,10 @@ async function carregarCasting(mostrarTodos = false) {
 
   if (usuario.tipo === "agencia" && usuario.agencia_id) {
     query = query.eq("agencia_id", usuario.agencia_id);
+  }
+
+  if (eventoFiltroId) {
+    query = query.eq("evento_id", eventoFiltroId);
   }
 
   const { data, error } = await query;

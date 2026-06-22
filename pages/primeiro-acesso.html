@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexus - Trocar senha</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style.css?v=senha-termos-1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js"></script>
+  <script src="../js/supabase.js?v=senha-termos-1"></script>
 </head>
 <body>
 
@@ -30,10 +30,17 @@
           <input id="confirmarSenha" type="password" placeholder="Confirme sua nova senha">
         </div>
 
-        <label class="check-linha">
-          <input type="checkbox" id="aceiteTermos">
-          <span>Li e aceito os termos de uso da plataforma Nexus.</span>
-        </label>
+        <div class="box-aviso termos-box">
+          <label class="check-linha check-termo">
+            <input type="checkbox" id="aceiteTermosUso">
+            <span>Li e aceito os <button type="button" class="btn-termo-link" data-termo="uso">Termos de Uso</button></span>
+          </label>
+
+          <label class="check-linha check-termo">
+            <input type="checkbox" id="aceitePrivacidade">
+            <span>Li e aceito a <button type="button" class="btn-termo-link" data-termo="privacidade">Política de Privacidade/LGPD</button></span>
+          </label>
+        </div>
 
         <button type="submit" id="btnSalvarSenha">Salvar nova senha</button>
         <button type="button" class="btn-link-login" id="btnVoltarLogin">Voltar ao login</button>
@@ -50,13 +57,83 @@
     </div>
   </footer>
 
+  <div class="modal-overlay" id="modalTermo">
+    <div class="modal-card modal-card-grande">
+      <div class="modal-header">
+        <div>
+          <h2 id="tituloTermo">Termo</h2>
+          <p>Leia antes de aceitar.</p>
+        </div>
+        <button class="btn-fechar" id="btnFecharTermo">×</button>
+      </div>
+
+      <div id="conteudoTermo" class="conteudo-termo"></div>
+
+      <div class="modal-actions">
+        <button id="btnLiTermo">Li e entendi</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 const usuarioLocal = JSON.parse(localStorage.getItem("nexus_usuario"));
+let termoAberto = null;
 
 if (!usuarioLocal || !usuarioLocal.id) {
   alert("Sessão não encontrada. Faça login novamente.");
   window.location.href = "../index.html";
 }
+
+const textosTermos = {
+  uso: {
+    titulo: "Termos de Uso - Nexus",
+    html: `
+      <h3>1. Uso da plataforma</h3>
+      <p>O Nexus é uma plataforma para cadastro, consulta, seleção e gestão de profissionais para eventos.</p>
+      <h3>2. Responsabilidade</h3>
+      <p>Agências e usuários são responsáveis pelas informações cadastradas, seleção dos profissionais e validação de documentos.</p>
+      <h3>3. Conduta</h3>
+      <p>É proibido usar a plataforma para fraudes, informações falsas, assédio, discriminação ou qualquer prática irregular.</p>
+      <h3>4. Acesso</h3>
+      <p>O acesso pode ser suspenso em caso de uso indevido, inadimplência, informações inconsistentes ou violação das regras.</p>
+    `
+  },
+  privacidade: {
+    titulo: "Política de Privacidade/LGPD - Nexus",
+    html: `
+      <h3>1. Dados coletados</h3>
+      <p>O Nexus pode armazenar dados cadastrais, profissionais, documentos, disponibilidade, avaliações e histórico de eventos.</p>
+      <h3>2. Finalidade</h3>
+      <p>Os dados são usados para operação da plataforma, seleção de profissionais, gestão de eventos, contratos e relatórios.</p>
+      <h3>3. Compartilhamento</h3>
+      <p>Dados podem ser visualizados por usuários autorizados, conforme perfil de acesso e vínculo com evento, agência ou contratante.</p>
+      <h3>4. Segurança</h3>
+      <p>O acesso deve ser feito com credenciais individuais. Cada usuário é responsável por manter sua senha em segurança.</p>
+    `
+  }
+};
+
+function abrirTermo(tipo) {
+  termoAberto = tipo;
+  document.getElementById("tituloTermo").textContent = textosTermos[tipo].titulo;
+  document.getElementById("conteudoTermo").innerHTML = textosTermos[tipo].html;
+  document.getElementById("modalTermo").classList.add("ativo");
+}
+
+function fecharTermo() {
+  document.getElementById("modalTermo").classList.remove("ativo");
+}
+
+document.querySelectorAll(".btn-termo-link").forEach(btn => {
+  btn.addEventListener("click", () => abrirTermo(btn.dataset.termo));
+});
+
+document.getElementById("btnFecharTermo").addEventListener("click", fecharTermo);
+document.getElementById("btnLiTermo").addEventListener("click", () => {
+  if (termoAberto === "uso") document.getElementById("aceiteTermosUso").checked = true;
+  if (termoAberto === "privacidade") document.getElementById("aceitePrivacidade").checked = true;
+  fecharTermo();
+});
 
 document.getElementById("btnVoltarLogin").addEventListener("click", () => {
   localStorage.removeItem("nexus_usuario");
@@ -69,7 +146,8 @@ document.getElementById("primeiroAcessoForm").addEventListener("submit", async (
   const btnSalvar = document.getElementById("btnSalvarSenha");
   const novaSenha = document.getElementById("novaSenha").value.trim();
   const confirmarSenha = document.getElementById("confirmarSenha").value.trim();
-  const aceiteTermos = document.getElementById("aceiteTermos").checked;
+  const aceiteTermosUso = document.getElementById("aceiteTermosUso").checked;
+  const aceitePrivacidade = document.getElementById("aceitePrivacidade").checked;
 
   if (!novaSenha || !confirmarSenha) {
     alert("Preencha a nova senha e a confirmação.");
@@ -86,8 +164,8 @@ document.getElementById("primeiroAcessoForm").addEventListener("submit", async (
     return;
   }
 
-  if (!aceiteTermos) {
-    alert("Você precisa aceitar os termos para continuar.");
+  if (!aceiteTermosUso || !aceitePrivacidade) {
+    alert("Você precisa aceitar os dois termos para continuar.");
     return;
   }
 
@@ -114,12 +192,20 @@ document.getElementById("primeiroAcessoForm").addEventListener("submit", async (
 
   await supabaseClient
     .from("nexus_aceites_termos")
-    .insert({
-      usuario_id: usuarioLocal.id,
-      termo: "termos_uso_nexus_v1",
-      aceite: true,
-      data_aceite: new Date().toISOString()
-    });
+    .insert([
+      {
+        usuario_id: usuarioLocal.id,
+        termo: "termos_uso_nexus_v1",
+        aceite: true,
+        data_aceite: new Date().toISOString()
+      },
+      {
+        usuario_id: usuarioLocal.id,
+        termo: "politica_privacidade_lgpd_v1",
+        aceite: true,
+        data_aceite: new Date().toISOString()
+      }
+    ]);
 
   localStorage.setItem("nexus_usuario", JSON.stringify(usuarioAtualizado));
 

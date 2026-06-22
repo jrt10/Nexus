@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Talentos - Nexus</title>
 
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style.css?v=senha-termos-1">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js"></script>
+  <script src="../js/supabase.js?v=senha-termos-1"></script>
 </head>
 
 <body class="sistema-body">
@@ -278,6 +278,8 @@ const modalSelecionarStaff = document.getElementById("modalSelecionarStaff");
 let staffAtualId = null;
 let staffSelecionadoParaEvento = null;
 let eventosSelecaoLista = [];
+const paramsTalentos = new URLSearchParams(window.location.search);
+const eventoPreSelecionadoId = paramsTalentos.get("evento_id");
 
 document.getElementById("btnFecharCurriculo").addEventListener("click", fecharCurriculo);
 document.getElementById("btnFecharCurriculoRodape").addEventListener("click", fecharCurriculo);
@@ -718,6 +720,10 @@ async function selecionarStaff(id) {
   staffSelecionadoParaEvento = id;
   modalSelecionarStaff.classList.add("ativo");
   await carregarEventosParaSelecao();
+
+  if (eventoPreSelecionadoId) {
+    document.getElementById("eventoSelecao").value = eventoPreSelecionadoId;
+  }
 }
 
 async function carregarEventosParaSelecao() {
