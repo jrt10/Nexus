@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Talentos - Nexus</title>
 
-  <link rel="stylesheet" href="../css/style.css?v=senha-termos-1">
+  <link rel="stylesheet" href="../css/style.css?v=txt-completo-1?v=senha-termos-1">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=senha-termos-1"></script>
+  <script src="../js/supabase.js?v=txt-completo-1?v=senha-termos-1"></script>
 </head>
 
 <body class="sistema-body">
@@ -628,23 +628,9 @@ async function abrirCurriculo(id) {
         <div class="linha-curriculo"><span>Peso</span><strong>${data.peso || "-"}</strong></div>
         <div class="linha-curriculo"><span>MEI</span><strong>${data.tem_mei ? (data.mei_proprio ? "Próprio" : "Terceiro") : "Não possui"}</strong></div>
         <div class="linha-curriculo"><span>CNPJ MEI</span><strong>${data.cnpj_mei || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Tipo MEI</span><strong>${data.mei_tipo || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Razão social MEI</span><strong>${data.mei_razao_social || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Titular MEI</span><strong>${data.mei_titular_nome || "-"}</strong></div>
-        <div class="linha-curriculo"><span>CPF titular MEI</span><strong>${data.mei_titular_cpf || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Relação titular MEI</span><strong>${data.mei_relacao_titular || "-"}</strong></div>
         <div class="linha-curriculo"><span>Valor mínimo diária</span><strong>${data.valor_minimo_diaria ? "R$ " + data.valor_minimo_diaria : "-"}</strong></div>
         <div class="linha-curriculo"><span>Pix</span><strong>${data.pix || "-"}</strong></div>
         <div class="linha-curriculo"><span>Banco</span><strong>${data.banco || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Tipo de conta</span><strong>${data.tipo_conta || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Agência</span><strong>${data.agencia_bancaria || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Conta</span><strong>${data.conta_bancaria || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Titular conta</span><strong>${data.titular_conta || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Doc titular conta</span><strong>${data.documento_titular_conta || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Nível experiência</span><strong>${data.nivel_experiencia || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Disponibilidade geral</span><strong>${data.disponibilidade_geral || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Camiseta</span><strong>${data.tamanho_camiseta || "-"}</strong></div>
-        <div class="linha-curriculo"><span>Calçado</span><strong>${data.numero_calcado || "-"}</strong></div>
         <div class="linha-curriculo"><span>Disponível agora</span><strong>${data.disponivel_agora ? "Sim" : "Não"}</strong></div>
         <div class="linha-curriculo"><span>Veículo</span><strong>${data.possui_veiculo || "-"}</strong></div>
         <div class="linha-curriculo"><span>Observações</span><strong>${data.observacoes || "-"}</strong></div>

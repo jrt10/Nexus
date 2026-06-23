@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>App Staff - Nexus</title>
-  <link rel="stylesheet" href="../css/style.css?v=staff-app-1">
+  <link rel="stylesheet" href="../css/style.css?v=txt-completo-1">
   <link rel="manifest" href="../manifest.json">
   <meta name="theme-color" content="#050505">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=staff-app-1"></script>
+  <script src="../js/supabase.js?v=txt-completo-1"></script>
 </head>
 
 <body class="staff-app-body">
-
   <main class="staff-app">
-
     <header class="staff-topo">
       <div class="staff-topo-info">
         <div class="staff-avatar" id="staffAvatar">👤</div>
@@ -22,70 +21,48 @@
           <h1 id="staffNome">Staff</h1>
           <p id="staffCidade">Carregando...</p>
         </div>
-      </div>
-
-      <button class="staff-sair" id="btnSair">Sair</button>
+      </div><button class="staff-sair" id="btnSair">Sair</button>
     </header>
-
+    <article class="staff-card install-card" id="cardInstalar">
+      <h2>Instalar app</h2>
+      <p>Para ficar com cara de aplicativo, instale o Nexus na tela inicial.</p><button id="btnInstalarApp">Instalar /
+        adicionar à tela inicial</button>
+    </article>
     <section class="staff-section ativo" id="secInicio">
       <article class="staff-card staff-hero">
         <div class="staff-disponivel">
           <div>
-            <h2><span class="staff-status-bola" id="statusBola"></span><span id="statusTexto">Disponibilidade</span></h2>
+            <h2><span class="staff-status-bola" id="statusBola"></span><span id="statusTexto">Disponibilidade</span>
+            </h2>
             <p>Ative quando estiver disponível para contratação imediata.</p>
-          </div>
-          <button class="btn-topo" id="btnDisponivelAgora">Ativar</button>
+          </div><button class="btn-topo" id="btnDisponivelAgora">Ativar</button>
         </div>
-
         <div class="staff-grid-mini">
-          <div class="staff-mini">
-            <strong id="totalEventos">0</strong>
-            <span>eventos</span>
-          </div>
-          <div class="staff-mini">
-            <strong id="mediaAvaliacao">0</strong>
-            <span>avaliação</span>
-          </div>
+          <div class="staff-mini"><strong id="totalEventos">0</strong><span>eventos</span></div>
+          <div class="staff-mini"><strong id="mediaAvaliacao">0</strong><span>avaliação</span></div>
         </div>
       </article>
-
       <article class="staff-card">
         <h2>Meu perfil</h2>
         <p id="perfilResumo">Carregando perfil...</p>
         <div class="staff-tags" id="perfilTags"></div>
       </article>
     </section>
-
     <section class="staff-section" id="secDisponibilidade">
       <article class="staff-card">
         <h2>Adicionar disponibilidade</h2>
-        <p>Informe os dias que você consegue trabalhar.</p>
-
         <div class="staff-form-grid">
-          <div class="input-group">
-            <label>Data</label>
-            <input id="dataDisponivel" type="date">
-          </div>
-
-          <div class="input-group">
-            <label>Período</label>
-            <select id="periodoDisponivel">
+          <div class="input-group"><label>Data</label><input id="dataDisponivel" type="date"></div>
+          <div class="input-group"><label>Período</label><select id="periodoDisponivel">
               <option value="dia_todo">Dia todo</option>
               <option value="manha">Manhã</option>
               <option value="tarde">Tarde</option>
               <option value="noite">Noite</option>
-            </select>
-          </div>
-
-          <div class="input-group">
-            <label>Observação</label>
-            <textarea id="obsDisponibilidade" placeholder="Ex: tenho aula até 12h"></textarea>
-          </div>
-
-          <button id="btnSalvarDisponibilidade">Salvar disponibilidade</button>
+            </select></div>
+          <div class="input-group"><label>Observação</label><textarea id="obsDisponibilidade"></textarea></div><button
+            id="btnSalvarDisponibilidade">Salvar disponibilidade</button>
         </div>
       </article>
-
       <article class="staff-card">
         <h2>Minhas disponibilidades</h2>
         <div id="listaDisponibilidade">
@@ -93,409 +70,45 @@
         </div>
       </article>
     </section>
-
     <section class="staff-section" id="secOportunidades">
       <article class="staff-card">
-        <h2>Oportunidades</h2>
+        <h2>Jobs</h2>
         <p>Eventos em que você foi selecionado ou está em análise.</p>
-
         <div id="listaOportunidades">
           <p class="texto-fraco">Nenhuma oportunidade carregada.</p>
         </div>
       </article>
     </section>
-
     <section class="staff-section" id="secPerfil">
       <article class="staff-card">
         <h2>Editar dados básicos</h2>
-
         <div class="staff-form-grid">
-          <div class="input-group">
-            <label>Nome de apresentação</label>
-            <input id="editNomeApresentacao">
-          </div>
-
-          <div class="input-group">
-            <label>Telefone</label>
-            <input id="editTelefone">
-          </div>
-
-          <div class="input-group">
-            <label>Cidade</label>
-            <input id="editCidade">
-          </div>
-
-          <div class="input-group">
-            <label>Estado</label>
-            <input id="editEstado" maxlength="2">
-          </div>
-
-          <div class="input-group">
-            <label>Pix</label>
-            <input id="editPix">
-          </div>
-
-          <div class="input-group">
-            <label>Valor mínimo diária</label>
-            <input id="editValorMinimo" type="number" step="0.01">
-          </div>
-
-          <button id="btnSalvarPerfil">Salvar perfil</button>
-        </div>
-      </article>
-
-      <article class="staff-card">
-        <h2>Documentos</h2>
-        <p>Área preparada para contrato assinado, documentos e comprovantes.</p>
-        <div id="listaDocumentos">
-          <p class="texto-fraco">Nenhum documento disponível ainda.</p>
+          <div class="input-group"><label>Nome de apresentação</label><input id="editNomeApresentacao"></div>
+          <div class="input-group"><label>Telefone</label><input id="editTelefone"></div>
+          <div class="input-group"><label>Cidade</label><input id="editCidade"></div>
+          <div class="input-group"><label>Estado</label><input id="editEstado" maxlength="2"></div>
+          <div class="input-group"><label>Pix</label><input id="editPix"></div>
+          <div class="input-group"><label>Valor mínimo diária</label><input id="editValorMinimo" type="number"
+              step="0.01"></div><button id="btnSalvarPerfil">Salvar perfil</button>
         </div>
       </article>
     </section>
-
   </main>
-
-  <nav class="staff-tabs">
-    <button class="staff-tab ativo" data-tab="secInicio">Início</button>
-    <button class="staff-tab" data-tab="secDisponibilidade">Agenda</button>
-    <button class="staff-tab" data-tab="secOportunidades">Jobs</button>
-    <button class="staff-tab" data-tab="secPerfil">Perfil</button>
-  </nav>
-
-<script>
-let usuario = JSON.parse(localStorage.getItem("nexus_usuario"));
-let staffAtual = null;
-
-if (!usuario || usuario.tipo !== "staff") {
-  alert("Acesso exclusivo para staff.");
-  window.location.href = "../index.html";
-}
-
-document.getElementById("btnSair").addEventListener("click", () => {
-  localStorage.removeItem("nexus_usuario");
-  window.location.href = "../index.html";
-});
-
-document.querySelectorAll(".staff-tab").forEach(botao => {
-  botao.addEventListener("click", () => {
-    document.querySelectorAll(".staff-tab").forEach(b => b.classList.remove("ativo"));
-    document.querySelectorAll(".staff-section").forEach(sec => sec.classList.remove("ativo"));
-
-    botao.classList.add("ativo");
-    document.getElementById(botao.dataset.tab).classList.add("ativo");
-  });
-});
-
-async function carregarStaff() {
-  let query = supabaseClient
-    .from("nexus_staffs")
-    .select(`
-      *,
-      nexus_staff_perfis (
-        perfil,
-        nivel
-      ),
-      nexus_staff_idiomas (
-        idioma,
-        outro_idioma
-      ),
-      nexus_staff_resumo (
-        total_eventos,
-        media_avaliacao
-      )
-    `);
-
-  if (usuario.staff_id) {
-    query = query.eq("id", usuario.staff_id);
-  } else {
-    query = query.eq("usuario_id", usuario.id);
-  }
-
-  const { data, error } = await query.maybeSingle();
-
-  if (error || !data) {
-    alert("Não encontrei seu cadastro de staff.");
-    console.error(error);
-    return;
-  }
-
-  staffAtual = data;
-
-  if (!usuario.staff_id) {
-    usuario.staff_id = data.id;
-    localStorage.setItem("nexus_usuario", JSON.stringify(usuario));
-  }
-
-  renderizarStaff();
-  carregarDisponibilidades();
-  carregarOportunidades();
-}
-
-function renderizarStaff() {
-  const nome = staffAtual.nome_apresentacao || staffAtual.nome_social || staffAtual.nome_documento || "Staff";
-  const cidade = `${staffAtual.cidade || "-"}${staffAtual.estado ? "/" + staffAtual.estado : ""}`;
-  const perfis = staffAtual.nexus_staff_perfis || [];
-  const idiomas = staffAtual.nexus_staff_idiomas || [];
-  const resumo = staffAtual.nexus_staff_resumo?.[0];
-
-  document.getElementById("staffNome").textContent = nome;
-  document.getElementById("staffCidade").textContent = cidade;
-
-  document.getElementById("perfilResumo").textContent =
-    `${cidade} • ${staffAtual.tem_mei ? (staffAtual.mei_proprio ? "MEI próprio" : "MEI terceiro") : "Sem MEI"} • Diária mínima ${staffAtual.valor_minimo_diaria ? "R$ " + staffAtual.valor_minimo_diaria : "não informada"}`;
-
-  document.getElementById("totalEventos").textContent = resumo?.total_eventos || 0;
-  document.getElementById("mediaAvaliacao").textContent = resumo?.media_avaliacao || 0;
-
-  const tags = [
-    ...perfis.map(p => p.perfil),
-    ...idiomas.map(i => i.idioma || i.outro_idioma)
-  ].filter(Boolean);
-
-  document.getElementById("perfilTags").innerHTML =
-    tags.length
-      ? tags.map(tag => `<span class="staff-tag">${tag}</span>`).join("")
-      : `<span class="staff-tag">Perfil em análise</span>`;
-
-  document.getElementById("editNomeApresentacao").value = staffAtual.nome_apresentacao || "";
-  document.getElementById("editTelefone").value = staffAtual.telefone || "";
-  document.getElementById("editCidade").value = staffAtual.cidade || "";
-  document.getElementById("editEstado").value = staffAtual.estado || "";
-  document.getElementById("editPix").value = staffAtual.pix || "";
-  document.getElementById("editValorMinimo").value = staffAtual.valor_minimo_diaria || "";
-
-  atualizarDisponivelAgora();
-}
-
-function atualizarDisponivelAgora() {
-  const ativo = !!staffAtual.disponivel_agora;
-
-  document.getElementById("statusBola").classList.toggle("ativo", ativo);
-  document.getElementById("statusTexto").textContent = ativo ? "Disponível agora" : "Indisponível agora";
-  document.getElementById("btnDisponivelAgora").textContent = ativo ? "Desativar" : "Ativar";
-}
-
-document.getElementById("btnDisponivelAgora").addEventListener("click", async () => {
-  if (!staffAtual) return;
-
-  const novoStatus = !staffAtual.disponivel_agora;
-
-  const { error } = await supabaseClient
-    .from("nexus_staffs")
-    .update({
-      disponivel_agora: novoStatus,
-      disponivel_agora_desde: novoStatus ? new Date().toISOString() : null,
-      disponivel_agora_cidade: staffAtual.cidade || null,
-      disponivel_agora_estado: staffAtual.estado || null
-    })
-    .eq("id", staffAtual.id);
-
-  if (error) {
-    alert("Erro ao atualizar disponibilidade: " + error.message);
-    return;
-  }
-
-  staffAtual.disponivel_agora = novoStatus;
-  atualizarDisponivelAgora();
-});
-
-document.getElementById("btnSalvarDisponibilidade").addEventListener("click", async () => {
-  if (!staffAtual) return;
-
-  const dataDisponivel = document.getElementById("dataDisponivel").value;
-  const periodo = document.getElementById("periodoDisponivel").value;
-  const observacao = document.getElementById("obsDisponibilidade").value.trim();
-
-  if (!dataDisponivel) {
-    alert("Informe a data.");
-    return;
-  }
-
-  const { error } = await supabaseClient
-    .from("nexus_staff_disponibilidade")
-    .insert({
-      staff_id: staffAtual.id,
-      data_disponivel: dataDisponivel,
-      periodo,
-      observacao,
-      status: "disponivel"
-    });
-
-  if (error) {
-    alert("Erro ao salvar disponibilidade: " + error.message);
-    return;
-  }
-
-  document.getElementById("dataDisponivel").value = "";
-  document.getElementById("obsDisponibilidade").value = "";
-
-  carregarDisponibilidades();
-});
-
-async function carregarDisponibilidades() {
-  if (!staffAtual) return;
-
-  const { data, error } = await supabaseClient
-    .from("nexus_staff_disponibilidade")
-    .select("*")
-    .eq("staff_id", staffAtual.id)
-    .order("data_disponivel", { ascending: true })
-    .limit(10);
-
-  const container = document.getElementById("listaDisponibilidade");
-
-  if (error) {
-    container.innerHTML = `<p class="texto-fraco">Erro ao carregar agenda.</p>`;
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    container.innerHTML = `<p class="texto-fraco">Nenhuma disponibilidade cadastrada.</p>`;
-    return;
-  }
-
-  container.innerHTML = data.map(item => `
-    <div class="staff-oportunidade">
-      <h3>${dataBR(item.data_disponivel)}</h3>
-      <p>${item.periodo || "dia_todo"} • ${item.status || "disponivel"}</p>
-      <p>${item.observacao || ""}</p>
-    </div>
-  `).join("");
-}
-
-async function carregarOportunidades() {
-  if (!staffAtual) return;
-
-  const { data, error } = await supabaseClient
-    .from("nexus_casting_staffs")
-    .select(`
-      *,
-      nexus_eventos (
-        nome_evento,
-        nome_empresa_contratante,
-        cidade,
-        estado,
-        data_inicio,
-        data_fim,
-        valor_diaria,
-        status
-      )
-    `)
-    .eq("staff_id", staffAtual.id)
-    .order("created_at", { ascending:false });
-
-  const container = document.getElementById("listaOportunidades");
-
-  if (error) {
-    container.innerHTML = `<p class="texto-fraco">Erro ao carregar oportunidades.</p>`;
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    container.innerHTML = `<p class="texto-fraco">Nenhuma oportunidade por enquanto.</p>`;
-    return;
-  }
-
-  container.innerHTML = data.map(item => {
-    const evento = item.nexus_eventos || {};
-    return `
-      <div class="staff-oportunidade">
-        <h3>${evento.nome_evento || "Evento"}</h3>
-        <p>${evento.nome_empresa_contratante || ""}</p>
-        <p>${evento.cidade || "-"}${evento.estado ? "/" + evento.estado : ""} • ${dataBR(evento.data_inicio)} até ${dataBR(evento.data_fim)}</p>
-        <p>Status: <strong>${item.status_operacional || "-"}</strong></p>
-        <p>Resposta: <strong>${item.interesse_staff || "pendente"}</strong></p>
-
-        <div class="staff-oportunidade-actions">
-          <button onclick="responderOportunidade('${item.id}', 'tenho_interesse')">Tenho interesse</button>
-          <button class="btn-secundario-clean" onclick="responderOportunidade('${item.id}', 'talvez')">Talvez</button>
-          <button class="btn-alerta full" onclick="responderOportunidade('${item.id}', 'nao_tenho_interesse')">Não tenho interesse</button>
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-async function responderOportunidade(id, resposta) {
-  let motivo = null;
-
-  if (resposta === "nao_tenho_interesse") {
-    motivo = prompt("Informe o motivo:");
-  }
-
-  const { error } = await supabaseClient
-    .from("nexus_casting_staffs")
-    .update({
-      interesse_staff: resposta,
-      motivo_resposta_staff: motivo,
-      data_resposta_staff: new Date().toISOString()
-    })
-    .eq("id", id);
-
-  if (error) {
-    alert("Erro ao responder: " + error.message);
-    return;
-  }
-
-  carregarOportunidades();
-}
-
-document.getElementById("btnSalvarPerfil").addEventListener("click", async () => {
-  if (!staffAtual) return;
-
-  const payload = {
-    nome_apresentacao: document.getElementById("editNomeApresentacao").value.trim(),
-    telefone: document.getElementById("editTelefone").value.trim(),
-    cidade: document.getElementById("editCidade").value.trim(),
-    estado: document.getElementById("editEstado").value.trim().toUpperCase(),
-    pix: document.getElementById("editPix").value.trim(),
-    valor_minimo_diaria: document.getElementById("editValorMinimo").value || null
-  };
-
-  const { data, error } = await supabaseClient
-    .from("nexus_staffs")
-    .update(payload)
-    .eq("id", staffAtual.id)
-    .select(`
-      *,
-      nexus_staff_perfis (
-        perfil,
-        nivel
-      ),
-      nexus_staff_idiomas (
-        idioma,
-        outro_idioma
-      ),
-      nexus_staff_resumo (
-        total_eventos,
-        media_avaliacao
-      )
-    `)
-    .single();
-
-  if (error) {
-    alert("Erro ao salvar perfil: " + error.message);
-    return;
-  }
-
-  staffAtual = data;
-  renderizarStaff();
-  alert("Perfil atualizado.");
-});
-
-function dataBR(data) {
-  if (!data) return "-";
-  const p = String(data).split("-");
-  if (p.length !== 3) return data;
-  return `${p[2]}/${p[1]}/${p[0]}`;
-}
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("../service-worker.js").catch(() => {});
-}
-
-carregarStaff();
-</script>
-
+  <nav class="staff-tabs"><button class="staff-tab ativo" data-tab="secInicio">Início</button><button class="staff-tab"
+      data-tab="secDisponibilidade">Agenda</button><button class="staff-tab"
+      data-tab="secOportunidades">Jobs</button><button class="staff-tab" data-tab="secPerfil">Perfil</button></nav>
+  <script>
+    let usuario = JSON.parse(localStorage.getItem("nexus_usuario")); let staffAtual = null, deferredInstallPrompt = null; if (!usuario) window.location.href = "../index.html"; if (usuario && usuario.tipo !== "staff") { if (["master", "agencia", "contratante"].includes(usuario.tipo)) window.location.href = "dashboard-master.html"; else { localStorage.removeItem("nexus_usuario"); window.location.href = "../index.html" } }
+    document.getElementById("btnSair").onclick = () => { localStorage.removeItem("nexus_usuario"); window.location.href = "../index.html" }; document.querySelectorAll(".staff-tab").forEach(b => b.onclick = () => { document.querySelectorAll(".staff-tab").forEach(x => x.classList.remove("ativo")); document.querySelectorAll(".staff-section").forEach(s => s.classList.remove("ativo")); b.classList.add("ativo"); document.getElementById(b.dataset.tab).classList.add("ativo") }); window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredInstallPrompt = e; document.getElementById("cardInstalar").style.display = "block" }); document.getElementById("btnInstalarApp").onclick = async () => { if (deferredInstallPrompt) { deferredInstallPrompt.prompt(); await deferredInstallPrompt.userChoice; deferredInstallPrompt = null } else alert("No celular, toque nos três pontinhos do navegador e escolha 'Adicionar à tela inicial' ou 'Instalar app'.") };
+    async function carregarStaff() { let q = supabaseClient.from("nexus_staffs").select(`*,nexus_staff_perfis(perfil,nivel),nexus_staff_idiomas(idioma,outro_idioma),nexus_staff_resumo(total_eventos,media_avaliacao),nexus_staff_fotos(url_foto,principal)`); if (usuario.staff_id) q = q.eq("id", usuario.staff_id); else q = q.eq("usuario_id", usuario.id); const { data, error } = await q.maybeSingle(); if (error || !data) { alert("Não encontrei seu cadastro de staff."); return } staffAtual = data; if (!usuario.staff_id) { usuario.staff_id = data.id; localStorage.setItem("nexus_usuario", JSON.stringify(usuario)) } renderizarStaff(); carregarDisponibilidades(); carregarOportunidades() }
+    function renderizarStaff() { const nome = staffAtual.nome_apresentacao || staffAtual.nome_social || staffAtual.nome_documento || "Staff", cidade = `${staffAtual.cidade || "-"}${staffAtual.estado ? "/" + staffAtual.estado : ""}`, perfis = staffAtual.nexus_staff_perfis || [], idiomas = staffAtual.nexus_staff_idiomas || [], resumo = staffAtual.nexus_staff_resumo?.[0], foto = (staffAtual.nexus_staff_fotos || []).find(f => f.principal)?.url_foto || (staffAtual.nexus_staff_fotos || [])[0]?.url_foto; document.getElementById("staffNome").textContent = nome; document.getElementById("staffCidade").textContent = cidade; if (foto) document.getElementById("staffAvatar").innerHTML = `<img src="${foto}">`; document.getElementById("perfilResumo").textContent = `${cidade} • ${staffAtual.tem_mei ? (staffAtual.mei_proprio ? "MEI próprio" : staffAtual.mei_terceiro ? "MEI terceiro" : "MEI") : "Sem MEI"} • Cachê mínimo ${staffAtual.valor_minimo_diaria ? "R$ " + staffAtual.valor_minimo_diaria : "não informado"}`; document.getElementById("totalEventos").textContent = resumo?.total_eventos || 0; document.getElementById("mediaAvaliacao").textContent = resumo?.media_avaliacao || 0; const tags = [...(perfis.map(p => p.perfil)), ...(idiomas.map(i => i.idioma || i.outro_idioma))].filter(Boolean); document.getElementById("perfilTags").innerHTML = tags.length ? tags.map(t => `<span class="staff-tag">${t}</span>`).join("") : `<span class="staff-tag">Perfil em análise</span>`; document.getElementById("editNomeApresentacao").value = staffAtual.nome_apresentacao || ""; document.getElementById("editTelefone").value = staffAtual.telefone || ""; document.getElementById("editCidade").value = staffAtual.cidade || ""; document.getElementById("editEstado").value = staffAtual.estado || ""; document.getElementById("editPix").value = staffAtual.pix || ""; document.getElementById("editValorMinimo").value = staffAtual.valor_minimo_diaria || ""; atualizarDisponivelAgora() }
+    function atualizarDisponivelAgora() { const ativo = !!staffAtual.disponivel_agora; document.getElementById("statusBola").classList.toggle("ativo", ativo); document.getElementById("statusTexto").textContent = ativo ? "Disponível agora" : "Indisponível agora"; document.getElementById("btnDisponivelAgora").textContent = ativo ? "Desativar" : "Ativar" } document.getElementById("btnDisponivelAgora").onclick = async () => { const novo = !staffAtual.disponivel_agora; const { error } = await supabaseClient.from("nexus_staffs").update({ disponivel_agora: novo, disponivel_agora_desde: novo ? new Date().toISOString() : null, disponivel_agora_cidade: staffAtual.cidade || null, disponivel_agora_estado: staffAtual.estado || null }).eq("id", staffAtual.id); if (error) { alert(error.message); return } staffAtual.disponivel_agora = novo; atualizarDisponivelAgora() };
+    document.getElementById("btnSalvarDisponibilidade").onclick = async () => { const d = document.getElementById("dataDisponivel").value; if (!d) { alert("Informe a data."); return } const { error } = await supabaseClient.from("nexus_staff_disponibilidade").insert({ staff_id: staffAtual.id, data_disponivel: d, periodo: document.getElementById("periodoDisponivel").value, observacao: document.getElementById("obsDisponibilidade").value.trim(), status: "disponivel" }); if (error) { alert(error.message); return } document.getElementById("dataDisponivel").value = ""; document.getElementById("obsDisponibilidade").value = ""; carregarDisponibilidades() };
+    async function carregarDisponibilidades() { const { data, error } = await supabaseClient.from("nexus_staff_disponibilidade").select("*").eq("staff_id", staffAtual.id).order("data_disponivel", { ascending: true }).limit(10); const c = document.getElementById("listaDisponibilidade"); if (error) { c.innerHTML = `<p class="texto-fraco">Erro ao carregar agenda.</p>`; return } if (!data.length) { c.innerHTML = `<p class="texto-fraco">Nenhuma disponibilidade cadastrada.</p>`; return } c.innerHTML = data.map(i => `<div class="staff-oportunidade"><h3>${dataBR(i.data_disponivel)}</h3><p>${i.periodo || "dia_todo"} • ${i.status || "disponivel"}</p><p>${i.observacao || ""}</p></div>`).join("") }
+    async function carregarOportunidades() { const { data, error } = await supabaseClient.from("nexus_casting_staffs").select(`*,nexus_eventos(nome_evento,nome_empresa_contratante,cidade,estado,data_inicio,data_fim,valor_diaria,status)`).eq("staff_id", staffAtual.id).order("created_at", { ascending: false }); const c = document.getElementById("listaOportunidades"); if (error) { c.innerHTML = `<p class="texto-fraco">Erro ao carregar oportunidades: ${error.message}</p>`; return } if (!data.length) { c.innerHTML = `<p class="texto-fraco">Nenhuma oportunidade por enquanto.</p>`; return } c.innerHTML = data.map(i => { const e = i.nexus_eventos || {}; return `<div class="staff-oportunidade"><h3>${e.nome_evento || "Evento"}</h3><p>${e.nome_empresa_contratante || ""}</p><p>${e.cidade || "-"}${e.estado ? "/" + e.estado : ""} • ${dataBR(e.data_inicio)} até ${dataBR(e.data_fim)}</p><p>Status: <strong>${i.status_operacional || "-"}</strong></p><p>Sua resposta: <strong>${respostaTexto(i.interesse_staff)}</strong></p><div class="staff-oportunidade-actions"><button onclick="responderOportunidade('${i.id}','tenho_interesse')">Tenho interesse</button><button class="btn-secundario-clean" onclick="responderOportunidade('${i.id}','talvez')">Talvez</button><button class="btn-alerta full" onclick="responderOportunidade('${i.id}','nao_tenho_interesse')">Não tenho interesse</button></div></div>` }).join("") }
+    function respostaTexto(r) { return ({ tenho_interesse: "Tenho interesse", talvez: "Talvez", nao_tenho_interesse: "Não tenho interesse" })[r] || "Pendente" } async function responderOportunidade(id, resposta) { let motivo = null; if (resposta === "nao_tenho_interesse") motivo = prompt("Informe o motivo:") || ""; const { error } = await supabaseClient.from("nexus_casting_staffs").update({ interesse_staff: resposta, motivo_resposta_staff: motivo, data_resposta_staff: new Date().toISOString() }).eq("id", id); if (error) { alert(error.message); return } alert("Resposta enviada com sucesso."); carregarOportunidades() }
+    document.getElementById("btnSalvarPerfil").onclick = async () => { const payload = { nome_apresentacao: document.getElementById("editNomeApresentacao").value.trim(), telefone: document.getElementById("editTelefone").value.trim(), cidade: document.getElementById("editCidade").value.trim(), estado: document.getElementById("editEstado").value.trim().toUpperCase(), pix: document.getElementById("editPix").value.trim(), valor_minimo_diaria: document.getElementById("editValorMinimo").value || null }; const { data, error } = await supabaseClient.from("nexus_staffs").update(payload).eq("id", staffAtual.id).select(`*,nexus_staff_perfis(perfil,nivel),nexus_staff_idiomas(idioma,outro_idioma),nexus_staff_resumo(total_eventos,media_avaliacao),nexus_staff_fotos(url_foto,principal)`).single(); if (error) { alert(error.message); return } staffAtual = data; renderizarStaff(); alert("Perfil atualizado.") }; function dataBR(d) { if (!d) return "-"; const p = String(d).split("-"); return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d } if ("serviceWorker" in navigator) { navigator.serviceWorker.register("../service-worker.js").catch(() => { }) } carregarStaff();
+  </script>
 </body>
+
 </html>

@@ -1,348 +1,95 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agências - Nexus</title>
-  <link rel="stylesheet" href="../css/style.css?v=senha-termos-1">
+  <link rel="stylesheet" href="../css/style.css?v=txt-completo-1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=senha-termos-1"></script>
+  <script src="../js/supabase.js?v=txt-completo-1"></script>
 </head>
+
 <body class="sistema-body">
-
-<div class="menu-topbar"><button type="button" class="menu-toggle" id="btnAbrirMenu">☰</button><div><strong>Nexus</strong><span>v1.0</span></div></div><div class="sidebar-overlay" id="sidebarOverlay"></div><aside class="sidebar" id="sidebar"><div class="sidebar-logo"><img src="../assets/logo.png" alt="Nexus"><h2>Nexus</h2><button type="button" class="menu-expand-btn" id="btnMenuExpandir" title="Expandir menu">⇥</button></div><nav class="menu"><a href="dashboard-master.html" data-menu="dashboard"><span class="menu-ico">🏠</span><span class="menu-text">Dashboard</span></a><a href="agencias.html" data-menu="agencias" class="ativo"><span class="menu-ico">🏢</span><span class="menu-text">Agências</span></a><a href="talentos.html" data-menu="talentos"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a><a href="eventos.html" data-menu="eventos"><span class="menu-ico">📅</span><span class="menu-text">Eventos</span></a><a href="casting.html" data-menu="casting"><span class="menu-ico">⭐</span><span class="menu-text">Casting</span></a><a href="#" data-menu="contratantes"><span class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a><a href="#" data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a><a href="#" data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a><a href="#" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a><a href="#" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a><a href="#" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span class="menu-text">Configurações</span></a></nav><div class="sidebar-footer"><div class="linha"></div><p class="footer-label">Nome</p><p id="nomeUsuario">Usuário</p><p class="footer-label">Função</p><p id="funcaoUsuario">-</p><button class="btn-sair" id="btnSair">Sair</button><div class="linha"></div><p>Nexus v1.0</p><p>© JRTecnologia</p><p>Desenvolvido por Jessyca Rocha Tavares</p></div></aside>
-
+  <div class="menu-topbar"><button type="button" class="menu-toggle" id="btnAbrirMenu">☰</button>
+    <div><strong>Nexus</strong><span>v1.0</span></div>
+  </div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><img src="../assets/logo.png" alt="Nexus">
+      <h2>Nexus</h2>
+    </div>
+    <nav class="menu"><a href="dashboard-master.html" data-menu="dashboard"><span class="menu-ico">🏠</span><span
+          class="menu-text">Dashboard</span></a><a href="agencias.html" data-menu="agencias"><span
+          class="menu-ico">🏢</span><span class="menu-text">Agências</span></a><a href="talentos.html"
+        data-menu="talentos"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a><a
+        href="eventos.html" data-menu="eventos"><span class="menu-ico">📅</span><span
+          class="menu-text">Eventos</span></a><a href="casting.html" data-menu="casting"><span
+          class="menu-ico">⭐</span><span class="menu-text">Casting</span></a><a href="#" data-menu="contratantes"><span
+          class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a><a href="#"
+        data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a><a href="#"
+        data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a><a
+        href="#" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a><a
+        href="#" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a><a
+        href="#" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span
+          class="menu-text">Configurações</span></a></nav>
+    <div class="sidebar-footer">
+      <div class="linha"></div>
+      <p class="footer-label">Nome</p>
+      <p id="nomeUsuario">Usuário</p>
+      <p class="footer-label">Função</p>
+      <p id="funcaoUsuario">-</p><button class="btn-sair" id="btnSair">Sair</button>
+      <div class="linha"></div>
+      <p>Nexus v1.0</p>
+      <p>© JRTecnologia</p>
+      <p>Desenvolvido por Jessyca Rocha Tavares</p>
+    </div>
+  </aside>
   <main class="conteudo">
     <header class="topo">
       <div>
         <h1>Agências</h1>
-        <p>Cadastro e controle das agências que usam o Nexus</p>
-      </div>
-      <button class="btn-topo" id="btnNovaAgencia">+ Nova agência</button>
+        <p>Cadastro e controle das agências</p>
+      </div><button class="btn-topo" id="btnNovaAgencia">+ Nova agência</button>
     </header>
-
     <section class="painel-filtro">
-      <div class="campo-busca">
-        <span>🔍</span>
-        <input type="text" id="campoPesquisa" placeholder="Pesquisar por agência, responsável, e-mail ou CNPJ">
-      </div>
-
-      <div class="botoes-filtro">
-        <button id="btnPesquisar">Pesquisar</button>
-        <button class="btn-secundario-clean" id="btnMostrarTodas">Mostrar todas</button>
-      </div>
+      <div class="campo-busca"><span>🔍</span><input type="text" id="campoPesquisa"
+          placeholder="Pesquisar agência, responsável ou e-mail"></div>
+      <div class="botoes-filtro"><button id="btnPesquisar">Pesquisar</button><button class="btn-secundario-clean"
+          id="btnMostrarTodas">Mostrar todas</button></div>
     </section>
-
     <section id="listaAgencias" class="grid-agencias">
       <p class="mensagem-vazia">Pesquise uma agência ou clique em “Mostrar todas”.</p>
     </section>
-  </main>
-
-  <div class="modal-overlay" id="modalAgencia">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div>
-          <h2 id="tituloModalAgencia">Nova agência</h2>
-          <p>Cadastre os dados e o acesso inicial da agência.</p>
+    <div class="modal-overlay" id="modalAgencia">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <h2 id="tituloModalAgencia">Nova agência</h2>
+            <p>Cadastre a agência e o acesso inicial.</p>
+          </div><button class="btn-fechar" id="btnFecharAgencia">×</button>
         </div>
-        <button class="btn-fechar" id="btnFecharAgencia">×</button>
-      </div>
-
-      <div class="modal-grid">
-        <div class="input-group"><label>Nome da agência</label><input id="nomeAgencia"></div>
-        <div class="input-group"><label>Razão social</label><input id="razaoSocial"></div>
-        <div class="input-group"><label>CNPJ</label><input id="cnpj"></div>
-        <div class="input-group"><label>Responsável</label><input id="responsavel"></div>
-        <div class="input-group"><label>Telefone</label><input id="telefone"></div>
-        <div class="input-group"><label>E-mail de acesso</label><input id="emailAgencia" type="email"></div>
-        <div class="input-group"><label>Senha inicial</label><input id="senhaInicial" value="123456"></div>
-        <div class="input-group">
-          <label>Status</label>
-          <select id="statusAgencia">
-            <option value="ativa">Ativa</option>
-            <option value="inativa">Inativa</option>
-          </select>
+        <div class="modal-grid">
+          <div class="input-group"><label>Nome da agência</label><input id="nomeAgencia"></div>
+          <div class="input-group"><label>Razão social</label><input id="razaoSocial"></div>
+          <div class="input-group"><label>CNPJ</label><input id="cnpj"></div>
+          <div class="input-group"><label>Responsável</label><input id="responsavel"></div>
+          <div class="input-group"><label>Telefone</label><input id="telefone"></div>
+          <div class="input-group"><label>E-mail</label><input id="emailAgencia" type="email"></div>
+          <div class="input-group"><label>Senha inicial</label><input id="senhaInicial" value="123456"></div>
+          <div class="input-group"><label>Status</label><select id="statusAgencia">
+              <option value="ativa">Ativa</option>
+              <option value="inativa">Inativa</option>
+            </select></div>
         </div>
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn-secundario-clean" id="btnCancelarAgencia">Cancelar</button>
-        <button id="btnSalvarAgencia">Salvar agência</button>
+        <div class="modal-actions"><button class="btn-secundario-clean" id="btnCancelarAgencia">Cancelar</button><button
+            id="btnSalvarAgencia">Salvar</button></div>
       </div>
     </div>
-  </div>
-
-<script>
-function iniciarSistema(menuAtivo = "") {
-  const usuario = JSON.parse(localStorage.getItem("nexus_usuario"));
-
-  if (!usuario) {
-    window.location.href = "../index.html";
-    return null;
-  }
-
-  if (!["master", "agencia"].includes(usuario.tipo)) {
-    window.location.href = "../index.html";
-    return null;
-  }
-
-  document.getElementById("nomeUsuario").textContent = usuario.nome || "Usuário";
-  document.getElementById("funcaoUsuario").textContent =
-    usuario.tipo === "master" ? "Master" : "Agência";
-
-  document.querySelectorAll("[data-menu]").forEach(link => {
-    if (link.dataset.menu === menuAtivo) link.classList.add("ativo");
-  });
-
-  document.getElementById("btnSair").addEventListener("click", () => {
-    localStorage.removeItem("nexus_usuario");
-    window.location.href = "../index.html";
-  });
-
-  return usuario;
-}
-
-const usuario = iniciarSistema("agencias");
-let agenciaEditandoId = null;
-
-const modalAgencia = document.getElementById("modalAgencia");
-
-document.getElementById("btnNovaAgencia").addEventListener("click", abrirNovaAgencia);
-document.getElementById("btnFecharAgencia").addEventListener("click", fecharModalAgencia);
-document.getElementById("btnCancelarAgencia").addEventListener("click", fecharModalAgencia);
-document.getElementById("btnSalvarAgencia").addEventListener("click", salvarAgencia);
-document.getElementById("btnPesquisar").addEventListener("click", () => carregarAgencias(false));
-document.getElementById("btnMostrarTodas").addEventListener("click", () => carregarAgencias(true));
-document.getElementById("campoPesquisa").addEventListener("keydown", event => {
-  if (event.key === "Enter") carregarAgencias(false);
-});
-
-function abrirNovaAgencia() {
-  agenciaEditandoId = null;
-  document.getElementById("tituloModalAgencia").textContent = "Nova agência";
-  limparCamposAgencia();
-  modalAgencia.classList.add("ativo");
-}
-
-function fecharModalAgencia() {
-  modalAgencia.classList.remove("ativo");
-  agenciaEditandoId = null;
-}
-
-function limparCamposAgencia() {
-  document.getElementById("nomeAgencia").value = "";
-  document.getElementById("razaoSocial").value = "";
-  document.getElementById("cnpj").value = "";
-  document.getElementById("responsavel").value = "";
-  document.getElementById("telefone").value = "";
-  document.getElementById("emailAgencia").value = "";
-  document.getElementById("senhaInicial").value = "123456";
-  document.getElementById("statusAgencia").value = "ativa";
-}
-
-async function carregarAgencias(mostrarTodas = false) {
-  const termo = document.getElementById("campoPesquisa").value.trim();
-
-  if (!mostrarTodas && !termo) {
-    document.getElementById("listaAgencias").innerHTML =
-      `<p class="mensagem-vazia">Pesquise uma agência ou clique em “Mostrar todas”.</p>`;
-    return;
-  }
-
-  let query = supabaseClient
-    .from("nexus_agencias")
-    .select("*")
-    .order("created_at", { ascending:false });
-
-  if (termo) {
-    query = query.or(`nome_agencia.ilike.%${termo}%,razao_social.ilike.%${termo}%,responsavel.ilike.%${termo}%,email.ilike.%${termo}%,cnpj.ilike.%${termo}%`);
-  }
-
-  const { data, error } = await query;
-
-  if (error) {
-    alert("Erro ao carregar agências: " + error.message);
-    return;
-  }
-
-  renderizarAgencias(data || []);
-}
-
-function renderizarAgencias(lista) {
-  const container = document.getElementById("listaAgencias");
-  container.innerHTML = "";
-
-  if (!lista.length) {
-    container.innerHTML = `<p class="mensagem-vazia">Nenhuma agência encontrada.</p>`;
-    return;
-  }
-
-  lista.forEach(agencia => {
-    container.innerHTML += `
-      <article class="card-agencia">
-        <div class="card-agencia-topo">
-          <div>
-            <h3>${agencia.nome_agencia || "-"}</h3>
-            <p>${agencia.responsavel || "-"}</p>
-          </div>
-          <span class="badge-status ${agencia.status || ""}">${agencia.status || "-"}</span>
-        </div>
-
-        <div class="card-agencia-info">
-          <p><strong>E-mail:</strong> ${agencia.email || "-"}</p>
-          <p><strong>Telefone:</strong> ${agencia.telefone || "-"}</p>
-          <p><strong>CNPJ:</strong> ${agencia.cnpj || "-"}</p>
-          <p><strong>Plano:</strong> ${agencia.plano_atual || "-"}</p>
-        </div>
-
-        <div class="card-agencia-actions">
-          <button onclick="editarAgencia('${agencia.id}')">Editar</button>
-          <button class="btn-secundario-clean" onclick="alternarStatusAgencia('${agencia.id}', '${agencia.status || ""}')">Status</button>
-        </div>
-      </article>
-    `;
-  });
-}
-
-async function salvarAgencia() {
-  const nomeAgencia = document.getElementById("nomeAgencia").value.trim();
-  const razaoSocial = document.getElementById("razaoSocial").value.trim();
-  const cnpj = document.getElementById("cnpj").value.trim();
-  const responsavel = document.getElementById("responsavel").value.trim();
-  const telefone = document.getElementById("telefone").value.trim();
-  const email = document.getElementById("emailAgencia").value.trim().toLowerCase();
-  const senha = document.getElementById("senhaInicial").value.trim();
-  const status = document.getElementById("statusAgencia").value;
-
-  if (!nomeAgencia || !responsavel || !email) {
-    alert("Preencha nome da agência, responsável e e-mail.");
-    return;
-  }
-
-  if (agenciaEditandoId) {
-    const { error } = await supabaseClient
-      .from("nexus_agencias")
-      .update({
-        nome_agencia:nomeAgencia,
-        razao_social:razaoSocial,
-        cnpj,
-        responsavel,
-        telefone,
-        email,
-        status
-      })
-      .eq("id", agenciaEditandoId);
-
-    if (error) {
-      alert("Erro ao editar agência: " + error.message);
-      return;
-    }
-
-    fecharModalAgencia();
-    carregarAgencias(true);
-    alert("Agência atualizada.");
-    return;
-  }
-
-  const { data: novoUsuario, error: erroUsuario } = await supabaseClient
-    .from("nexus_usuarios")
-    .insert({
-      nome:responsavel,
-      email,
-      senha: senha || "123456",
-      tipo:"agencia",
-      status:"ativo",
-      primeiro_acesso:true,
-      alterar_senha:true
-    })
-    .select()
-    .single();
-
-  if (erroUsuario) {
-    alert("Erro ao criar usuário da agência: " + erroUsuario.message);
-    return;
-  }
-
-  const { data: novaAgencia, error: erroAgencia } = await supabaseClient
-    .from("nexus_agencias")
-    .insert({
-      usuario_id:novoUsuario.id,
-      nome_agencia:nomeAgencia,
-      razao_social:razaoSocial,
-      cnpj,
-      responsavel,
-      telefone,
-      email,
-      status,
-      pode_criar_eventos:true,
-      pode_criar_contratantes:true,
-      pode_montar_casting:true,
-      pode_exportar_planilha:true,
-      pode_avaliar_staff:true,
-      plano_atual:"teste"
-    })
-    .select()
-    .single();
-
-  if (erroAgencia) {
-    alert("Usuário criado, mas erro ao criar agência: " + erroAgencia.message);
-    return;
-  }
-
-  await supabaseClient
-    .from("nexus_usuarios")
-    .update({ agencia_id:novaAgencia.id })
-    .eq("id", novoUsuario.id);
-
-  fecharModalAgencia();
-  carregarAgencias(true);
-  alert("Agência criada com sucesso.");
-}
-
-async function editarAgencia(id) {
-  const { data, error } = await supabaseClient
-    .from("nexus_agencias")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error || !data) {
-    alert("Erro ao carregar agência.");
-    return;
-  }
-
-  agenciaEditandoId = id;
-  document.getElementById("tituloModalAgencia").textContent = "Editar agência";
-  document.getElementById("nomeAgencia").value = data.nome_agencia || "";
-  document.getElementById("razaoSocial").value = data.razao_social || "";
-  document.getElementById("cnpj").value = data.cnpj || "";
-  document.getElementById("responsavel").value = data.responsavel || "";
-  document.getElementById("telefone").value = data.telefone || "";
-  document.getElementById("emailAgencia").value = data.email || "";
-  document.getElementById("senhaInicial").value = "";
-  document.getElementById("statusAgencia").value = data.status || "ativa";
-  modalAgencia.classList.add("ativo");
-}
-
-async function alternarStatusAgencia(id, statusAtual) {
-  const novoStatus = statusAtual === "ativa" ? "inativa" : "ativa";
-
-  const { error } = await supabaseClient
-    .from("nexus_agencias")
-    .update({ status:novoStatus })
-    .eq("id", id);
-
-  if (error) {
-    alert("Erro ao alterar status: " + error.message);
-    return;
-  }
-
-  carregarAgencias(true);
-}
-
-</script>
-
-
-<script>(function(){function init(){const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay'),btnAbrir=document.getElementById('btnAbrirMenu'),btnExp=document.getElementById('btnMenuExpandir');if(!sidebar)return;if(localStorage.getItem('nexus_menu_expandido')==='sim'){document.body.classList.add('menu-aberto-desktop');if(btnExp)btnExp.textContent='⇤'}if(btnAbrir)btnAbrir.onclick=()=>{sidebar.classList.add('menu-aberto');if(overlay)overlay.classList.add('ativo')};if(overlay)overlay.onclick=()=>{sidebar.classList.remove('menu-aberto');overlay.classList.remove('ativo')};if(btnExp)btnExp.onclick=()=>{document.body.classList.toggle('menu-aberto-desktop');const aberto=document.body.classList.contains('menu-aberto-desktop');localStorage.setItem('nexus_menu_expandido',aberto?'sim':'nao');btnExp.textContent=aberto?'⇤':'⇥'}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();</script>
+  </main>
+  <script>function iniciarSistema(menuAtivo = "") { const usuario = JSON.parse(localStorage.getItem("nexus_usuario")); if (!usuario) { window.location.href = "../index.html"; return null } if (usuario.tipo === "staff") { window.location.href = "app-staff.html"; return null } if (!["master", "agencia", "contratante"].includes(usuario.tipo)) { localStorage.removeItem("nexus_usuario"); window.location.href = "../index.html"; return null } document.getElementById("nomeUsuario").textContent = usuario.nome || "Usuário"; document.getElementById("funcaoUsuario").textContent = usuario.tipo === "master" ? "Master" : usuario.tipo === "agencia" ? "Agência" : "Contratante"; document.querySelectorAll("[data-menu]").forEach(link => { if (link.dataset.menu === menuAtivo) link.classList.add("ativo") }); document.getElementById("btnSair").addEventListener("click", () => { localStorage.removeItem("nexus_usuario"); window.location.href = "../index.html" }); const sidebar = document.getElementById("sidebar"); const overlay = document.getElementById("sidebarOverlay"); const btnAbrir = document.getElementById("btnAbrirMenu"); if (btnAbrir) btnAbrir.addEventListener("click", () => { sidebar.classList.add("menu-aberto"); overlay.classList.add("ativo") }); if (overlay) overlay.addEventListener("click", () => { sidebar.classList.remove("menu-aberto"); overlay.classList.remove("ativo") }); return usuario }
+    const usuario = iniciarSistema("agencias");
+    let agenciaEditandoId = null; const modalAgencia = document.getElementById("modalAgencia"); document.getElementById("btnNovaAgencia").onclick = () => { agenciaEditandoId = null; limparCamposAgencia(); document.getElementById("tituloModalAgencia").textContent = "Nova agência"; modalAgencia.classList.add("ativo") }; document.getElementById("btnFecharAgencia").onclick = fecharModalAgencia; document.getElementById("btnCancelarAgencia").onclick = fecharModalAgencia; document.getElementById("btnSalvarAgencia").onclick = salvarAgencia; document.getElementById("btnPesquisar").onclick = () => carregarAgencias(false); document.getElementById("btnMostrarTodas").onclick = () => carregarAgencias(true); function fecharModalAgencia() { modalAgencia.classList.remove("ativo"); agenciaEditandoId = null } function limparCamposAgencia() { ["nomeAgencia", "razaoSocial", "cnpj", "responsavel", "telefone", "emailAgencia"].forEach(id => document.getElementById(id).value = ""); document.getElementById("senhaInicial").value = "123456"; document.getElementById("statusAgencia").value = "ativa" } async function carregarAgencias(mostrar = false) { const termo = document.getElementById("campoPesquisa").value.trim(); if (!mostrar && !termo) { document.getElementById("listaAgencias").innerHTML = `<p class="mensagem-vazia">Pesquise uma agência ou clique em “Mostrar todas”.</p>`; return } let q = supabaseClient.from("nexus_agencias").select("*").order("created_at", { ascending: false }); if (termo) q = q.or(`nome_agencia.ilike.%${termo}%,responsavel.ilike.%${termo}%,email.ilike.%${termo}%`); const { data, error } = await q; if (error) { alert(error.message); return } const c = document.getElementById("listaAgencias"); c.innerHTML = ""; if (!data.length) { c.innerHTML = `<p class="mensagem-vazia">Nenhuma agência encontrada.</p>`; return } data.forEach(a => c.innerHTML += `<article class="card-agencia"><div class="card-agencia-topo"><div><h3>${a.nome_agencia || "-"}</h3><p>${a.responsavel || "-"}</p></div><span class="badge-status ${a.status || ""}">${a.status || "-"}</span></div><div class="card-agencia-info"><p><strong>E-mail:</strong> ${a.email || "-"}</p><p><strong>Telefone:</strong> ${a.telefone || "-"}</p><p><strong>CNPJ:</strong> ${a.cnpj || "-"}</p></div><div class="card-agencia-actions"><button onclick="editarAgencia('${a.id}')">Editar</button><button class="btn-secundario-clean" onclick="alternarStatusAgencia('${a.id}','${a.status || ""}')">Status</button></div></article>`) } async function salvarAgencia() { const nome_agencia = document.getElementById("nomeAgencia").value.trim(), responsavel = document.getElementById("responsavel").value.trim(), email = document.getElementById("emailAgencia").value.trim().toLowerCase(); if (!nome_agencia || !responsavel || !email) { alert("Preencha nome, responsável e e-mail."); return } const payload = { nome_agencia, razao_social: document.getElementById("razaoSocial").value.trim(), cnpj: document.getElementById("cnpj").value.trim(), responsavel, telefone: document.getElementById("telefone").value.trim(), email, status: document.getElementById("statusAgencia").value }; if (agenciaEditandoId) { const { error } = await supabaseClient.from("nexus_agencias").update(payload).eq("id", agenciaEditandoId); if (error) { alert(error.message); return } fecharModalAgencia(); carregarAgencias(true); return } const senha = document.getElementById("senhaInicial").value.trim() || "123456"; const { data: u, error: e1 } = await supabaseClient.from("nexus_usuarios").insert({ nome: responsavel, email, senha, tipo: "agencia", status: "ativo", primeiro_acesso: true, alterar_senha: true }).select().single(); if (e1) { alert(e1.message); return } const { data: a, error: e2 } = await supabaseClient.from("nexus_agencias").insert({ ...payload, usuario_id: u.id, plano_atual: "teste", pode_criar_eventos: true, pode_montar_casting: true }).select().single(); if (e2) { alert(e2.message); return } await supabaseClient.from("nexus_usuarios").update({ agencia_id: a.id }).eq("id", u.id); fecharModalAgencia(); carregarAgencias(true) } async function editarAgencia(id) { const { data, error } = await supabaseClient.from("nexus_agencias").select("*").eq("id", id).single(); if (error) { alert(error.message); return } agenciaEditandoId = id; document.getElementById("tituloModalAgencia").textContent = "Editar agência"; document.getElementById("nomeAgencia").value = data.nome_agencia || ""; document.getElementById("razaoSocial").value = data.razao_social || ""; document.getElementById("cnpj").value = data.cnpj || ""; document.getElementById("responsavel").value = data.responsavel || ""; document.getElementById("telefone").value = data.telefone || ""; document.getElementById("emailAgencia").value = data.email || ""; document.getElementById("senhaInicial").value = ""; document.getElementById("statusAgencia").value = data.status || "ativa"; modalAgencia.classList.add("ativo") } async function alternarStatusAgencia(id, statusAtual) { const novo = statusAtual === "ativa" ? "inativa" : "ativa"; await supabaseClient.from("nexus_agencias").update({ status: novo }).eq("id", id); carregarAgencias(true) }</script>
 </body>
+
 </html>

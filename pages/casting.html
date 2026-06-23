@@ -1,501 +1,279 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App Staff - Nexus</title>
-  <link rel="stylesheet" href="../css/style.css?v=staff-app-1">
-  <link rel="manifest" href="../manifest.json">
-  <meta name="theme-color" content="#050505">
+  <title>Casting - Nexus</title>
+  <link rel="stylesheet" href="../css/style.css?v=txt-completo-1?v=senha-termos-1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=staff-app-1"></script>
+  <script src="../js/supabase.js?v=txt-completo-1?v=senha-termos-1"></script>
 </head>
 
-<body class="staff-app-body">
+<body class="sistema-body">
 
-  <main class="staff-app">
+  <div class="menu-topbar"><button type="button" class="menu-toggle" id="btnAbrirMenu">☰</button>
+    <div><strong>Nexus</strong><span>v1.0</span></div>
+  </div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><img src="../assets/logo.png" alt="Nexus">
+      <h2>Nexus</h2><button type="button" class="menu-expand-btn" id="btnMenuExpandir" title="Expandir menu">⇥</button>
+    </div>
+    <nav class="menu"><a href="dashboard-master.html" data-menu="dashboard"><span class="menu-ico">🏠</span><span
+          class="menu-text">Dashboard</span></a><a href="agencias.html" data-menu="agencias"><span
+          class="menu-ico">🏢</span><span class="menu-text">Agências</span></a><a href="talentos.html"
+        data-menu="talentos"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a><a
+        href="eventos.html" data-menu="eventos"><span class="menu-ico">📅</span><span
+          class="menu-text">Eventos</span></a><a href="casting.html" data-menu="casting" class="ativo"><span
+          class="menu-ico">⭐</span><span class="menu-text">Casting</span></a><a href="#" data-menu="contratantes"><span
+          class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a><a href="#"
+        data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a><a href="#"
+        data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a><a
+        href="#" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a><a
+        href="#" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a><a
+        href="#" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span
+          class="menu-text">Configurações</span></a></nav>
+    <div class="sidebar-footer">
+      <div class="linha"></div>
+      <p class="footer-label">Nome</p>
+      <p id="nomeUsuario">Usuário</p>
+      <p class="footer-label">Função</p>
+      <p id="funcaoUsuario">-</p><button class="btn-sair" id="btnSair">Sair</button>
+      <div class="linha"></div>
+      <p>Nexus v1.0</p>
+      <p>© JRTecnologia</p>
+      <p>Desenvolvido por Jessyca Rocha Tavares</p>
+    </div>
+  </aside>
 
-    <header class="staff-topo">
-      <div class="staff-topo-info">
-        <div class="staff-avatar" id="staffAvatar">👤</div>
-        <div>
-          <h1 id="staffNome">Staff</h1>
-          <p id="staffCidade">Carregando...</p>
-        </div>
+  <main class="conteudo">
+    <header class="topo">
+      <div>
+        <h1>Casting</h1>
+        <p>Talentos selecionados para eventos</p>
       </div>
-
-      <button class="staff-sair" id="btnSair">Sair</button>
+      <button class="btn-topo" id="btnSelecionarTalentoCasting">+ Selecionar talento</button>
     </header>
 
-    <section class="staff-section ativo" id="secInicio">
-      <article class="staff-card staff-hero">
-        <div class="staff-disponivel">
-          <div>
-            <h2><span class="staff-status-bola" id="statusBola"></span><span id="statusTexto">Disponibilidade</span></h2>
-            <p>Ative quando estiver disponível para contratação imediata.</p>
-          </div>
-          <button class="btn-topo" id="btnDisponivelAgora">Ativar</button>
-        </div>
+    <section class="painel-filtro">
+      <div class="campo-busca">
+        <span>🔍</span>
+        <input type="text" id="campoPesquisa" placeholder="Pesquisar por evento, staff ou status">
+      </div>
 
-        <div class="staff-grid-mini">
-          <div class="staff-mini">
-            <strong id="totalEventos">0</strong>
-            <span>eventos</span>
-          </div>
-          <div class="staff-mini">
-            <strong id="mediaAvaliacao">0</strong>
-            <span>avaliação</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="staff-card">
-        <h2>Meu perfil</h2>
-        <p id="perfilResumo">Carregando perfil...</p>
-        <div class="staff-tags" id="perfilTags"></div>
-      </article>
+      <div class="botoes-filtro">
+        <button id="btnPesquisar">Pesquisar</button>
+        <button class="btn-secundario-clean" id="btnMostrarTodos">Mostrar todos</button>
+      </div>
     </section>
 
-    <section class="staff-section" id="secDisponibilidade">
-      <article class="staff-card">
-        <h2>Adicionar disponibilidade</h2>
-        <p>Informe os dias que você consegue trabalhar.</p>
-
-        <div class="staff-form-grid">
-          <div class="input-group">
-            <label>Data</label>
-            <input id="dataDisponivel" type="date">
-          </div>
-
-          <div class="input-group">
-            <label>Período</label>
-            <select id="periodoDisponivel">
-              <option value="dia_todo">Dia todo</option>
-              <option value="manha">Manhã</option>
-              <option value="tarde">Tarde</option>
-              <option value="noite">Noite</option>
-            </select>
-          </div>
-
-          <div class="input-group">
-            <label>Observação</label>
-            <textarea id="obsDisponibilidade" placeholder="Ex: tenho aula até 12h"></textarea>
-          </div>
-
-          <button id="btnSalvarDisponibilidade">Salvar disponibilidade</button>
-        </div>
-      </article>
-
-      <article class="staff-card">
-        <h2>Minhas disponibilidades</h2>
-        <div id="listaDisponibilidade">
-          <p class="texto-fraco">Nenhuma disponibilidade carregada.</p>
-        </div>
-      </article>
+    <section id="listaCasting" class="grid-casting">
+      <p class="mensagem-vazia">Pesquise um casting ou clique em “Mostrar todos”.</p>
     </section>
-
-    <section class="staff-section" id="secOportunidades">
-      <article class="staff-card">
-        <h2>Oportunidades</h2>
-        <p>Eventos em que você foi selecionado ou está em análise.</p>
-
-        <div id="listaOportunidades">
-          <p class="texto-fraco">Nenhuma oportunidade carregada.</p>
-        </div>
-      </article>
-    </section>
-
-    <section class="staff-section" id="secPerfil">
-      <article class="staff-card">
-        <h2>Editar dados básicos</h2>
-
-        <div class="staff-form-grid">
-          <div class="input-group">
-            <label>Nome de apresentação</label>
-            <input id="editNomeApresentacao">
-          </div>
-
-          <div class="input-group">
-            <label>Telefone</label>
-            <input id="editTelefone">
-          </div>
-
-          <div class="input-group">
-            <label>Cidade</label>
-            <input id="editCidade">
-          </div>
-
-          <div class="input-group">
-            <label>Estado</label>
-            <input id="editEstado" maxlength="2">
-          </div>
-
-          <div class="input-group">
-            <label>Pix</label>
-            <input id="editPix">
-          </div>
-
-          <div class="input-group">
-            <label>Valor mínimo diária</label>
-            <input id="editValorMinimo" type="number" step="0.01">
-          </div>
-
-          <button id="btnSalvarPerfil">Salvar perfil</button>
-        </div>
-      </article>
-
-      <article class="staff-card">
-        <h2>Documentos</h2>
-        <p>Área preparada para contrato assinado, documentos e comprovantes.</p>
-        <div id="listaDocumentos">
-          <p class="texto-fraco">Nenhum documento disponível ainda.</p>
-        </div>
-      </article>
-    </section>
-
   </main>
 
-  <nav class="staff-tabs">
-    <button class="staff-tab ativo" data-tab="secInicio">Início</button>
-    <button class="staff-tab" data-tab="secDisponibilidade">Agenda</button>
-    <button class="staff-tab" data-tab="secOportunidades">Jobs</button>
-    <button class="staff-tab" data-tab="secPerfil">Perfil</button>
-  </nav>
+  <script>
+    function iniciarSistema(menuAtivo = "") {
+      const usuario = JSON.parse(localStorage.getItem("nexus_usuario"));
 
-<script>
-let usuario = JSON.parse(localStorage.getItem("nexus_usuario"));
-let staffAtual = null;
+      if (!usuario) {
+        window.location.href = "../index.html";
+        return null;
+      }
 
-if (!usuario || usuario.tipo !== "staff") {
-  alert("Acesso exclusivo para staff.");
-  window.location.href = "../index.html";
-}
+      if (!["master", "agencia"].includes(usuario.tipo)) {
+        window.location.href = "../index.html";
+        return null;
+      }
 
-document.getElementById("btnSair").addEventListener("click", () => {
-  localStorage.removeItem("nexus_usuario");
-  window.location.href = "../index.html";
-});
+      document.getElementById("nomeUsuario").textContent = usuario.nome || "Usuário";
+      document.getElementById("funcaoUsuario").textContent =
+        usuario.tipo === "master" ? "Master" : "Agência";
 
-document.querySelectorAll(".staff-tab").forEach(botao => {
-  botao.addEventListener("click", () => {
-    document.querySelectorAll(".staff-tab").forEach(b => b.classList.remove("ativo"));
-    document.querySelectorAll(".staff-section").forEach(sec => sec.classList.remove("ativo"));
+      document.querySelectorAll("[data-menu]").forEach(link => {
+        if (link.dataset.menu === menuAtivo) link.classList.add("ativo");
+      });
 
-    botao.classList.add("ativo");
-    document.getElementById(botao.dataset.tab).classList.add("ativo");
-  });
-});
+      document.getElementById("btnSair").addEventListener("click", () => {
+        localStorage.removeItem("nexus_usuario");
+        window.location.href = "../index.html";
+      });
 
-async function carregarStaff() {
-  let query = supabaseClient
-    .from("nexus_staffs")
-    .select(`
-      *,
-      nexus_staff_perfis (
-        perfil,
-        nivel
-      ),
-      nexus_staff_idiomas (
-        idioma,
-        outro_idioma
-      ),
-      nexus_staff_resumo (
-        total_eventos,
-        media_avaliacao
-      )
-    `);
+      return usuario;
+    }
 
-  if (usuario.staff_id) {
-    query = query.eq("id", usuario.staff_id);
-  } else {
-    query = query.eq("usuario_id", usuario.id);
-  }
+    const usuario = iniciarSistema("casting");
+    const paramsCasting = new URLSearchParams(window.location.search);
+    const eventoFiltroId = paramsCasting.get("evento_id");
 
-  const { data, error } = await query.maybeSingle();
-
-  if (error || !data) {
-    alert("Não encontrei seu cadastro de staff.");
-    console.error(error);
-    return;
-  }
-
-  staffAtual = data;
-
-  if (!usuario.staff_id) {
-    usuario.staff_id = data.id;
-    localStorage.setItem("nexus_usuario", JSON.stringify(usuario));
-  }
-
-  renderizarStaff();
-  carregarDisponibilidades();
-  carregarOportunidades();
-}
-
-function renderizarStaff() {
-  const nome = staffAtual.nome_apresentacao || staffAtual.nome_social || staffAtual.nome_documento || "Staff";
-  const cidade = `${staffAtual.cidade || "-"}${staffAtual.estado ? "/" + staffAtual.estado : ""}`;
-  const perfis = staffAtual.nexus_staff_perfis || [];
-  const idiomas = staffAtual.nexus_staff_idiomas || [];
-  const resumo = staffAtual.nexus_staff_resumo?.[0];
-
-  document.getElementById("staffNome").textContent = nome;
-  document.getElementById("staffCidade").textContent = cidade;
-
-  document.getElementById("perfilResumo").textContent =
-    `${cidade} • ${staffAtual.tem_mei ? (staffAtual.mei_proprio ? "MEI próprio" : "MEI terceiro") : "Sem MEI"} • Diária mínima ${staffAtual.valor_minimo_diaria ? "R$ " + staffAtual.valor_minimo_diaria : "não informada"}`;
-
-  document.getElementById("totalEventos").textContent = resumo?.total_eventos || 0;
-  document.getElementById("mediaAvaliacao").textContent = resumo?.media_avaliacao || 0;
-
-  const tags = [
-    ...perfis.map(p => p.perfil),
-    ...idiomas.map(i => i.idioma || i.outro_idioma)
-  ].filter(Boolean);
-
-  document.getElementById("perfilTags").innerHTML =
-    tags.length
-      ? tags.map(tag => `<span class="staff-tag">${tag}</span>`).join("")
-      : `<span class="staff-tag">Perfil em análise</span>`;
-
-  document.getElementById("editNomeApresentacao").value = staffAtual.nome_apresentacao || "";
-  document.getElementById("editTelefone").value = staffAtual.telefone || "";
-  document.getElementById("editCidade").value = staffAtual.cidade || "";
-  document.getElementById("editEstado").value = staffAtual.estado || "";
-  document.getElementById("editPix").value = staffAtual.pix || "";
-  document.getElementById("editValorMinimo").value = staffAtual.valor_minimo_diaria || "";
-
-  atualizarDisponivelAgora();
-}
-
-function atualizarDisponivelAgora() {
-  const ativo = !!staffAtual.disponivel_agora;
-
-  document.getElementById("statusBola").classList.toggle("ativo", ativo);
-  document.getElementById("statusTexto").textContent = ativo ? "Disponível agora" : "Indisponível agora";
-  document.getElementById("btnDisponivelAgora").textContent = ativo ? "Desativar" : "Ativar";
-}
-
-document.getElementById("btnDisponivelAgora").addEventListener("click", async () => {
-  if (!staffAtual) return;
-
-  const novoStatus = !staffAtual.disponivel_agora;
-
-  const { error } = await supabaseClient
-    .from("nexus_staffs")
-    .update({
-      disponivel_agora: novoStatus,
-      disponivel_agora_desde: novoStatus ? new Date().toISOString() : null,
-      disponivel_agora_cidade: staffAtual.cidade || null,
-      disponivel_agora_estado: staffAtual.estado || null
-    })
-    .eq("id", staffAtual.id);
-
-  if (error) {
-    alert("Erro ao atualizar disponibilidade: " + error.message);
-    return;
-  }
-
-  staffAtual.disponivel_agora = novoStatus;
-  atualizarDisponivelAgora();
-});
-
-document.getElementById("btnSalvarDisponibilidade").addEventListener("click", async () => {
-  if (!staffAtual) return;
-
-  const dataDisponivel = document.getElementById("dataDisponivel").value;
-  const periodo = document.getElementById("periodoDisponivel").value;
-  const observacao = document.getElementById("obsDisponibilidade").value.trim();
-
-  if (!dataDisponivel) {
-    alert("Informe a data.");
-    return;
-  }
-
-  const { error } = await supabaseClient
-    .from("nexus_staff_disponibilidade")
-    .insert({
-      staff_id: staffAtual.id,
-      data_disponivel: dataDisponivel,
-      periodo,
-      observacao,
-      status: "disponivel"
+    document.getElementById("btnSelecionarTalentoCasting").addEventListener("click", () => {
+      window.location.href = eventoFiltroId ? `talentos.html?evento_id=${eventoFiltroId}` : "talentos.html";
     });
 
-  if (error) {
-    alert("Erro ao salvar disponibilidade: " + error.message);
-    return;
-  }
+    document.getElementById("btnPesquisar").addEventListener("click", () => carregarCasting(false));
+    document.getElementById("btnMostrarTodos").addEventListener("click", () => carregarCasting(true));
+    document.getElementById("campoPesquisa").addEventListener("keydown", event => {
+      if (event.key === "Enter") carregarCasting(false);
+    });
 
-  document.getElementById("dataDisponivel").value = "";
-  document.getElementById("obsDisponibilidade").value = "";
+    async function carregarCasting(mostrarTodos = false) {
+      const termo = document.getElementById("campoPesquisa").value.trim().toLowerCase();
 
-  carregarDisponibilidades();
-});
+      if (!mostrarTodos && !termo && !eventoFiltroId) {
+        document.getElementById("listaCasting").innerHTML =
+          `<p class="mensagem-vazia">Pesquise um casting ou clique em “Mostrar todos”.</p>`;
+        return;
+      }
 
-async function carregarDisponibilidades() {
-  if (!staffAtual) return;
-
-  const { data, error } = await supabaseClient
-    .from("nexus_staff_disponibilidade")
-    .select("*")
-    .eq("staff_id", staffAtual.id)
-    .order("data_disponivel", { ascending: true })
-    .limit(10);
-
-  const container = document.getElementById("listaDisponibilidade");
-
-  if (error) {
-    container.innerHTML = `<p class="texto-fraco">Erro ao carregar agenda.</p>`;
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    container.innerHTML = `<p class="texto-fraco">Nenhuma disponibilidade cadastrada.</p>`;
-    return;
-  }
-
-  container.innerHTML = data.map(item => `
-    <div class="staff-oportunidade">
-      <h3>${dataBR(item.data_disponivel)}</h3>
-      <p>${item.periodo || "dia_todo"} • ${item.status || "disponivel"}</p>
-      <p>${item.observacao || ""}</p>
-    </div>
-  `).join("");
-}
-
-async function carregarOportunidades() {
-  if (!staffAtual) return;
-
-  const { data, error } = await supabaseClient
-    .from("nexus_casting_staffs")
-    .select(`
+      let query = supabaseClient
+        .from("nexus_casting_staffs")
+        .select(`
       *,
+      nexus_staffs (
+        id,
+        nome_documento,
+        nome_social,
+        nome_apresentacao,
+        cidade,
+        estado,
+        telefone,
+        status
+      ),
       nexus_eventos (
+        id,
         nome_evento,
-        nome_empresa_contratante,
         cidade,
         estado,
         data_inicio,
         data_fim,
-        valor_diaria,
         status
       )
     `)
-    .eq("staff_id", staffAtual.id)
-    .order("created_at", { ascending:false });
+        .order("created_at", { ascending: false });
 
-  const container = document.getElementById("listaOportunidades");
+      if (usuario.tipo === "agencia" && usuario.agencia_id) {
+        query = query.eq("agencia_id", usuario.agencia_id);
+      }
 
-  if (error) {
-    container.innerHTML = `<p class="texto-fraco">Erro ao carregar oportunidades.</p>`;
-    return;
-  }
+      if (eventoFiltroId) {
+        query = query.eq("evento_id", eventoFiltroId);
+      }
 
-  if (!data || data.length === 0) {
-    container.innerHTML = `<p class="texto-fraco">Nenhuma oportunidade por enquanto.</p>`;
-    return;
-  }
+      const { data, error } = await query;
 
-  container.innerHTML = data.map(item => {
-    const evento = item.nexus_eventos || {};
-    return `
-      <div class="staff-oportunidade">
-        <h3>${evento.nome_evento || "Evento"}</h3>
-        <p>${evento.nome_empresa_contratante || ""}</p>
-        <p>${evento.cidade || "-"}${evento.estado ? "/" + evento.estado : ""} • ${dataBR(evento.data_inicio)} até ${dataBR(evento.data_fim)}</p>
-        <p>Status: <strong>${item.status_operacional || "-"}</strong></p>
-        <p>Resposta: <strong>${item.interesse_staff || "pendente"}</strong></p>
+      if (error) {
+        alert("Erro ao carregar casting: " + error.message);
+        return;
+      }
 
-        <div class="staff-oportunidade-actions">
-          <button onclick="responderOportunidade('${item.id}', 'tenho_interesse')">Tenho interesse</button>
-          <button class="btn-secundario-clean" onclick="responderOportunidade('${item.id}', 'talvez')">Talvez</button>
-          <button class="btn-alerta full" onclick="responderOportunidade('${item.id}', 'nao_tenho_interesse')">Não tenho interesse</button>
+      let lista = data || [];
+
+      if (termo) {
+        lista = lista.filter(item => {
+          const staff = item.nexus_staffs || {};
+          const evento = item.nexus_eventos || {};
+
+          const texto = [
+            staff.nome_apresentacao,
+            staff.nome_social,
+            staff.nome_documento,
+            staff.cidade,
+            staff.estado,
+            evento.nome_evento,
+            evento.cidade,
+            evento.estado,
+            item.status_operacional
+          ].join(" ").toLowerCase();
+
+          return texto.includes(termo);
+        });
+      }
+
+      renderizarCasting(lista);
+    }
+
+    function dataBR(data) {
+      if (!data) return "-";
+      const p = String(data).split("-");
+      if (p.length !== 3) return data;
+      return `${p[2]}/${p[1]}/${p[0]}`;
+    }
+
+    function nomeStaff(staff) {
+      if (!staff) return "-";
+      return staff.nome_apresentacao || staff.nome_social || staff.nome_documento || "-";
+    }
+
+    function respostaTexto(resposta) {
+      return ({
+        tenho_interesse: "Tenho interesse",
+        talvez: "Talvez",
+        nao_tenho_interesse: "Não tenho interesse"
+      })[resposta] || "Pendente";
+    }
+
+    function renderizarCasting(lista) {
+      const container = document.getElementById("listaCasting");
+      container.innerHTML = "";
+
+      if (!lista.length) {
+        container.innerHTML = `<p class="mensagem-vazia">Nenhum talento no casting.</p>`;
+        return;
+      }
+
+      lista.forEach(item => {
+        const staff = item.nexus_staffs || {};
+        const evento = item.nexus_eventos || {};
+
+        container.innerHTML += `
+      <article class="card-casting">
+        <div class="card-casting-topo">
+          <div>
+            <h3>${nomeStaff(staff)}</h3>
+            <p>${evento.nome_evento || "Evento não informado"}</p>
+          </div>
+          <span class="badge-status ${item.status_operacional || ""}">${item.status_operacional || "-"}</span>
         </div>
-      </div>
+
+        <div class="card-casting-info">
+          <p><strong>Contato:</strong> ${staff.telefone || "-"} • ${staff.email || "-"}</p>
+          <p><strong>Staff:</strong> ${staff.cidade || "-"}${staff.estado ? "/" + staff.estado : ""}</p>
+          <p><strong>Evento:</strong> ${evento.cidade || "-"}${evento.estado ? "/" + evento.estado : ""}</p>
+          <p><strong>Período:</strong> ${dataBR(evento.data_inicio)} até ${dataBR(evento.data_fim)}</p>
+          <p><strong>Resposta staff:</strong> ${respostaTexto(item.interesse_staff)}</p>
+          <p><strong>Motivo:</strong> ${item.motivo_resposta_staff || "-"}</p>
+          <p><strong>Prioridade:</strong> ${item.marcado_como_prioridade ? "Sim" : "Não"}</p>
+          <p><strong>Obs:</strong> ${item.observacao_agencia || "-"}</p>
+        </div>
+
+        <div class="card-casting-actions">
+          <button onclick="alterarStatus('${item.id}','confirmado')">Confirmar</button>
+          <button class="btn-secundario-clean" onclick="alterarStatus('${item.id}','recusado')">Recusar</button>
+        </div>
+      </article>
     `;
-  }).join("");
-}
+      });
+    }
 
-async function responderOportunidade(id, resposta) {
-  let motivo = null;
+    async function alterarStatus(id, status) {
+      const { error } = await supabaseClient
+        .from("nexus_casting_staffs")
+        .update({ status_operacional: status })
+        .eq("id", id);
 
-  if (resposta === "nao_tenho_interesse") {
-    motivo = prompt("Informe o motivo:");
-  }
+      if (error) {
+        alert("Erro ao alterar status: " + error.message);
+        return;
+      }
 
-  const { error } = await supabaseClient
-    .from("nexus_casting_staffs")
-    .update({
-      interesse_staff: resposta,
-      motivo_resposta_staff: motivo,
-      data_resposta_staff: new Date().toISOString()
-    })
-    .eq("id", id);
+      carregarCasting(true);
+    }
 
-  if (error) {
-    alert("Erro ao responder: " + error.message);
-    return;
-  }
+  </script>
 
-  carregarOportunidades();
-}
 
-document.getElementById("btnSalvarPerfil").addEventListener("click", async () => {
-  if (!staffAtual) return;
-
-  const payload = {
-    nome_apresentacao: document.getElementById("editNomeApresentacao").value.trim(),
-    telefone: document.getElementById("editTelefone").value.trim(),
-    cidade: document.getElementById("editCidade").value.trim(),
-    estado: document.getElementById("editEstado").value.trim().toUpperCase(),
-    pix: document.getElementById("editPix").value.trim(),
-    valor_minimo_diaria: document.getElementById("editValorMinimo").value || null
-  };
-
-  const { data, error } = await supabaseClient
-    .from("nexus_staffs")
-    .update(payload)
-    .eq("id", staffAtual.id)
-    .select(`
-      *,
-      nexus_staff_perfis (
-        perfil,
-        nivel
-      ),
-      nexus_staff_idiomas (
-        idioma,
-        outro_idioma
-      ),
-      nexus_staff_resumo (
-        total_eventos,
-        media_avaliacao
-      )
-    `)
-    .single();
-
-  if (error) {
-    alert("Erro ao salvar perfil: " + error.message);
-    return;
-  }
-
-  staffAtual = data;
-  renderizarStaff();
-  alert("Perfil atualizado.");
-});
-
-function dataBR(data) {
-  if (!data) return "-";
-  const p = String(data).split("-");
-  if (p.length !== 3) return data;
-  return `${p[2]}/${p[1]}/${p[0]}`;
-}
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("../service-worker.js").catch(() => {});
-}
-
-carregarStaff();
-</script>
-
+  <script>(function () { function init() { const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), btnAbrir = document.getElementById('btnAbrirMenu'), btnExp = document.getElementById('btnMenuExpandir'); if (!sidebar) return; if (localStorage.getItem('nexus_menu_expandido') === 'sim') { document.body.classList.add('menu-aberto-desktop'); if (btnExp) btnExp.textContent = '⇤' } if (btnAbrir) btnAbrir.onclick = () => { sidebar.classList.add('menu-aberto'); if (overlay) overlay.classList.add('ativo') }; if (overlay) overlay.onclick = () => { sidebar.classList.remove('menu-aberto'); overlay.classList.remove('ativo') }; if (btnExp) btnExp.onclick = () => { document.body.classList.toggle('menu-aberto-desktop'); const aberto = document.body.classList.contains('menu-aberto-desktop'); localStorage.setItem('nexus_menu_expandido', aberto ? 'sim' : 'nao'); btnExp.textContent = aberto ? '⇤' : '⇥' } } if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init() })();</script>
 </body>
+
 </html>

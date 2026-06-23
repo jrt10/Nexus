@@ -2,6 +2,7 @@
   "name": "Nexus Staff",
   "short_name": "Nexus",
   "start_url": "pages/app-staff.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#050505",

@@ -1,44 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexus</title>
-  <link rel="stylesheet" href="css/style.css?v=staff-app-1">
+  <link rel="stylesheet" href="css/style.css?v=txt-completo-1">
 </head>
-<body>
 
+<body>
   <main class="login-container">
     <section class="login-card">
-
-      <div class="logo-area">
-        <img src="assets/logo.png" alt="Logo Nexus" class="logo">
+      <div class="logo-area"><img src="assets/logo.png" alt="Logo Nexus" class="logo">
         <h1>NEXUS</h1>
         <p class="marca"><span>JRT</span>ecnologia</p>
       </div>
-
       <form id="loginForm">
-        <div class="input-group">
-          <label for="email">E-mail</label>
-          <input id="email" type="email" placeholder="Digite seu e-mail">
-        </div>
-
-        <div class="input-group">
-          <label for="senha">Senha</label>
-          <div class="senha-container">
-            <input id="senha" type="password" placeholder="Digite sua senha">
-            <span id="toggleSenha" class="olho">👁️</span>
-          </div>
-        </div>
-
-        <button type="submit">Entrar</button>
-        <button type="button" class="btn-link-login" id="btnEsqueciSenha">Esqueci minha senha</button>
-        <button type="button" class="btn-link-login" onclick="window.location.href='pages/cadastro-staff.html'">Sou staff / quero me cadastrar</button>
+        <div class="input-group"><label for="email">E-mail</label><input id="email" type="email"
+            placeholder="Digite seu e-mail"></div>
+        <div class="input-group"><label for="senha">Senha</label>
+          <div class="senha-container"><input id="senha" type="password" placeholder="Digite sua senha"><span
+              id="toggleSenha" class="olho">👁️</span></div>
+        </div><button type="submit">Entrar</button><button type="button" class="btn-link-login"
+          id="btnEsqueciSenha">Esqueci minha senha</button><button type="button" class="btn-link-login"
+          onclick="window.location.href='pages/cadastro-staff.html'">Sou staff / quero me cadastrar</button>
       </form>
-
     </section>
   </main>
-
   <footer>
     <div class="footer-content">
       <h3>Nexus v1.0</h3>
@@ -46,44 +34,32 @@
       <p>Desenvolvido por Jessyca Rocha Tavares</p>
     </div>
   </footer>
-
   <div class="modal-overlay" id="modalSenha">
     <div class="modal-card modal-card-menor">
       <div class="modal-header">
         <div>
           <h2>Redefinir senha</h2>
-          <p>Informe seu e-mail para solicitar um link de redefinição.</p>
-        </div>
-        <button class="btn-fechar" id="btnFecharSenha">×</button>
+          <p>Informe seu e-mail para solicitar uma redefinição segura.</p>
+        </div><button class="btn-fechar" id="btnFecharSenha">×</button>
       </div>
-
-      <div class="input-group">
-        <label for="emailRedefinir">E-mail</label>
-        <input id="emailRedefinir" type="email" placeholder="Digite seu e-mail">
-      </div>
-
-      <div class="input-group">
-        <label for="canalRedefinir">Como deseja receber?</label>
-        <select id="canalRedefinir">
-          <option value="email">E-mail</option>
-          <option value="whatsapp">WhatsApp</option>
-          <option value="sms">SMS</option>
-        </select>
-      </div>
-
+      <div class="input-group"><label for="emailRedefinir">E-mail</label><input id="emailRedefinir" type="email"
+          placeholder="Digite seu e-mail"></div>
       <div class="box-aviso">
-        <p>Por segurança, o Nexus não exibe senha na tela. A solicitação fica registrada para envio pelo canal escolhido.</p>
+        <p>Por segurança, o Nexus não exibe senha na tela. A solicitação fica registrada para envio pelo canal
+          escolhido.</p>
       </div>
-
-      <div class="modal-actions">
-        <button type="button" class="btn-secundario-clean" id="btnCancelarSenha">Cancelar</button>
-        <button type="button" id="btnGerarSenha">Solicitar redefinição</button>
+      <div class="grupo-canal"><label class="check-linha"><input type="radio" name="canalRedefinicao" value="email"
+            checked><span>E-mail</span></label><label class="check-linha"><input type="radio" name="canalRedefinicao"
+            value="whatsapp"><span>WhatsApp</span></label><label class="check-linha"><input type="radio"
+            name="canalRedefinicao" value="sms"><span>SMS</span></label></div>
+      <div class="modal-actions"><button type="button" class="btn-secundario-clean"
+          id="btnCancelarSenha">Cancelar</button><button type="button" id="btnGerarSenha">Solicitar redefinição</button>
       </div>
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js?v=staff-app-1"></script>
-  <script src="js/app.js?v=staff-app-1"></script>
+  <script src="js/supabase.js?v=txt-completo-1"></script>
+  <script src="js/app.js?v=txt-completo-1"></script>
 </body>
+
 </html>
