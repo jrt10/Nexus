@@ -1386,3 +1386,49 @@ footer p{
     grid-template-columns:repeat(4, 1fr);
   }
 }
+
+
+/* ===== MENU COMPACTO DEFINITIVO ===== */
+.menu-topbar{display:none}.sidebar-overlay{display:none}.menu-expand-btn{width:38px;height:38px;padding:0;border-radius:12px;background:#171717;border:1px solid #222;color:#14bdd1;position:absolute;right:-2px;top:70px;font-size:16px}.sidebar-logo{position:relative}.menu a{display:flex;align-items:center;gap:10px}.menu-ico{width:24px;min-width:24px;text-align:center;font-size:18px}.menu-text{display:none;white-space:nowrap}
+.sidebar{width:88px!important;padding:20px 12px!important}.sidebar .sidebar-logo img{width:54px!important}.sidebar .sidebar-logo h2{display:none}.sidebar .menu a{justify-content:center;padding:13px 10px}.sidebar .sidebar-footer{display:none}.conteudo{margin-left:88px!important;width:calc(100% - 88px)!important}
+body.menu-aberto-desktop .sidebar{width:280px!important;padding:24px 18px!important}body.menu-aberto-desktop .sidebar-logo h2{display:block;font-size:26px;letter-spacing:2px}body.menu-aberto-desktop .sidebar-logo img{width:70px!important}body.menu-aberto-desktop .menu a{justify-content:flex-start;padding:12px 14px}body.menu-aberto-desktop .menu-text{display:inline}body.menu-aberto-desktop .sidebar-footer{display:block;font-size:13px;color:#aaa;text-align:left;line-height:1.5}body.menu-aberto-desktop .conteudo{margin-left:280px!important;width:calc(100% - 280px)!important}
+@media(max-width:900px){.menu-topbar{position:fixed;top:0;left:0;right:0;height:62px;background:rgba(13,13,13,.96);border-bottom:1px solid #222;display:flex;align-items:center;gap:12px;padding:0 16px;z-index:120;backdrop-filter:blur(10px)}.menu-topbar strong{display:block;font-size:17px}.menu-topbar span{display:block;color:#aaa;font-size:12px;margin-top:2px}.menu-toggle{width:42px;min-width:42px;height:42px;padding:0;border-radius:12px;background:#171717;border:1px solid #222;color:#14bdd1;font-size:22px}.sidebar{position:fixed!important;width:280px!important;min-height:100vh!important;left:0!important;top:0!important;z-index:130;transform:translateX(-105%);transition:.22s ease;padding:24px 18px!important}.sidebar.menu-aberto{transform:translateX(0)}.sidebar .sidebar-logo h2{display:block}.sidebar .sidebar-logo img{width:70px!important}.sidebar .menu a{justify-content:flex-start;padding:12px 14px}.sidebar .menu-text{display:inline}.sidebar .sidebar-footer{display:block;font-size:13px;color:#aaa;text-align:left;line-height:1.5}.menu-expand-btn{display:none}.sidebar-overlay.ativo{display:block;position:fixed;inset:0;background:rgba(0,0,0,.68);z-index:125}.conteudo,body.menu-aberto-desktop .conteudo{margin-left:0!important;width:100%!important;padding:86px 22px 24px!important}}
+
+
+/* ===== CADASTRO STAFF COM OPÇÕES E FOTO ===== */
+.cadastro-section{background:#0d0d0d;border:1px solid #222;border-radius:18px;padding:18px;margin-bottom:18px}.cadastro-section h2{font-size:20px;margin-bottom:6px}.cadastro-section p{color:#aaa;font-size:14px;margin-bottom:16px}.opcoes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}.opcao-check{display:flex;align-items:center;gap:10px;background:#111;border:1px solid var(--line,#222);border-radius:14px;padding:12px;cursor:pointer;color:#ddd;font-size:14px}.opcao-check:hover{border-color:rgba(20,189,209,.45)}.opcao-check input{width:18px;height:18px;accent-color:var(--blue,#14bdd1)}.preview-foto-staff{width:128px;height:128px;border-radius:24px;background:#111;border:1px solid #222;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:8px 0 14px;color:#777;font-size:38px}.preview-foto-staff img{width:100%;height:100%;object-fit:cover}.file-input-staff{background:#111!important;border:1px dashed #333!important;padding:16px!important;border-radius:14px!important}.cadastro-duas-colunas{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:720px){.opcoes-grid,.cadastro-duas-colunas{grid-template-columns:1fr}}
+
+
+/* ===== AJUSTES CADASTRO STAFF: CASCATA / NOME SOCIAL / PIX ===== */
+.campo-destaque-social{
+  width:100%;
+  background:rgba(20,189,209,.13);
+  border:1px solid rgba(20,189,209,.35);
+  color:#14bdd1;
+  margin:4px 0 14px;
+}
+.campo-oculto{display:none!important}
+.campo-readonly{
+  opacity:.85;
+  border:1px solid rgba(20,189,209,.25)!important;
+}
+.cascata-box{
+  background:#111;
+  border:1px solid #222;
+  border-radius:16px;
+  padding:16px;
+  margin-top:12px;
+}
+.opcoes-grid.tres{grid-template-columns:repeat(3,1fr)}
+.aviso-opcional{
+  color:#fbbf24!important;
+  font-size:13px!important;
+  margin-top:6px!important;
+}
+.input-money-wrap{position:relative}
+.input-money-wrap span{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  color:#14bdd1;font-weight:bold;
+}
+.input-money-wrap input{padding-left:42px!important}
+@media(max-width:720px){.opcoes-grid.tres{grid-template-columns:1fr}}

@@ -10,39 +10,7 @@
 </head>
 <body class="sistema-body">
 
-<aside class="sidebar">
-    <div class="sidebar-logo">
-      <img src="../assets/logo.png" alt="Nexus">
-      <h2>Nexus</h2>
-    </div>
-
-    <nav class="menu">
-      <a href="dashboard-master.html" data-menu="dashboard">🏠 Dashboard</a>
-      <a href="agencias.html" data-menu="agencias">🏢 Agências</a>
-      <a href="talentos.html" data-menu="talentos">👥 Talentos</a>
-      <a href="eventos.html" data-menu="eventos">📅 Eventos</a>
-      <a href="casting.html" data-menu="casting">⭐ Casting</a>
-      <a href="#" data-menu="contratantes">🏢 Contratantes</a>
-      <a href="#" data-menu="documentos">📄 Documentos</a>
-      <a href="#" data-menu="notificacoes">🔔 Notificações</a>
-      <a href="#" data-menu="financeiro">💳 Financeiro</a>
-      <a href="#" data-menu="relatorios">📊 Relatórios</a>
-      <a href="#" data-menu="configuracoes">⚙️ Configurações</a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <div class="linha"></div>
-      <p class="footer-label">Nome</p>
-      <p id="nomeUsuario">Jessyca</p>
-      <p class="footer-label">Função</p>
-      <p id="funcaoUsuario">Master</p>
-      <button class="btn-sair" id="btnSair">Sair</button>
-      <div class="linha"></div>
-      <p>Nexus v1.0</p>
-      <p>© JRTecnologia - Soluções Criativas</p>
-      <p>Desenvolvido por Jessyca Rocha Tavares</p>
-    </div>
-  </aside>
+<div class="menu-topbar"><button type="button" class="menu-toggle" id="btnAbrirMenu">☰</button><div><strong>Nexus</strong><span>v1.0</span></div></div><div class="sidebar-overlay" id="sidebarOverlay"></div><aside class="sidebar" id="sidebar"><div class="sidebar-logo"><img src="../assets/logo.png" alt="Nexus"><h2>Nexus</h2><button type="button" class="menu-expand-btn" id="btnMenuExpandir" title="Expandir menu">⇥</button></div><nav class="menu"><a href="dashboard-master.html" data-menu="dashboard"><span class="menu-ico">🏠</span><span class="menu-text">Dashboard</span></a><a href="agencias.html" data-menu="agencias" class="ativo"><span class="menu-ico">🏢</span><span class="menu-text">Agências</span></a><a href="talentos.html" data-menu="talentos"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a><a href="eventos.html" data-menu="eventos"><span class="menu-ico">📅</span><span class="menu-text">Eventos</span></a><a href="casting.html" data-menu="casting"><span class="menu-ico">⭐</span><span class="menu-text">Casting</span></a><a href="#" data-menu="contratantes"><span class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a><a href="#" data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a><a href="#" data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a><a href="#" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a><a href="#" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a><a href="#" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span class="menu-text">Configurações</span></a></nav><div class="sidebar-footer"><div class="linha"></div><p class="footer-label">Nome</p><p id="nomeUsuario">Usuário</p><p class="footer-label">Função</p><p id="funcaoUsuario">-</p><button class="btn-sair" id="btnSair">Sair</button><div class="linha"></div><p>Nexus v1.0</p><p>© JRTecnologia</p><p>Desenvolvido por Jessyca Rocha Tavares</p></div></aside>
 
   <main class="conteudo">
     <header class="topo">
@@ -374,5 +342,7 @@ async function alternarStatusAgencia(id, statusAtual) {
 
 </script>
 
+
+<script>(function(){function init(){const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay'),btnAbrir=document.getElementById('btnAbrirMenu'),btnExp=document.getElementById('btnMenuExpandir');if(!sidebar)return;if(localStorage.getItem('nexus_menu_expandido')==='sim'){document.body.classList.add('menu-aberto-desktop');if(btnExp)btnExp.textContent='⇤'}if(btnAbrir)btnAbrir.onclick=()=>{sidebar.classList.add('menu-aberto');if(overlay)overlay.classList.add('ativo')};if(overlay)overlay.onclick=()=>{sidebar.classList.remove('menu-aberto');overlay.classList.remove('ativo')};if(btnExp)btnExp.onclick=()=>{document.body.classList.toggle('menu-aberto-desktop');const aberto=document.body.classList.contains('menu-aberto-desktop');localStorage.setItem('nexus_menu_expandido',aberto?'sim':'nao');btnExp.textContent=aberto?'⇤':'⇥'}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();</script>
 </body>
 </html>

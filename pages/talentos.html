@@ -13,44 +13,7 @@
 
 <body class="sistema-body">
 
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <img src="../assets/logo.png" alt="Nexus">
-      <h2>Nexus</h2>
-    </div>
-
-    <nav class="menu">
-      <a href="dashboard-master.html">🏠 Dashboard</a>
-      <a href="agencias.html">🏢 Agências</a>
-      <a class="ativo" href="talentos.html">👥 Talentos</a>
-      <a href="eventos.html">📅 Eventos</a>
-      <a href="casting.html">⭐ Casting</a>
-      <a href="#">🏢 Contratantes</a>
-      <a href="#">📄 Documentos</a>
-      <a href="#">🔔 Notificações</a>
-      <a href="#">💳 Financeiro</a>
-      <a href="#">📊 Relatórios</a>
-      <a href="#">⚙️ Configurações</a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <div class="linha"></div>
-
-      <p class="footer-label">Nome</p>
-      <p id="nomeUsuario">Jessyca</p>
-
-      <p class="footer-label">Função</p>
-      <p id="funcaoUsuario">Master</p>
-
-      <button class="btn-sair" id="btnSair">Sair</button>
-
-      <div class="linha"></div>
-
-      <p>Nexus v1.0</p>
-      <p>© JRTecnologia - Soluções Criativas</p>
-      <p>Desenvolvido por Jessyca Rocha Tavares</p>
-    </div>
-  </aside>
+  <div class="menu-topbar"><button type="button" class="menu-toggle" id="btnAbrirMenu">☰</button><div><strong>Nexus</strong><span>v1.0</span></div></div><div class="sidebar-overlay" id="sidebarOverlay"></div><aside class="sidebar" id="sidebar"><div class="sidebar-logo"><img src="../assets/logo.png" alt="Nexus"><h2>Nexus</h2><button type="button" class="menu-expand-btn" id="btnMenuExpandir" title="Expandir menu">⇥</button></div><nav class="menu"><a href="dashboard-master.html" data-menu="dashboard"><span class="menu-ico">🏠</span><span class="menu-text">Dashboard</span></a><a href="agencias.html" data-menu="agencias"><span class="menu-ico">🏢</span><span class="menu-text">Agências</span></a><a href="talentos.html" data-menu="talentos" class="ativo"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a><a href="eventos.html" data-menu="eventos"><span class="menu-ico">📅</span><span class="menu-text">Eventos</span></a><a href="casting.html" data-menu="casting"><span class="menu-ico">⭐</span><span class="menu-text">Casting</span></a><a href="#" data-menu="contratantes"><span class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a><a href="#" data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a><a href="#" data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a><a href="#" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a><a href="#" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a><a href="#" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span class="menu-text">Configurações</span></a></nav><div class="sidebar-footer"><div class="linha"></div><p class="footer-label">Nome</p><p id="nomeUsuario">Usuário</p><p class="footer-label">Função</p><p id="funcaoUsuario">-</p><button class="btn-sair" id="btnSair">Sair</button><div class="linha"></div><p>Nexus v1.0</p><p>© JRTecnologia</p><p>Desenvolvido por Jessyca Rocha Tavares</p></div></aside>
 
   <main class="conteudo">
 
@@ -394,8 +357,8 @@ function renderizarTalentos(lista) {
     const perfis = staff.nexus_staff_perfis || [];
     const resumo = staff.nexus_staff_resumo?.[0];
 
-    const idiomaTexto = idiomas.map(i => i.idioma || i.outro_idioma).filter(Boolean).join(", ") || "-";
-    const perfilTexto = perfis.map(p => p.perfil).filter(Boolean).slice(0, 3).join(", ") || "-";
+    const idiomaTexto = idiomas.map(i => i.idioma || i.outro_idioma).filter(Boolean).join(", ") || staff.idiomas_texto || "-";
+    const perfilTexto = perfis.map(p => p.perfil).filter(Boolean).slice(0, 3).join(", ") || staff.funcoes_texto || "-";
     const media = resumo?.media_avaliacao ? Number(resumo.media_avaliacao).toFixed(1) : "-";
 
     container.innerHTML += `
@@ -653,11 +616,38 @@ async function abrirCurriculo(id) {
       </section>
 
       <section class="bloco-curriculo">
-        <h3>Dados profissionais</h3>
+        <h3>Cadastro completo</h3>
+        <div class="linha-curriculo"><span>Nome documento</span><strong>${data.nome_documento || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Nome apresentação</span><strong>${data.nome_apresentacao || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Nome social</span><strong>${data.nome_social || "-"}</strong></div>
+        <div class="linha-curriculo"><span>E-mail</span><strong>${data.email || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Telefone</span><strong>${data.telefone || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Gênero</span><strong>${data.genero || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Pronome</span><strong>${data.pronome || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Altura</span><strong>${data.altura || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Peso</span><strong>${data.peso || "-"}</strong></div>
         <div class="linha-curriculo"><span>MEI</span><strong>${data.tem_mei ? (data.mei_proprio ? "Próprio" : "Terceiro") : "Não possui"}</strong></div>
+        <div class="linha-curriculo"><span>CNPJ MEI</span><strong>${data.cnpj_mei || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Tipo MEI</span><strong>${data.mei_tipo || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Razão social MEI</span><strong>${data.mei_razao_social || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Titular MEI</span><strong>${data.mei_titular_nome || "-"}</strong></div>
+        <div class="linha-curriculo"><span>CPF titular MEI</span><strong>${data.mei_titular_cpf || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Relação titular MEI</span><strong>${data.mei_relacao_titular || "-"}</strong></div>
         <div class="linha-curriculo"><span>Valor mínimo diária</span><strong>${data.valor_minimo_diaria ? "R$ " + data.valor_minimo_diaria : "-"}</strong></div>
+        <div class="linha-curriculo"><span>Pix</span><strong>${data.pix || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Banco</span><strong>${data.banco || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Tipo de conta</span><strong>${data.tipo_conta || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Agência</span><strong>${data.agencia_bancaria || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Conta</span><strong>${data.conta_bancaria || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Titular conta</span><strong>${data.titular_conta || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Doc titular conta</span><strong>${data.documento_titular_conta || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Nível experiência</span><strong>${data.nivel_experiencia || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Disponibilidade geral</span><strong>${data.disponibilidade_geral || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Camiseta</span><strong>${data.tamanho_camiseta || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Calçado</span><strong>${data.numero_calcado || "-"}</strong></div>
         <div class="linha-curriculo"><span>Disponível agora</span><strong>${data.disponivel_agora ? "Sim" : "Não"}</strong></div>
         <div class="linha-curriculo"><span>Veículo</span><strong>${data.possui_veiculo || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Observações</span><strong>${data.observacoes || "-"}</strong></div>
       </section>
 
       <section class="bloco-curriculo">
@@ -877,5 +867,7 @@ carregarFuncoesCatalogo();
 atualizarMiniMetricas([]);
 </script>
 
+
+<script>(function(){function init(){const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay'),btnAbrir=document.getElementById('btnAbrirMenu'),btnExp=document.getElementById('btnMenuExpandir');if(!sidebar)return;if(localStorage.getItem('nexus_menu_expandido')==='sim'){document.body.classList.add('menu-aberto-desktop');if(btnExp)btnExp.textContent='⇤'}if(btnAbrir)btnAbrir.onclick=()=>{sidebar.classList.add('menu-aberto');if(overlay)overlay.classList.add('ativo')};if(overlay)overlay.onclick=()=>{sidebar.classList.remove('menu-aberto');overlay.classList.remove('ativo')};if(btnExp)btnExp.onclick=()=>{document.body.classList.toggle('menu-aberto-desktop');const aberto=document.body.classList.contains('menu-aberto-desktop');localStorage.setItem('nexus_menu_expandido',aberto?'sim':'nao');btnExp.textContent=aberto?'⇤':'⇥'}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();</script>
 </body>
 </html>
