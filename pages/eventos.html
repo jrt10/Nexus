@@ -3,28 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eventos - Nexus</title>
-  <link rel="stylesheet" href="../css/style.css?v=txt-completo-1?v=senha-termos-1">
+  <title>Casting - Nexus</title>
+  <link rel="stylesheet" href="../css/style.css?v=senha-termos-1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=txt-completo-1?v=senha-termos-1"></script>
+  <script src="../js/supabase.js?v=senha-termos-1"></script>
 </head>
 <body class="sistema-body">
 
-<div class="menu-topbar"><button type="button" class="menu-toggle" id="btnAbrirMenu">☰</button><div><strong>Nexus</strong><span>v1.0</span></div></div><div class="sidebar-overlay" id="sidebarOverlay"></div><aside class="sidebar" id="sidebar"><div class="sidebar-logo"><img src="../assets/logo.png" alt="Nexus"><h2>Nexus</h2><button type="button" class="menu-expand-btn" id="btnMenuExpandir" title="Expandir menu">⇥</button></div><nav class="menu"><a href="dashboard-master.html" data-menu="dashboard"><span class="menu-ico">🏠</span><span class="menu-text">Dashboard</span></a><a href="agencias.html" data-menu="agencias"><span class="menu-ico">🏢</span><span class="menu-text">Agências</span></a><a href="talentos.html" data-menu="talentos"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a><a href="eventos.html" data-menu="eventos" class="ativo"><span class="menu-ico">📅</span><span class="menu-text">Eventos</span></a><a href="casting.html" data-menu="casting"><span class="menu-ico">⭐</span><span class="menu-text">Casting</span></a><a href="#" data-menu="contratantes"><span class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a><a href="#" data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a><a href="#" data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a><a href="#" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a><a href="#" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a><a href="#" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span class="menu-text">Configurações</span></a></nav><div class="sidebar-footer"><div class="linha"></div><p class="footer-label">Nome</p><p id="nomeUsuario">Usuário</p><p class="footer-label">Função</p><p id="funcaoUsuario">-</p><button class="btn-sair" id="btnSair">Sair</button><div class="linha"></div><p>Nexus v1.0</p><p>© JRTecnologia</p><p>Desenvolvido por Jessyca Rocha Tavares</p></div></aside>
+<div class="menu-topbar"><button type="button" class="menu-toggle" id="btnAbrirMenu">☰</button><div><strong>Nexus</strong><span>v1.0</span></div></div><div class="sidebar-overlay" id="sidebarOverlay"></div><aside class="sidebar" id="sidebar"><div class="sidebar-logo"><img src="../assets/logo.png" alt="Nexus"><h2>Nexus</h2></div><nav class="menu"><a href="dashboard-master.html" data-menu="dashboard"><span class="menu-ico">🏠</span><span class="menu-text">Dashboard</span></a><a href="agencias.html" data-menu="agencias"><span class="menu-ico">🏢</span><span class="menu-text">Agências</span></a><a href="talentos.html" data-menu="talentos"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a><a href="eventos.html" data-menu="eventos"><span class="menu-ico">📅</span><span class="menu-text">Eventos</span></a><a href="casting.html" data-menu="casting" class="ativo"><span class="menu-ico">⭐</span><span class="menu-text">Casting</span></a><a href="#" data-menu="contratantes"><span class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a><a href="#" data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a><a href="#" data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a><a href="#" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a><a href="#" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a><a href="#" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span class="menu-text">Configurações</span></a></nav><div class="sidebar-footer"><div class="linha"></div><p class="footer-label">Nome</p><p id="nomeUsuario">Usuário</p><p class="footer-label">Função</p><p id="funcaoUsuario">-</p><button class="btn-sair" id="btnSair">Sair</button><div class="linha"></div><p>Nexus v1.0</p><p>© JRTecnologia</p><p>Desenvolvido por Jessyca Rocha Tavares</p></div></aside>
 
   <main class="conteudo">
     <header class="topo">
       <div>
-        <h1>Eventos</h1>
-        <p>Cadastre eventos e use no casting de talentos</p>
+        <h1>Casting</h1>
+        <p>Talentos selecionados para eventos</p>
       </div>
-      <button class="btn-topo" id="btnNovoEvento">+ Novo evento</button>
+      <button class="btn-topo" id="btnSelecionarTalentoCasting">+ Selecionar talento</button>
     </header>
 
     <section class="painel-filtro">
       <div class="campo-busca">
         <span>🔍</span>
-        <input type="text" id="campoPesquisa" placeholder="Pesquisar por evento, cidade, contratante ou status">
+        <input type="text" id="campoPesquisa" placeholder="Pesquisar por evento, staff ou status">
       </div>
 
       <div class="botoes-filtro">
@@ -33,58 +33,10 @@
       </div>
     </section>
 
-    <section id="listaEventos" class="grid-eventos">
-      <p class="mensagem-vazia">Pesquise um evento ou clique em “Mostrar todos”.</p>
+    <section id="listaCasting" class="grid-casting">
+      <p class="mensagem-vazia">Pesquise um casting ou clique em “Mostrar todos”.</p>
     </section>
   </main>
-
-  <div class="modal-overlay" id="modalEvento">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div>
-          <h2>Novo evento</h2>
-          <p>Preencha as informações principais do evento.</p>
-        </div>
-        <button class="btn-fechar" id="btnFecharEvento">×</button>
-      </div>
-
-      <div class="modal-grid">
-        <div class="input-group"><label>Nome do evento</label><input id="nomeEvento"></div>
-        <div class="input-group"><label>Contratante / expositor</label><input id="nomeEmpresaContratante"></div>
-        <div class="input-group"><label>Local</label><input id="localEvento"></div>
-        <div class="input-group"><label>Cidade</label><input id="cidade"></div>
-        <div class="input-group"><label>Estado</label><input id="estado" maxlength="2"></div>
-        <div class="input-group"><label>Valor diária padrão</label><input id="valorDiaria" type="number" step="0.01"></div>
-        <div class="input-group"><label>Data início</label><input id="dataInicio" type="date"></div>
-        <div class="input-group"><label>Data fim</label><input id="dataFim" type="date"></div>
-        <div class="input-group"><label>Horário início</label><input id="horarioInicio" type="time"></div>
-        <div class="input-group"><label>Horário fim</label><input id="horarioFim" type="time"></div>
-        <div class="input-group">
-          <label>Status</label>
-          <select id="statusEvento">
-            <option value="em_selecao">Em seleção</option>
-            <option value="publicado">Publicado</option>
-            <option value="fechado">Fechado</option>
-            <option value="cancelado">Cancelado</option>
-          </select>
-        </div>
-        <div class="input-group" id="grupoAgenciaEvento">
-          <label>Agência</label>
-          <select id="agenciaEvento"></select>
-        </div>
-      </div>
-
-      <div class="input-group">
-        <label>Observações</label>
-        <textarea id="observacoes" rows="4"></textarea>
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn-secundario-clean" id="btnCancelarEvento">Cancelar</button>
-        <button id="btnSalvarEvento">Salvar evento</button>
-      </div>
-    </div>
-  </div>
 
 <script>
 function iniciarSistema(menuAtivo = "") {
@@ -116,150 +68,94 @@ function iniciarSistema(menuAtivo = "") {
   return usuario;
 }
 
-const usuario = iniciarSistema("eventos");
-const modalEvento = document.getElementById("modalEvento");
-let agenciasLista = [];
+const usuario = iniciarSistema("casting");
+const paramsCasting = new URLSearchParams(window.location.search);
+const eventoFiltroId = paramsCasting.get("evento_id");
 
-document.getElementById("btnNovoEvento").addEventListener("click", abrirNovoEvento);
-document.getElementById("btnFecharEvento").addEventListener("click", fecharModalEvento);
-document.getElementById("btnCancelarEvento").addEventListener("click", fecharModalEvento);
-document.getElementById("btnSalvarEvento").addEventListener("click", salvarEvento);
-document.getElementById("btnPesquisar").addEventListener("click", () => carregarEventos(false));
-document.getElementById("btnMostrarTodos").addEventListener("click", () => carregarEventos(true));
-document.getElementById("campoPesquisa").addEventListener("keydown", event => {
-  if (event.key === "Enter") carregarEventos(false);
+document.getElementById("btnSelecionarTalentoCasting").addEventListener("click", () => {
+  window.location.href = eventoFiltroId ? `talentos.html?evento_id=${eventoFiltroId}` : "talentos.html";
 });
 
-async function carregarAgenciasParaEvento() {
-  const select = document.getElementById("agenciaEvento");
+document.getElementById("btnPesquisar").addEventListener("click", () => carregarCasting(false));
+document.getElementById("btnMostrarTodos").addEventListener("click", () => carregarCasting(true));
+document.getElementById("campoPesquisa").addEventListener("keydown", event => {
+  if (event.key === "Enter") carregarCasting(false);
+});
 
-  if (usuario.tipo === "agencia") {
-    document.getElementById("grupoAgenciaEvento").style.display = "none";
-    return;
-  }
+async function carregarCasting(mostrarTodos = false) {
+  const termo = document.getElementById("campoPesquisa").value.trim().toLowerCase();
 
-  const { data, error } = await supabaseClient
-    .from("nexus_agencias")
-    .select("id, nome_agencia, status")
-    .order("nome_agencia", { ascending:true });
-
-  if (error) {
-    select.innerHTML = `<option value="">Erro ao carregar agências</option>`;
-    return;
-  }
-
-  agenciasLista = data || [];
-  select.innerHTML = `<option value="">Selecione uma agência</option>`;
-  agenciasLista.forEach(agencia => {
-    select.innerHTML += `<option value="${agencia.id}">${agencia.nome_agencia}</option>`;
-  });
-}
-
-function abrirNovoEvento() {
-  limparCamposEvento();
-  modalEvento.classList.add("ativo");
-}
-
-function fecharModalEvento() {
-  modalEvento.classList.remove("ativo");
-}
-
-function limparCamposEvento() {
-  document.getElementById("nomeEvento").value = "";
-  document.getElementById("nomeEmpresaContratante").value = "";
-  document.getElementById("localEvento").value = "";
-  document.getElementById("cidade").value = "";
-  document.getElementById("estado").value = "";
-  document.getElementById("valorDiaria").value = "";
-  document.getElementById("dataInicio").value = "";
-  document.getElementById("dataFim").value = "";
-  document.getElementById("horarioInicio").value = "";
-  document.getElementById("horarioFim").value = "";
-  document.getElementById("statusEvento").value = "em_selecao";
-  document.getElementById("observacoes").value = "";
-  if (document.getElementById("agenciaEvento")) document.getElementById("agenciaEvento").value = "";
-}
-
-async function salvarEvento() {
-  const nome_evento = document.getElementById("nomeEvento").value.trim();
-  const nome_empresa_contratante = document.getElementById("nomeEmpresaContratante").value.trim();
-  const local_evento = document.getElementById("localEvento").value.trim();
-  const cidade = document.getElementById("cidade").value.trim();
-  const estado = document.getElementById("estado").value.trim().toUpperCase();
-  const valor_diaria = document.getElementById("valorDiaria").value || null;
-  const data_inicio = document.getElementById("dataInicio").value || null;
-  const data_fim = document.getElementById("dataFim").value || null;
-  const horario_inicio = document.getElementById("horarioInicio").value || null;
-  const horario_fim = document.getElementById("horarioFim").value || null;
-  const status = document.getElementById("statusEvento").value;
-  const observacoes = document.getElementById("observacoes").value.trim();
-
-  let agencia_id = usuario.agencia_id || null;
-  if (usuario.tipo === "master") agencia_id = document.getElementById("agenciaEvento").value || null;
-
-  if (!nome_evento || !cidade || !data_inicio) {
-    alert("Preencha nome do evento, cidade e data início.");
-    return;
-  }
-
-  const { error } = await supabaseClient
-    .from("nexus_eventos")
-    .insert({
-      agencia_id,
-      nome_evento,
-      nome_empresa_contratante,
-      local_evento,
-      cidade,
-      estado,
-      data_inicio,
-      data_fim,
-      horario_inicio,
-      horario_fim,
-      valor_diaria,
-      observacoes,
-      status
-    });
-
-  if (error) {
-    alert("Erro ao salvar evento: " + error.message);
-    return;
-  }
-
-  fecharModalEvento();
-  carregarEventos(true);
-  alert("Evento cadastrado.");
-}
-
-async function carregarEventos(mostrarTodos = false) {
-  const termo = document.getElementById("campoPesquisa").value.trim();
-
-  if (!mostrarTodos && !termo) {
-    document.getElementById("listaEventos").innerHTML =
-      `<p class="mensagem-vazia">Pesquise um evento ou clique em “Mostrar todos”.</p>`;
+  if (!mostrarTodos && !termo && !eventoFiltroId) {
+    document.getElementById("listaCasting").innerHTML =
+      `<p class="mensagem-vazia">Pesquise um casting ou clique em “Mostrar todos”.</p>`;
     return;
   }
 
   let query = supabaseClient
-    .from("nexus_eventos")
-    .select("*")
-    .order("data_inicio", { ascending:false });
+    .from("nexus_casting_staffs")
+    .select(`
+      *,
+      nexus_staffs (
+        id,
+        nome_documento,
+        nome_social,
+        nome_apresentacao,
+        cidade,
+        estado,
+        telefone,
+        status
+      ),
+      nexus_eventos (
+        id,
+        nome_evento,
+        cidade,
+        estado,
+        data_inicio,
+        data_fim,
+        status
+      )
+    `)
+    .order("created_at", { ascending:false });
 
   if (usuario.tipo === "agencia" && usuario.agencia_id) {
     query = query.eq("agencia_id", usuario.agencia_id);
   }
 
-  if (termo) {
-    query = query.or(`nome_evento.ilike.%${termo}%,nome_empresa_contratante.ilike.%${termo}%,cidade.ilike.%${termo}%,estado.ilike.%${termo}%,status.ilike.%${termo}%`);
+  if (eventoFiltroId) {
+    query = query.eq("evento_id", eventoFiltroId);
   }
 
   const { data, error } = await query;
 
   if (error) {
-    alert("Erro ao carregar eventos: " + error.message);
+    alert("Erro ao carregar casting: " + error.message);
     return;
   }
 
-  renderizarEventos(data || []);
+  let lista = data || [];
+
+  if (termo) {
+    lista = lista.filter(item => {
+      const staff = item.nexus_staffs || {};
+      const evento = item.nexus_eventos || {};
+
+      const texto = [
+        staff.nome_apresentacao,
+        staff.nome_social,
+        staff.nome_documento,
+        staff.cidade,
+        staff.estado,
+        evento.nome_evento,
+        evento.cidade,
+        evento.estado,
+        item.status_operacional
+      ].join(" ").toLowerCase();
+
+      return texto.includes(termo);
+    });
+  }
+
+  renderizarCasting(lista);
 }
 
 function dataBR(data) {
@@ -269,43 +165,76 @@ function dataBR(data) {
   return `${p[2]}/${p[1]}/${p[0]}`;
 }
 
-function renderizarEventos(lista) {
-  const container = document.getElementById("listaEventos");
+function nomeStaff(staff) {
+  if (!staff) return "-";
+  return staff.nome_apresentacao || staff.nome_social || staff.nome_documento || "-";
+}
+
+function respostaTexto(resposta) {
+  return ({
+    tenho_interesse: "Tenho interesse",
+    talvez: "Talvez",
+    nao_tenho_interesse: "Não tenho interesse"
+  })[resposta] || "Pendente";
+}
+
+function renderizarCasting(lista) {
+  const container = document.getElementById("listaCasting");
   container.innerHTML = "";
 
   if (!lista.length) {
-    container.innerHTML = `<p class="mensagem-vazia">Nenhum evento encontrado.</p>`;
+    container.innerHTML = `<p class="mensagem-vazia">Nenhum talento no casting.</p>`;
     return;
   }
 
-  lista.forEach(evento => {
+  lista.forEach(item => {
+    const staff = item.nexus_staffs || {};
+    const evento = item.nexus_eventos || {};
+
     container.innerHTML += `
-      <article class="card-evento">
-        <div class="card-evento-topo">
+      <article class="card-casting">
+        <div class="card-casting-topo">
           <div>
-            <h3>${evento.nome_evento || "-"}</h3>
-            <p>${evento.nome_empresa_contratante || "-"}</p>
+            <h3>${nomeStaff(staff)}</h3>
+            <p>${evento.nome_evento || "Evento não informado"}</p>
           </div>
-          <span class="badge-status ${evento.status || ""}">${evento.status || "-"}</span>
+          <span class="badge-status ${item.status_operacional || ""}">${item.status_operacional || "-"}</span>
         </div>
 
-        <div class="card-evento-info">
-          <p><strong>Local:</strong> ${evento.local_evento || "-"}</p>
-          <p><strong>Cidade:</strong> ${evento.cidade || "-"}${evento.estado ? "/" + evento.estado : ""}</p>
+        <div class="card-casting-info">
+          <p><strong>Contato:</strong> ${staff.telefone || "-"} • ${staff.email || "-"}</p>
+          <p><strong>Staff:</strong> ${staff.cidade || "-"}${staff.estado ? "/" + staff.estado : ""}</p>
+          <p><strong>Evento:</strong> ${evento.cidade || "-"}${evento.estado ? "/" + evento.estado : ""}</p>
           <p><strong>Período:</strong> ${dataBR(evento.data_inicio)} até ${dataBR(evento.data_fim)}</p>
-          <p><strong>Diária:</strong> ${evento.valor_diaria ? "R$ " + evento.valor_diaria : "-"}</p>
+          <p><strong>Resposta staff:</strong> ${respostaTexto(item.interesse_staff)}</p>
+          <p><strong>Motivo:</strong> ${item.motivo_resposta_staff || "-"}</p>
+          <p><strong>Prioridade:</strong> ${item.marcado_como_prioridade ? "Sim" : "Não"}</p>
+          <p><strong>Obs:</strong> ${item.observacao_agencia || "-"}</p>
         </div>
 
-        <div class="card-evento-actions">
-          <button onclick="window.location.href='casting.html?evento_id=${evento.id}'">Ver casting</button>
-          <button class="btn-secundario-clean" onclick="window.location.href='talentos.html?evento_id=${evento.id}'">Selecionar talentos</button>
+        <div class="card-casting-actions">
+          <button onclick="alterarStatus('${item.id}','confirmado')">Confirmar</button>
+          <button class="btn-secundario-clean" onclick="alterarStatus('${item.id}','recusado')">Recusar</button>
         </div>
       </article>
     `;
   });
 }
 
-carregarAgenciasParaEvento();
+async function alterarStatus(id, status) {
+  const { error } = await supabaseClient
+    .from("nexus_casting_staffs")
+    .update({ status_operacional:status })
+    .eq("id", id);
+
+  if (error) {
+    alert("Erro ao alterar status: " + error.message);
+    return;
+  }
+
+  carregarCasting(true);
+}
+
 </script>
 
 

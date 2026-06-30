@@ -1,51 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Casting - Nexus</title>
-  <link rel="stylesheet" href="../css/style.css?v=txt-completo-1?v=senha-termos-1">
+  <link rel="stylesheet" href="../css/style.css?v=senha-termos-1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=txt-completo-1?v=senha-termos-1"></script>
+  <script src="../js/supabase.js?v=senha-termos-1"></script>
 </head>
-
 <body class="sistema-body">
 
-  <div class="menu-topbar"><button type="button" class="menu-toggle" id="btnAbrirMenu">☰</button>
-    <div><strong>Nexus</strong><span>v1.0</span></div>
-  </div>
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo"><img src="../assets/logo.png" alt="Nexus">
-      <h2>Nexus</h2><button type="button" class="menu-expand-btn" id="btnMenuExpandir" title="Expandir menu">⇥</button>
-    </div>
-    <nav class="menu"><a href="dashboard-master.html" data-menu="dashboard"><span class="menu-ico">🏠</span><span
-          class="menu-text">Dashboard</span></a><a href="agencias.html" data-menu="agencias"><span
-          class="menu-ico">🏢</span><span class="menu-text">Agências</span></a><a href="talentos.html"
-        data-menu="talentos"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a><a
-        href="eventos.html" data-menu="eventos"><span class="menu-ico">📅</span><span
-          class="menu-text">Eventos</span></a><a href="casting.html" data-menu="casting" class="ativo"><span
-          class="menu-ico">⭐</span><span class="menu-text">Casting</span></a><a href="#" data-menu="contratantes"><span
-          class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a><a href="#"
-        data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a><a href="#"
-        data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a><a
-        href="#" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a><a
-        href="#" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a><a
-        href="#" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span
-          class="menu-text">Configurações</span></a></nav>
-    <div class="sidebar-footer">
-      <div class="linha"></div>
-      <p class="footer-label">Nome</p>
-      <p id="nomeUsuario">Usuário</p>
-      <p class="footer-label">Função</p>
-      <p id="funcaoUsuario">-</p><button class="btn-sair" id="btnSair">Sair</button>
-      <div class="linha"></div>
-      <p>Nexus v1.0</p>
-      <p>© JRTecnologia</p>
-      <p>Desenvolvido por Jessyca Rocha Tavares</p>
-    </div>
-  </aside>
+<div class="menu-topbar"><button type="button" class="menu-toggle" id="btnAbrirMenu">☰</button><div><strong>Nexus</strong><span>v1.0</span></div></div><div class="sidebar-overlay" id="sidebarOverlay"></div><aside class="sidebar" id="sidebar"><div class="sidebar-logo"><img src="../assets/logo.png" alt="Nexus"><h2>Nexus</h2></div><nav class="menu"><a href="dashboard-master.html" data-menu="dashboard"><span class="menu-ico">🏠</span><span class="menu-text">Dashboard</span></a><a href="agencias.html" data-menu="agencias"><span class="menu-ico">🏢</span><span class="menu-text">Agências</span></a><a href="talentos.html" data-menu="talentos"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a><a href="eventos.html" data-menu="eventos"><span class="menu-ico">📅</span><span class="menu-text">Eventos</span></a><a href="casting.html" data-menu="casting" class="ativo"><span class="menu-ico">⭐</span><span class="menu-text">Casting</span></a><a href="#" data-menu="contratantes"><span class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a><a href="#" data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a><a href="#" data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a><a href="#" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a><a href="#" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a><a href="#" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span class="menu-text">Configurações</span></a></nav><div class="sidebar-footer"><div class="linha"></div><p class="footer-label">Nome</p><p id="nomeUsuario">Usuário</p><p class="footer-label">Função</p><p id="funcaoUsuario">-</p><button class="btn-sair" id="btnSair">Sair</button><div class="linha"></div><p>Nexus v1.0</p><p>© JRTecnologia</p><p>Desenvolvido por Jessyca Rocha Tavares</p></div></aside>
 
   <main class="conteudo">
     <header class="topo">
@@ -73,62 +38,62 @@
     </section>
   </main>
 
-  <script>
-    function iniciarSistema(menuAtivo = "") {
-      const usuario = JSON.parse(localStorage.getItem("nexus_usuario"));
+<script>
+function iniciarSistema(menuAtivo = "") {
+  const usuario = JSON.parse(localStorage.getItem("nexus_usuario"));
 
-      if (!usuario) {
-        window.location.href = "../index.html";
-        return null;
-      }
+  if (!usuario) {
+    window.location.href = "../index.html";
+    return null;
+  }
 
-      if (!["master", "agencia"].includes(usuario.tipo)) {
-        window.location.href = "../index.html";
-        return null;
-      }
+  if (!["master", "agencia"].includes(usuario.tipo)) {
+    window.location.href = "../index.html";
+    return null;
+  }
 
-      document.getElementById("nomeUsuario").textContent = usuario.nome || "Usuário";
-      document.getElementById("funcaoUsuario").textContent =
-        usuario.tipo === "master" ? "Master" : "Agência";
+  document.getElementById("nomeUsuario").textContent = usuario.nome || "Usuário";
+  document.getElementById("funcaoUsuario").textContent =
+    usuario.tipo === "master" ? "Master" : "Agência";
 
-      document.querySelectorAll("[data-menu]").forEach(link => {
-        if (link.dataset.menu === menuAtivo) link.classList.add("ativo");
-      });
+  document.querySelectorAll("[data-menu]").forEach(link => {
+    if (link.dataset.menu === menuAtivo) link.classList.add("ativo");
+  });
 
-      document.getElementById("btnSair").addEventListener("click", () => {
-        localStorage.removeItem("nexus_usuario");
-        window.location.href = "../index.html";
-      });
+  document.getElementById("btnSair").addEventListener("click", () => {
+    localStorage.removeItem("nexus_usuario");
+    window.location.href = "../index.html";
+  });
 
-      return usuario;
-    }
+  return usuario;
+}
 
-    const usuario = iniciarSistema("casting");
-    const paramsCasting = new URLSearchParams(window.location.search);
-    const eventoFiltroId = paramsCasting.get("evento_id");
+const usuario = iniciarSistema("casting");
+const paramsCasting = new URLSearchParams(window.location.search);
+const eventoFiltroId = paramsCasting.get("evento_id");
 
-    document.getElementById("btnSelecionarTalentoCasting").addEventListener("click", () => {
-      window.location.href = eventoFiltroId ? `talentos.html?evento_id=${eventoFiltroId}` : "talentos.html";
-    });
+document.getElementById("btnSelecionarTalentoCasting").addEventListener("click", () => {
+  window.location.href = eventoFiltroId ? `talentos.html?evento_id=${eventoFiltroId}` : "talentos.html";
+});
 
-    document.getElementById("btnPesquisar").addEventListener("click", () => carregarCasting(false));
-    document.getElementById("btnMostrarTodos").addEventListener("click", () => carregarCasting(true));
-    document.getElementById("campoPesquisa").addEventListener("keydown", event => {
-      if (event.key === "Enter") carregarCasting(false);
-    });
+document.getElementById("btnPesquisar").addEventListener("click", () => carregarCasting(false));
+document.getElementById("btnMostrarTodos").addEventListener("click", () => carregarCasting(true));
+document.getElementById("campoPesquisa").addEventListener("keydown", event => {
+  if (event.key === "Enter") carregarCasting(false);
+});
 
-    async function carregarCasting(mostrarTodos = false) {
-      const termo = document.getElementById("campoPesquisa").value.trim().toLowerCase();
+async function carregarCasting(mostrarTodos = false) {
+  const termo = document.getElementById("campoPesquisa").value.trim().toLowerCase();
 
-      if (!mostrarTodos && !termo && !eventoFiltroId) {
-        document.getElementById("listaCasting").innerHTML =
-          `<p class="mensagem-vazia">Pesquise um casting ou clique em “Mostrar todos”.</p>`;
-        return;
-      }
+  if (!mostrarTodos && !termo && !eventoFiltroId) {
+    document.getElementById("listaCasting").innerHTML =
+      `<p class="mensagem-vazia">Pesquise um casting ou clique em “Mostrar todos”.</p>`;
+    return;
+  }
 
-      let query = supabaseClient
-        .from("nexus_casting_staffs")
-        .select(`
+  let query = supabaseClient
+    .from("nexus_casting_staffs")
+    .select(`
       *,
       nexus_staffs (
         id,
@@ -150,83 +115,83 @@
         status
       )
     `)
-        .order("created_at", { ascending: false });
+    .order("created_at", { ascending:false });
 
-      if (usuario.tipo === "agencia" && usuario.agencia_id) {
-        query = query.eq("agencia_id", usuario.agencia_id);
-      }
+  if (usuario.tipo === "agencia" && usuario.agencia_id) {
+    query = query.eq("agencia_id", usuario.agencia_id);
+  }
 
-      if (eventoFiltroId) {
-        query = query.eq("evento_id", eventoFiltroId);
-      }
+  if (eventoFiltroId) {
+    query = query.eq("evento_id", eventoFiltroId);
+  }
 
-      const { data, error } = await query;
+  const { data, error } = await query;
 
-      if (error) {
-        alert("Erro ao carregar casting: " + error.message);
-        return;
-      }
+  if (error) {
+    alert("Erro ao carregar casting: " + error.message);
+    return;
+  }
 
-      let lista = data || [];
+  let lista = data || [];
 
-      if (termo) {
-        lista = lista.filter(item => {
-          const staff = item.nexus_staffs || {};
-          const evento = item.nexus_eventos || {};
+  if (termo) {
+    lista = lista.filter(item => {
+      const staff = item.nexus_staffs || {};
+      const evento = item.nexus_eventos || {};
 
-          const texto = [
-            staff.nome_apresentacao,
-            staff.nome_social,
-            staff.nome_documento,
-            staff.cidade,
-            staff.estado,
-            evento.nome_evento,
-            evento.cidade,
-            evento.estado,
-            item.status_operacional
-          ].join(" ").toLowerCase();
+      const texto = [
+        staff.nome_apresentacao,
+        staff.nome_social,
+        staff.nome_documento,
+        staff.cidade,
+        staff.estado,
+        evento.nome_evento,
+        evento.cidade,
+        evento.estado,
+        item.status_operacional
+      ].join(" ").toLowerCase();
 
-          return texto.includes(termo);
-        });
-      }
+      return texto.includes(termo);
+    });
+  }
 
-      renderizarCasting(lista);
-    }
+  renderizarCasting(lista);
+}
 
-    function dataBR(data) {
-      if (!data) return "-";
-      const p = String(data).split("-");
-      if (p.length !== 3) return data;
-      return `${p[2]}/${p[1]}/${p[0]}`;
-    }
+function dataBR(data) {
+  if (!data) return "-";
+  const p = String(data).split("-");
+  if (p.length !== 3) return data;
+  return `${p[2]}/${p[1]}/${p[0]}`;
+}
 
-    function nomeStaff(staff) {
-      if (!staff) return "-";
-      return staff.nome_apresentacao || staff.nome_social || staff.nome_documento || "-";
-    }
+function nomeStaff(staff) {
+  if (!staff) return "-";
+  return staff.nome_apresentacao || staff.nome_social || staff.nome_documento || "-";
+}
 
-    function respostaTexto(resposta) {
-      return ({
-        tenho_interesse: "Tenho interesse",
-        talvez: "Talvez",
-        nao_tenho_interesse: "Não tenho interesse"
-      })[resposta] || "Pendente";
-    }
+function respostaTexto(resposta) {
+  return ({
+    tenho_interesse: "Tenho interesse",
+    talvez: "Talvez",
+    nao_tenho_interesse: "Não tenho interesse"
+  })[resposta] || "Pendente";
+}
 
-    function renderizarCasting(lista) {
-      const container = document.getElementById("listaCasting");
-      container.innerHTML = "";
+function renderizarCasting(lista) {
+  const container = document.getElementById("listaCasting");
+  container.innerHTML = "";
 
-      if (!lista.length) {
-        container.innerHTML = `<p class="mensagem-vazia">Nenhum talento no casting.</p>`;
-        return;
-      }
+  if (!lista.length) {
+    container.innerHTML = `<p class="mensagem-vazia">Nenhum talento no casting.</p>`;
+    return;
+  }
 
-      lista.forEach(item => {
-        const staff = item.nexus_staffs || {};
-        const evento = item.nexus_eventos || {};
+  lista.forEach(item => {
+    const staff = item.nexus_staffs || {};
+    const evento = item.nexus_eventos || {};
 
-        container.innerHTML += `
+    container.innerHTML += `
       <article class="card-casting">
         <div class="card-casting-topo">
           <div>
@@ -253,27 +218,26 @@
         </div>
       </article>
     `;
-      });
-    }
+  });
+}
 
-    async function alterarStatus(id, status) {
-      const { error } = await supabaseClient
-        .from("nexus_casting_staffs")
-        .update({ status_operacional: status })
-        .eq("id", id);
+async function alterarStatus(id, status) {
+  const { error } = await supabaseClient
+    .from("nexus_casting_staffs")
+    .update({ status_operacional:status })
+    .eq("id", id);
 
-      if (error) {
-        alert("Erro ao alterar status: " + error.message);
-        return;
-      }
+  if (error) {
+    alert("Erro ao alterar status: " + error.message);
+    return;
+  }
 
-      carregarCasting(true);
-    }
+  carregarCasting(true);
+}
 
-  </script>
+</script>
 
 
-  <script>(function () { function init() { const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), btnAbrir = document.getElementById('btnAbrirMenu'), btnExp = document.getElementById('btnMenuExpandir'); if (!sidebar) return; if (localStorage.getItem('nexus_menu_expandido') === 'sim') { document.body.classList.add('menu-aberto-desktop'); if (btnExp) btnExp.textContent = '⇤' } if (btnAbrir) btnAbrir.onclick = () => { sidebar.classList.add('menu-aberto'); if (overlay) overlay.classList.add('ativo') }; if (overlay) overlay.onclick = () => { sidebar.classList.remove('menu-aberto'); overlay.classList.remove('ativo') }; if (btnExp) btnExp.onclick = () => { document.body.classList.toggle('menu-aberto-desktop'); const aberto = document.body.classList.contains('menu-aberto-desktop'); localStorage.setItem('nexus_menu_expandido', aberto ? 'sim' : 'nao'); btnExp.textContent = aberto ? '⇤' : '⇥' } } if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init() })();</script>
+<script>(function(){function init(){const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay'),btnAbrir=document.getElementById('btnAbrirMenu'),btnExp=document.getElementById('btnMenuExpandir');if(!sidebar)return;if(localStorage.getItem('nexus_menu_expandido')==='sim'){document.body.classList.add('menu-aberto-desktop');if(btnExp)btnExp.textContent='⇤'}if(btnAbrir)btnAbrir.onclick=()=>{sidebar.classList.add('menu-aberto');if(overlay)overlay.classList.add('ativo')};if(overlay)overlay.onclick=()=>{sidebar.classList.remove('menu-aberto');overlay.classList.remove('ativo')};if(btnExp)btnExp.onclick=()=>{document.body.classList.toggle('menu-aberto-desktop');const aberto=document.body.classList.contains('menu-aberto-desktop');localStorage.setItem('nexus_menu_expandido',aberto?'sim':'nao');btnExp.textContent=aberto?'⇤':'⇥'}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();</script>
 </body>
-
 </html>

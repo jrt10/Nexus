@@ -1,52 +1,224 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexus - Trocar senha</title>
-  <link rel="stylesheet" href="../css/style.css?v=txt-completo-1">
+  <link rel="stylesheet" href="../css/style.css?v=senha-termos-1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=txt-completo-1"></script>
+  <script src="../js/supabase.js?v=senha-termos-1"></script>
 </head>
-
 <body>
+
   <main class="login-container">
     <section class="login-card">
-      <div class="logo-area"><img src="../assets/logo.png" class="logo">
+
+      <div class="logo-area">
+        <img src="../assets/logo.png" alt="Logo Nexus" class="logo">
         <h1>NEXUS</h1>
         <p class="marca"><span>JRT</span>ecnologia</p>
       </div>
+
       <form id="primeiroAcessoForm">
-        <div class="input-group"><label>Nova senha</label><input id="novaSenha" type="password"></div>
-        <div class="input-group"><label>Confirmar senha</label><input id="confirmarSenha" type="password"></div><label
-          class="check-linha"><input type="checkbox" id="termosUso"><span>Aceito os <a href="#"
-              onclick="abrirTermo('termos');return false;">Termos de Uso</a></span></label><label
-          class="check-linha"><input type="checkbox" id="politicaPrivacidade"><span>Aceito a <a href="#"
-              onclick="abrirTermo('privacidade');return false;">Política de Privacidade/LGPD</a></span></label><button
-          type="submit" id="btnSalvarSenha">Salvar nova senha</button><button type="button" class="btn-link-login"
-          onclick="localStorage.removeItem('nexus_usuario');window.location.href='../index.html'">Voltar ao
-          login</button>
+        <div class="input-group">
+          <label for="novaSenha">Nova senha</label>
+          <input id="novaSenha" type="password" placeholder="Digite sua nova senha">
+        </div>
+
+        <div class="input-group">
+          <label for="confirmarSenha">Confirmar senha</label>
+          <input id="confirmarSenha" type="password" placeholder="Confirme sua nova senha">
+        </div>
+
+        <div class="box-aviso termos-box">
+          <label class="check-linha check-termo">
+            <input type="checkbox" id="aceiteTermosUso">
+            <span>Li e aceito os <button type="button" class="btn-termo-link" data-termo="uso">Termos de Uso</button></span>
+          </label>
+
+          <label class="check-linha check-termo">
+            <input type="checkbox" id="aceitePrivacidade">
+            <span>Li e aceito a <button type="button" class="btn-termo-link" data-termo="privacidade">Política de Privacidade/LGPD</button></span>
+          </label>
+        </div>
+
+        <button type="submit" id="btnSalvarSenha">Salvar nova senha</button>
+        <button type="button" class="btn-link-login" id="btnVoltarLogin">Voltar ao login</button>
       </form>
+
     </section>
   </main>
+
+  <footer>
+    <div class="footer-content">
+      <h3>Nexus v1.0</h3>
+      <p>© JRTecnologia - Soluções Criativas</p>
+      <p>Desenvolvido por Jessyca Rocha Tavares</p>
+    </div>
+  </footer>
+
   <div class="modal-overlay" id="modalTermo">
-    <div class="modal-card">
+    <div class="modal-card modal-card-grande">
       <div class="modal-header">
         <div>
           <h2 id="tituloTermo">Termo</h2>
           <p>Leia antes de aceitar.</p>
-        </div><button class="btn-fechar" onclick="fecharTermo()">×</button>
+        </div>
+        <button class="btn-fechar" id="btnFecharTermo">×</button>
       </div>
-      <div id="textoTermo" class="box-aviso"></div>
-      <div class="modal-actions"><button onclick="fecharTermo()">Fechar</button></div>
+
+      <div id="conteudoTermo" class="conteudo-termo"></div>
+
+      <div class="modal-actions">
+        <button id="btnLiTermo">Li e entendi</button>
+      </div>
     </div>
   </div>
-  <script>
-    const usuarioLocal = JSON.parse(localStorage.getItem("nexus_usuario")); if (!usuarioLocal || !usuarioLocal.id) { alert("Sessão não encontrada."); window.location.href = "../index.html" }
-    function abrirTermo(tipo) { document.getElementById("tituloTermo").textContent = tipo === "termos" ? "Termos de Uso" : "Política de Privacidade/LGPD"; document.getElementById("textoTermo").innerHTML = tipo === "termos" ? "<p>Ao usar o Nexus, o usuário concorda em manter informações verdadeiras, respeitar os processos de eventos, contratos, disponibilidade e comunicação da plataforma.</p>" : "<p>Os dados cadastrados serão utilizados para operação de casting, contato profissional, contratos, eventos, avaliações e gestão de oportunidades, conforme LGPD.</p>"; document.getElementById("modalTermo").classList.add("ativo") } function fecharTermo() { document.getElementById("modalTermo").classList.remove("ativo") }
-    document.getElementById("primeiroAcessoForm").addEventListener("submit", async e => { e.preventDefault(); const nova = document.getElementById("novaSenha").value.trim(), conf = document.getElementById("confirmarSenha").value.trim(); if (!nova || !conf) { alert("Preencha as senhas."); return } if (nova.length < 6) { alert("A senha precisa ter pelo menos 6 caracteres."); return } if (nova !== conf) { alert("As senhas não conferem."); return } if (!document.getElementById("termosUso").checked || !document.getElementById("politicaPrivacidade").checked) { alert("Você precisa aceitar os dois termos."); return } const { data, error } = await supabaseClient.from("nexus_usuarios").update({ senha: nova, primeiro_acesso: false, alterar_senha: false }).eq("id", usuarioLocal.id).select().single(); if (error) { alert(error.message); return } await supabaseClient.from("nexus_aceites_termos").insert([{ usuario_id: usuarioLocal.id, termo: "termos_uso_nexus_v1", aceite: true, data_aceite: new Date().toISOString() }, { usuario_id: usuarioLocal.id, termo: "politica_privacidade_lgpd_v1", aceite: true, data_aceite: new Date().toISOString() }]); localStorage.setItem("nexus_usuario", JSON.stringify(data)); alert("Senha alterada com sucesso."); window.location.href = data.tipo === "staff" ? "app-staff.html" : "dashboard-master.html" });
-  </script>
-</body>
 
+<script>
+const usuarioLocal = JSON.parse(localStorage.getItem("nexus_usuario"));
+let termoAberto = null;
+
+if (!usuarioLocal || !usuarioLocal.id) {
+  alert("Sessão não encontrada. Faça login novamente.");
+  window.location.href = "../index.html";
+}
+
+const textosTermos = {
+  uso: {
+    titulo: "Termos de Uso - Nexus",
+    html: `
+      <h3>1. Uso da plataforma</h3>
+      <p>O Nexus é uma plataforma para cadastro, consulta, seleção e gestão de profissionais para eventos.</p>
+      <h3>2. Responsabilidade</h3>
+      <p>Agências e usuários são responsáveis pelas informações cadastradas, seleção dos profissionais e validação de documentos.</p>
+      <h3>3. Conduta</h3>
+      <p>É proibido usar a plataforma para fraudes, informações falsas, assédio, discriminação ou qualquer prática irregular.</p>
+      <h3>4. Acesso</h3>
+      <p>O acesso pode ser suspenso em caso de uso indevido, inadimplência, informações inconsistentes ou violação das regras.</p>
+    `
+  },
+  privacidade: {
+    titulo: "Política de Privacidade/LGPD - Nexus",
+    html: `
+      <h3>1. Dados coletados</h3>
+      <p>O Nexus pode armazenar dados cadastrais, profissionais, documentos, disponibilidade, avaliações e histórico de eventos.</p>
+      <h3>2. Finalidade</h3>
+      <p>Os dados são usados para operação da plataforma, seleção de profissionais, gestão de eventos, contratos e relatórios.</p>
+      <h3>3. Compartilhamento</h3>
+      <p>Dados podem ser visualizados por usuários autorizados, conforme perfil de acesso e vínculo com evento, agência ou contratante.</p>
+      <h3>4. Segurança</h3>
+      <p>O acesso deve ser feito com credenciais individuais. Cada usuário é responsável por manter sua senha em segurança.</p>
+    `
+  }
+};
+
+function abrirTermo(tipo) {
+  termoAberto = tipo;
+  document.getElementById("tituloTermo").textContent = textosTermos[tipo].titulo;
+  document.getElementById("conteudoTermo").innerHTML = textosTermos[tipo].html;
+  document.getElementById("modalTermo").classList.add("ativo");
+}
+
+function fecharTermo() {
+  document.getElementById("modalTermo").classList.remove("ativo");
+}
+
+document.querySelectorAll(".btn-termo-link").forEach(btn => {
+  btn.addEventListener("click", () => abrirTermo(btn.dataset.termo));
+});
+
+document.getElementById("btnFecharTermo").addEventListener("click", fecharTermo);
+document.getElementById("btnLiTermo").addEventListener("click", () => {
+  if (termoAberto === "uso") document.getElementById("aceiteTermosUso").checked = true;
+  if (termoAberto === "privacidade") document.getElementById("aceitePrivacidade").checked = true;
+  fecharTermo();
+});
+
+document.getElementById("btnVoltarLogin").addEventListener("click", () => {
+  localStorage.removeItem("nexus_usuario");
+  window.location.href = "../index.html";
+});
+
+document.getElementById("primeiroAcessoForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const btnSalvar = document.getElementById("btnSalvarSenha");
+  const novaSenha = document.getElementById("novaSenha").value.trim();
+  const confirmarSenha = document.getElementById("confirmarSenha").value.trim();
+  const aceiteTermosUso = document.getElementById("aceiteTermosUso").checked;
+  const aceitePrivacidade = document.getElementById("aceitePrivacidade").checked;
+
+  if (!novaSenha || !confirmarSenha) {
+    alert("Preencha a nova senha e a confirmação.");
+    return;
+  }
+
+  if (novaSenha.length < 6) {
+    alert("A senha precisa ter pelo menos 6 caracteres.");
+    return;
+  }
+
+  if (novaSenha !== confirmarSenha) {
+    alert("As senhas não conferem.");
+    return;
+  }
+
+  if (!aceiteTermosUso || !aceitePrivacidade) {
+    alert("Você precisa aceitar os dois termos para continuar.");
+    return;
+  }
+
+  btnSalvar.disabled = true;
+  btnSalvar.textContent = "Salvando...";
+
+  const { data: usuarioAtualizado, error: erroSenha } = await supabaseClient
+    .from("nexus_usuarios")
+    .update({
+      senha: novaSenha,
+      primeiro_acesso: false,
+      alterar_senha: false
+    })
+    .eq("id", usuarioLocal.id)
+    .select()
+    .single();
+
+  if (erroSenha) {
+    btnSalvar.disabled = false;
+    btnSalvar.textContent = "Salvar nova senha";
+    alert("Erro ao alterar senha: " + erroSenha.message);
+    return;
+  }
+
+  await supabaseClient
+    .from("nexus_aceites_termos")
+    .insert([
+      {
+        usuario_id: usuarioLocal.id,
+        termo: "termos_uso_nexus_v1",
+        aceite: true,
+        data_aceite: new Date().toISOString()
+      },
+      {
+        usuario_id: usuarioLocal.id,
+        termo: "politica_privacidade_lgpd_v1",
+        aceite: true,
+        data_aceite: new Date().toISOString()
+      }
+    ]);
+
+  localStorage.setItem("nexus_usuario", JSON.stringify(usuarioAtualizado));
+
+  alert("Senha alterada com sucesso.");
+
+  if (usuarioAtualizado.tipo === "master" || usuarioAtualizado.tipo === "agencia") {
+    window.location.href = "dashboard-master.html";
+    return;
+  }
+
+  window.location.href = "../index.html";
+});
+</script>
+
+</body>
 </html>

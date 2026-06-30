@@ -3,14 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>App Staff - Nexus</title>
 
-  <link rel="stylesheet" href="../css/style.css?v=rotas-master-3">
-  <link rel="manifest" href="../manifest.json">
+  <link rel="stylesheet" href="../css/style.css?v=pwa-menu-4">
+  <link rel="manifest" href="../manifest.json?v=pwa-menu-4">
+
   <meta name="theme-color" content="#050505">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Nexus">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <link rel="apple-touch-icon" href="../assets/logo-192.png?v=pwa-menu-4">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=rotas-master-3"></script>
+  <script src="../js/supabase.js?v=pwa-menu-4"></script>
 </head>
 
 <body class="staff-app-body">
@@ -30,11 +38,9 @@
       <button class="staff-sair" id="btnSair">Sair</button>
     </header>
 
-    <article class="staff-card install-card" id="cardInstalar">
-      <h2>Instalar app</h2>
-      <p>Para ficar com cara de aplicativo, instale o Nexus na tela inicial.</p>
-      <button id="btnInstalarApp">Instalar / adicionar à tela inicial</button>
-    </article>
+    <div class="pwa-mini-info" id="pwaMiniInfo">
+      Para instalar como app: no celular, toque nos três pontinhos do navegador e escolha “Adicionar à tela inicial”.
+    </div>
 
     <section class="staff-section ativo" id="secInicio">
       <article class="staff-card staff-hero">
@@ -102,7 +108,6 @@
 
       <article class="staff-card">
         <h2>Minhas disponibilidades</h2>
-
         <div id="listaDisponibilidade">
           <p class="texto-fraco">Nenhuma disponibilidade carregada.</p>
         </div>
@@ -172,17 +177,11 @@
 <script>
 const usuarioLogado = JSON.parse(localStorage.getItem("nexus_usuario"));
 
-/*
-  ATENÇÃO:
-  Não existe alert de "Acesso exclusivo para staff" neste arquivo.
-  Se Master/Agência/Contratante cair aqui por cache, URL antiga ou clique errado,
-  ele volta direto para o dashboard.
-*/
 if (!usuarioLogado) {
   window.location.replace("../index.html");
 } else if (String(usuarioLogado.tipo || "").toLowerCase() !== "staff") {
   if (["master", "agencia", "contratante"].includes(String(usuarioLogado.tipo || "").toLowerCase())) {
-    window.location.replace("dashboard-master.html?v=rotas-master-3");
+    window.location.replace("dashboard-master.html?v=pwa-menu-4");
   } else {
     localStorage.removeItem("nexus_usuario");
     window.location.replace("../index.html");
@@ -193,7 +192,12 @@ if (!usuarioLogado) {
 
 function iniciarAppStaff(usuario) {
   let staffAtual = null;
-  let deferredInstallPrompt = null;
+
+  const miniInfo = document.getElementById("pwaMiniInfo");
+
+  if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) {
+    if (miniInfo) miniInfo.style.display = "none";
+  }
 
   document.getElementById("btnSair").addEventListener("click", () => {
     localStorage.removeItem("nexus_usuario");
@@ -208,22 +212,6 @@ function iniciarAppStaff(usuario) {
       botao.classList.add("ativo");
       document.getElementById(botao.dataset.tab).classList.add("ativo");
     });
-  });
-
-  window.addEventListener("beforeinstallprompt", (event) => {
-    event.preventDefault();
-    deferredInstallPrompt = event;
-    document.getElementById("cardInstalar").style.display = "block";
-  });
-
-  document.getElementById("btnInstalarApp").addEventListener("click", async () => {
-    if (deferredInstallPrompt) {
-      deferredInstallPrompt.prompt();
-      await deferredInstallPrompt.userChoice;
-      deferredInstallPrompt = null;
-    } else {
-      alert("No celular, toque nos três pontinhos do navegador e escolha 'Adicionar à tela inicial' ou 'Instalar app'.");
-    }
   });
 
   async function carregarStaff() {
@@ -558,7 +546,7 @@ function iniciarAppStaff(usuario) {
   }
 
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("../service-worker.js?v=rotas-master-3").catch(() => {});
+    navigator.serviceWorker.register("../service-worker.js?v=pwa-menu-4").catch(() => {});
   }
 
   carregarStaff();

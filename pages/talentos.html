@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Talentos - Nexus</title>
 
-  <link rel="stylesheet" href="../css/style.css?v=txt-completo-1?v=senha-termos-1">
+  <link rel="stylesheet" href="../css/style.css?v=senha-termos-1">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=txt-completo-1?v=senha-termos-1"></script>
+  <script src="../js/supabase.js?v=senha-termos-1"></script>
 </head>
 
 <body class="sistema-body">
 
-  <div class="menu-topbar"><button type="button" class="menu-toggle" id="btnAbrirMenu">☰</button><div><strong>Nexus</strong><span>v1.0</span></div></div><div class="sidebar-overlay" id="sidebarOverlay"></div><aside class="sidebar" id="sidebar"><div class="sidebar-logo"><img src="../assets/logo.png" alt="Nexus"><h2>Nexus</h2><button type="button" class="menu-expand-btn" id="btnMenuExpandir" title="Expandir menu">⇥</button></div><nav class="menu"><a href="dashboard-master.html" data-menu="dashboard"><span class="menu-ico">🏠</span><span class="menu-text">Dashboard</span></a><a href="agencias.html" data-menu="agencias"><span class="menu-ico">🏢</span><span class="menu-text">Agências</span></a><a href="talentos.html" data-menu="talentos" class="ativo"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a><a href="eventos.html" data-menu="eventos"><span class="menu-ico">📅</span><span class="menu-text">Eventos</span></a><a href="casting.html" data-menu="casting"><span class="menu-ico">⭐</span><span class="menu-text">Casting</span></a><a href="#" data-menu="contratantes"><span class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a><a href="#" data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a><a href="#" data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a><a href="#" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a><a href="#" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a><a href="#" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span class="menu-text">Configurações</span></a></nav><div class="sidebar-footer"><div class="linha"></div><p class="footer-label">Nome</p><p id="nomeUsuario">Usuário</p><p class="footer-label">Função</p><p id="funcaoUsuario">-</p><button class="btn-sair" id="btnSair">Sair</button><div class="linha"></div><p>Nexus v1.0</p><p>© JRTecnologia</p><p>Desenvolvido por Jessyca Rocha Tavares</p></div></aside>
+  <div class="menu-topbar"><button type="button" class="menu-toggle" id="btnAbrirMenu">☰</button><div><strong>Nexus</strong><span>v1.0</span></div></div><div class="sidebar-overlay" id="sidebarOverlay"></div><aside class="sidebar" id="sidebar"><div class="sidebar-logo"><img src="../assets/logo.png" alt="Nexus"><h2>Nexus</h2></div><nav class="menu"><a href="dashboard-master.html" data-menu="dashboard"><span class="menu-ico">🏠</span><span class="menu-text">Dashboard</span></a><a href="agencias.html" data-menu="agencias"><span class="menu-ico">🏢</span><span class="menu-text">Agências</span></a><a href="talentos.html" data-menu="talentos" class="ativo"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a><a href="eventos.html" data-menu="eventos"><span class="menu-ico">📅</span><span class="menu-text">Eventos</span></a><a href="casting.html" data-menu="casting"><span class="menu-ico">⭐</span><span class="menu-text">Casting</span></a><a href="#" data-menu="contratantes"><span class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a><a href="#" data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a><a href="#" data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a><a href="#" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a><a href="#" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a><a href="#" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span class="menu-text">Configurações</span></a></nav><div class="sidebar-footer"><div class="linha"></div><p class="footer-label">Nome</p><p id="nomeUsuario">Usuário</p><p class="footer-label">Função</p><p id="funcaoUsuario">-</p><button class="btn-sair" id="btnSair">Sair</button><div class="linha"></div><p>Nexus v1.0</p><p>© JRTecnologia</p><p>Desenvolvido por Jessyca Rocha Tavares</p></div></aside>
 
   <main class="conteudo">
 
@@ -628,9 +628,23 @@ async function abrirCurriculo(id) {
         <div class="linha-curriculo"><span>Peso</span><strong>${data.peso || "-"}</strong></div>
         <div class="linha-curriculo"><span>MEI</span><strong>${data.tem_mei ? (data.mei_proprio ? "Próprio" : "Terceiro") : "Não possui"}</strong></div>
         <div class="linha-curriculo"><span>CNPJ MEI</span><strong>${data.cnpj_mei || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Tipo MEI</span><strong>${data.mei_tipo || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Razão social MEI</span><strong>${data.mei_razao_social || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Titular MEI</span><strong>${data.mei_titular_nome || "-"}</strong></div>
+        <div class="linha-curriculo"><span>CPF titular MEI</span><strong>${data.mei_titular_cpf || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Relação titular MEI</span><strong>${data.mei_relacao_titular || "-"}</strong></div>
         <div class="linha-curriculo"><span>Valor mínimo diária</span><strong>${data.valor_minimo_diaria ? "R$ " + data.valor_minimo_diaria : "-"}</strong></div>
         <div class="linha-curriculo"><span>Pix</span><strong>${data.pix || "-"}</strong></div>
         <div class="linha-curriculo"><span>Banco</span><strong>${data.banco || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Tipo de conta</span><strong>${data.tipo_conta || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Agência</span><strong>${data.agencia_bancaria || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Conta</span><strong>${data.conta_bancaria || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Titular conta</span><strong>${data.titular_conta || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Doc titular conta</span><strong>${data.documento_titular_conta || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Nível experiência</span><strong>${data.nivel_experiencia || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Disponibilidade geral</span><strong>${data.disponibilidade_geral || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Camiseta</span><strong>${data.tamanho_camiseta || "-"}</strong></div>
+        <div class="linha-curriculo"><span>Calçado</span><strong>${data.numero_calcado || "-"}</strong></div>
         <div class="linha-curriculo"><span>Disponível agora</span><strong>${data.disponivel_agora ? "Sim" : "Não"}</strong></div>
         <div class="linha-curriculo"><span>Veículo</span><strong>${data.possui_veiculo || "-"}</strong></div>
         <div class="linha-curriculo"><span>Observações</span><strong>${data.observacoes || "-"}</strong></div>
