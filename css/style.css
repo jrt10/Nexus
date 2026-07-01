@@ -1541,3 +1541,89 @@ body.menu-aberto-desktop .sidebar{width:280px!important;padding:24px 18px!import
 .menu-expand-btn,.menu-compact-toggle,#btnMenuExpandir,#btnMenuCompacto{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;}
 .install-card{display:none!important;}
 @media(min-width:901px){.sidebar{width:88px!important;overflow:hidden!important}.conteudo{margin-left:88px!important;width:calc(100% - 88px)!important}.sidebar:hover{width:280px!important;overflow:visible!important}.sidebar .menu-text,.sidebar .sidebar-footer,.sidebar .sidebar-logo h2{display:none!important}.sidebar:hover .menu-text,.sidebar:hover .sidebar-footer,.sidebar:hover .sidebar-logo h2{display:block!important}}
+
+
+/* ===== AJUSTES FINAIS FLUXO V1 ===== */
+.sidebar{overflow-y:auto!important;overflow-x:hidden!important;max-height:100vh!important}.sidebar:hover{overflow-y:auto!important;overflow-x:hidden!important}.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:#222;border-radius:999px}.menu-expand-btn,.menu-compact-toggle,#btnMenuExpandir,#btnMenuCompacto{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}.menu a[href="#"]{opacity:.55}.card-talento.favorito{border-color:rgba(251,191,36,.55);box-shadow:0 0 0 1px rgba(251,191,36,.15)}.btn-favorito-ativo{background:rgba(251,191,36,.16)!important;border:1px solid rgba(251,191,36,.45)!important;color:#fbbf24!important}.favorito-label{position:absolute;top:12px;right:12px;background:rgba(251,191,36,.92);color:#111;border-radius:999px;font-size:12px;font-weight:bold;padding:7px 10px}.calendario-staff{background:#111;border:1px solid #222;border-radius:18px;padding:14px;margin-top:14px}.calendario-topo{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.calendario-topo button{width:44px;min-width:44px;padding:10px;background:#171717;border:1px solid #222}.calendario-topo strong{text-transform:capitalize}.calendario-semana,.calendario-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.calendario-semana span{color:#888;font-size:12px;text-align:center;padding:6px 0}.dia-calendario{aspect-ratio:1/1;border-radius:12px;background:#171717;border:1px solid #222;color:#ddd;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;user-select:none}.dia-calendario:hover{border-color:rgba(20,189,209,.45)}.dia-calendario.vazio{opacity:.22;pointer-events:none}.dia-calendario.disponivel{background:rgba(74,222,128,.16);border-color:rgba(74,222,128,.55);color:#8fffb4;font-weight:bold}.dia-calendario.hoje{outline:1px solid rgba(20,189,209,.7)}.notificacao-item{background:#111;border:1px solid #222;border-radius:16px;padding:14px;margin-top:10px}.notificacao-item.nao-lida{border-color:rgba(20,189,209,.45);background:rgba(20,189,209,.08)}.notificacao-item h3{font-size:15px;margin-bottom:5px}.notificacao-item p{color:#aaa;font-size:13px}.tabela-simples{width:100%;border-collapse:collapse;background:#0d0d0d;border:1px solid #222;border-radius:18px;overflow:hidden}.tabela-simples th,.tabela-simples td{padding:13px 14px;border-bottom:1px solid #222;text-align:left;font-size:14px;color:#ddd}.tabela-simples th{color:#14bdd1;background:#111}.tabela-simples tr:last-child td{border-bottom:none}.config-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}.config-card{background:#0d0d0d;border:1px solid #222;border-radius:18px;padding:20px}.config-card h2{margin-bottom:8px}.config-card p{color:#aaa;font-size:14px;line-height:1.4;margin-bottom:16px}@media(max-width:800px){.tabela-simples{display:block;overflow-x:auto}}
+
+
+/* ===== NEXUS V1 - NOTIFICAÇÕES ===== */
+
+.notificacao-banner{
+  background:linear-gradient(135deg, rgba(20,189,209,.14), rgba(20,189,209,.04));
+  border:1px solid rgba(20,189,209,.35);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+.notificacao-banner h2{
+  font-size:18px;
+  margin-bottom:6px;
+}
+
+.notificacao-banner p{
+  color:#b9eef5;
+  font-size:14px;
+  line-height:1.45;
+  margin-bottom:12px;
+}
+
+.notificacao-banner button{
+  width:auto;
+  min-width:170px;
+  padding:11px 14px;
+}
+
+.notificacao-status{
+  display:inline-block;
+  margin-left:8px;
+  color:#aaa;
+  font-size:13px;
+}
+
+.notificacao-item{
+  background:#111;
+  border:1px solid #222;
+  border-radius:16px;
+  padding:14px;
+  margin-top:10px;
+}
+
+.notificacao-item.nao-lida{
+  border-color:rgba(20,189,209,.45);
+  background:rgba(20,189,209,.08);
+}
+
+.notificacao-item h3{
+  font-size:15px;
+  margin-bottom:5px;
+}
+
+.notificacao-item p{
+  color:#aaa;
+  font-size:13px;
+}
+
+.notificacao-item small{
+  display:block;
+  color:#777;
+  margin-top:8px;
+}
+
+.pwa-mini-info{
+  background:rgba(20,189,209,.10);
+  border:1px solid rgba(20,189,209,.25);
+  color:#c9f8ff;
+  border-radius:14px;
+  padding:12px 14px;
+  font-size:13px;
+  line-height:1.4;
+  margin-bottom:14px;
+}
+
+@media(display-mode:standalone){
+  .pwa-mini-info{
+    display:none!important;
+  }
+}

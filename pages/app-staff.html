@@ -6,19 +6,23 @@
 
   <title>App Staff - Nexus</title>
 
-  <link rel="stylesheet" href="../css/style.css?v=pwa-menu-4">
-  <link rel="manifest" href="../manifest.json?v=pwa-menu-4">
+  <link rel="stylesheet" href="../css/style.css?v=fluxo-v2">
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js?v=fluxo-v2"></script>
+  <script src="../js/push-notifications.js?v=nexus-v1-admin-pages-1"></script>
+
+  <link rel="manifest" href="../manifest.json?v=nexus-v1-admin-pages-1">
   <meta name="theme-color" content="#050505">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Nexus">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Nexus">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=nexus-v1-admin-pages-1">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/logo-192.png?v=nexus-v1-admin-pages-1">
+  <link rel="icon" type="image/png" sizes="512x512" href="../assets/logo-512.png?v=nexus-v1-admin-pages-1">
 
-  <link rel="apple-touch-icon" href="../assets/logo-192.png?v=pwa-menu-4">
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=pwa-menu-4"></script>
 </head>
 
 <body class="staff-app-body">
@@ -39,8 +43,15 @@
     </header>
 
     <div class="pwa-mini-info" id="pwaMiniInfo">
-      Para instalar como app: no celular, toque nos três pontinhos do navegador e escolha “Adicionar à tela inicial”.
+      Para receber notificações de oportunidades, adicione o Nexus à tela inicial do celular e ative as notificações.
     </div>
+
+    <article class="notificacao-banner" id="bannerNotificacao">
+      <h2>🔔 Notificações de jobs</h2>
+      <p>Ative para receber aviso quando entrar oportunidade nova ou mensagem da agência.</p>
+      <button id="btnAtivarNotificacoes">Ativar notificações</button>
+      <span class="notificacao-status" id="statusNotificacao">não ativadas</span>
+    </article>
 
     <section class="staff-section ativo" id="secInicio">
       <article class="staff-card staff-hero">
@@ -71,6 +82,14 @@
       </article>
 
       <article class="staff-card">
+        <h2>Notificações</h2>
+        <p>Oportunidades e avisos enviados pela agência.</p>
+        <div id="listaNotificacoesStaff">
+          <p class="texto-fraco">Nenhuma notificação carregada.</p>
+        </div>
+      </article>
+
+      <article class="staff-card">
         <h2>Meu perfil</h2>
         <p id="perfilResumo">Carregando perfil...</p>
         <div class="staff-tags" id="perfilTags"></div>
@@ -79,7 +98,22 @@
 
     <section class="staff-section" id="secDisponibilidade">
       <article class="staff-card">
-        <h2>Adicionar disponibilidade</h2>
+        <h2>Calendário de disponibilidade</h2>
+        <p>Clique em um dia para marcar como disponível. Clique novamente para tirar.</p>
+
+        <div class="calendario-staff">
+          <div class="calendario-topo">
+            <button id="btnMesAnterior">‹</button>
+            <strong id="tituloCalendario">Mês</strong>
+            <button id="btnProximoMes">›</button>
+          </div>
+          <div class="calendario-semana"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
+          <div class="calendario-grid" id="gridCalendario"></div>
+        </div>
+      </article>
+
+      <article class="staff-card">
+        <h2>Adicionar disponibilidade manual</h2>
 
         <div class="staff-form-grid">
           <div class="input-group">
@@ -181,7 +215,7 @@ if (!usuarioLogado) {
   window.location.replace("../index.html");
 } else if (String(usuarioLogado.tipo || "").toLowerCase() !== "staff") {
   if (["master", "agencia", "contratante"].includes(String(usuarioLogado.tipo || "").toLowerCase())) {
-    window.location.replace("dashboard-master.html?v=pwa-menu-4");
+    window.location.replace("dashboard-master.html?v=fluxo-v2");
   } else {
     localStorage.removeItem("nexus_usuario");
     window.location.replace("../index.html");
@@ -192,8 +226,16 @@ if (!usuarioLogado) {
 
 function iniciarAppStaff(usuario) {
   let staffAtual = null;
+  let mesAtual = new Date();
+  let disponibilidadesMes = [];
 
   const miniInfo = document.getElementById("pwaMiniInfo");
+  const btnAtivarNotificacoes = document.getElementById("btnAtivarNotificacoes");
+  if (btnAtivarNotificacoes) btnAtivarNotificacoes.addEventListener("click", ativarNotificacoesStaff);
+  if ("Notification" in window && Notification.permission === "granted") {
+    const statusEl = document.getElementById("statusNotificacao");
+    if (statusEl) statusEl.textContent = "ativadas";
+  }
 
   if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) {
     if (miniInfo) miniInfo.style.display = "none";
@@ -211,7 +253,18 @@ function iniciarAppStaff(usuario) {
 
       botao.classList.add("ativo");
       document.getElementById(botao.dataset.tab).classList.add("ativo");
+      if (botao.dataset.tab === "secDisponibilidade") carregarDisponibilidadesMes();
     });
+  });
+
+  document.getElementById("btnMesAnterior").addEventListener("click", () => {
+    mesAtual = new Date(mesAtual.getFullYear(), mesAtual.getMonth() - 1, 1);
+    carregarDisponibilidadesMes();
+  });
+
+  document.getElementById("btnProximoMes").addEventListener("click", () => {
+    mesAtual = new Date(mesAtual.getFullYear(), mesAtual.getMonth() + 1, 1);
+    carregarDisponibilidadesMes();
   });
 
   async function carregarStaff() {
@@ -258,8 +311,10 @@ function iniciarAppStaff(usuario) {
     }
 
     renderizarStaff();
-    carregarDisponibilidades();
+    carregarDisponibilidadesMes();
     carregarOportunidades();
+    carregarNotificacoesStaff();
+    iniciarMonitoramentoNotificacoes();
   }
 
   function renderizarStaff() {
@@ -372,36 +427,81 @@ function iniciarAppStaff(usuario) {
     document.getElementById("dataDisponivel").value = "";
     document.getElementById("obsDisponibilidade").value = "";
 
-    carregarDisponibilidades();
+    carregarDisponibilidadesMes();
   });
 
-  async function carregarDisponibilidades() {
+  async function carregarDisponibilidadesMes() {
+    if (!staffAtual) return;
+    const inicio = new Date(mesAtual.getFullYear(), mesAtual.getMonth(), 1);
+    const fim = new Date(mesAtual.getFullYear(), mesAtual.getMonth() + 1, 0);
     const { data, error } = await supabaseClient
       .from("nexus_staff_disponibilidade")
       .select("*")
       .eq("staff_id", staffAtual.id)
-      .order("data_disponivel", { ascending: true })
-      .limit(10);
+      .gte("data_disponivel", ymd(inicio))
+      .lte("data_disponivel", ymd(fim))
+      .order("data_disponivel", { ascending: true });
+    if (error) { alert("Erro ao carregar calendário: " + error.message); return; }
+    disponibilidadesMes = data || [];
+    renderizarCalendario();
+    renderizarListaDisponibilidades();
+  }
 
+  function ymd(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+
+  function renderizarCalendario() {
+    const grid = document.getElementById("gridCalendario");
+    const titulo = document.getElementById("tituloCalendario");
+    if (!grid || !titulo) return;
+    const hoje = ymd(new Date());
+    titulo.textContent = mesAtual.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+    grid.innerHTML = "";
+    const primeiroDia = new Date(mesAtual.getFullYear(), mesAtual.getMonth(), 1);
+    const ultimoDia = new Date(mesAtual.getFullYear(), mesAtual.getMonth() + 1, 0);
+    for (let i = 0; i < primeiroDia.getDay(); i++) grid.innerHTML += `<div class="dia-calendario vazio"></div>`;
+    for (let dia = 1; dia <= ultimoDia.getDate(); dia++) {
+      const data = new Date(mesAtual.getFullYear(), mesAtual.getMonth(), dia);
+      const dataTexto = ymd(data);
+      const existe = disponibilidadesMes.some((item) => item.data_disponivel === dataTexto);
+      grid.innerHTML += `<div class="dia-calendario ${existe ? "disponivel" : ""} ${dataTexto === hoje ? "hoje" : ""}" onclick="alternarDiaDisponivel('${dataTexto}')">${dia}</div>`;
+    }
+  }
+
+  window.alternarDiaDisponivel = async function alternarDiaDisponivel(dataTexto) {
+    const existente = disponibilidadesMes.find((item) => item.data_disponivel === dataTexto);
+    if (existente) {
+      const { error } = await supabaseClient.from("nexus_staff_disponibilidade").delete().eq("id", existente.id);
+      if (error) { alert("Erro ao remover disponibilidade: " + error.message); return; }
+      disponibilidadesMes = disponibilidadesMes.filter((item) => item.id !== existente.id);
+      renderizarCalendario(); renderizarListaDisponibilidades(); return;
+    }
+    const { data, error } = await supabaseClient.from("nexus_staff_disponibilidade").insert({ staff_id: staffAtual.id, data_disponivel: dataTexto, periodo: "dia_todo", status: "disponivel" }).select().single();
+    if (error) { alert("Erro ao marcar disponibilidade: " + error.message); return; }
+    disponibilidadesMes.push(data); renderizarCalendario(); renderizarListaDisponibilidades();
+  };
+
+  function renderizarListaDisponibilidades() {
     const container = document.getElementById("listaDisponibilidade");
+    if (!disponibilidadesMes.length) { container.innerHTML = `<p class="texto-fraco">Nenhuma disponibilidade marcada neste mês.</p>`; return; }
+    container.innerHTML = disponibilidadesMes.sort((a,b) => a.data_disponivel.localeCompare(b.data_disponivel)).map((item) => `<div class="staff-oportunidade"><h3>${dataBR(item.data_disponivel)}</h3><p>${item.periodo || "dia_todo"} • ${item.status || "disponivel"}</p></div>`).join("");
+  }
 
-    if (error) {
-      container.innerHTML = `<p class="texto-fraco">Erro ao carregar agenda.</p>`;
-      return;
-    }
+  async function carregarNotificacoesStaff() {
+    const container = document.getElementById("listaNotificacoesStaff");
+    if (!container) return;
+    const { data, error } = await supabaseClient.from("nexus_notificacoes_usuarios").select("*").eq("usuario_id", usuario.id).order("created_at", { ascending: false }).limit(5);
+    if (error) { container.innerHTML = `<p class="texto-fraco">Erro ao carregar notificações.</p>`; return; }
+    if (!data || !data.length) { container.innerHTML = `<p class="texto-fraco">Nenhuma notificação por enquanto.</p>`; return; }
+    container.innerHTML = data.map((item) => `<div class="notificacao-item ${item.status === "nao_lida" ? "nao-lida" : ""}"><h3>${item.titulo || "Notificação"}</h3><p>${item.mensagem || ""}</p></div>`).join("");
+  }
 
-    if (!data || data.length === 0) {
-      container.innerHTML = `<p class="texto-fraco">Nenhuma disponibilidade cadastrada.</p>`;
-      return;
-    }
-
-    container.innerHTML = data.map((item) => `
-      <div class="staff-oportunidade">
-        <h3>${dataBR(item.data_disponivel)}</h3>
-        <p>${item.periodo || "dia_todo"} • ${item.status || "disponivel"}</p>
-        <p>${item.observacao || ""}</p>
-      </div>
-    `).join("");
+  async function carregarDisponibilidades() {
+    await carregarDisponibilidadesMes();
   }
 
   async function carregarOportunidades() {
@@ -546,8 +646,53 @@ function iniciarAppStaff(usuario) {
   }
 
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("../service-worker.js?v=pwa-menu-4").catch(() => {});
+    navigator.serviceWorker.register("../service-worker.js?v=fluxo-v2").catch(() => {});
   }
+
+
+  async function ativarNotificacoesStaff() {
+    if (window.nexusAtivarNotificacoes) {
+      await window.nexusAtivarNotificacoes(usuario, staffAtual);
+      await carregarNotificacoesStaff();
+    }
+  }
+
+  function iniciarMonitoramentoNotificacoes() {
+    if (!window.nexusVerificarNovasNotificacoes) return;
+
+    window.nexusVerificarNovasNotificacoes(usuario, renderizarNotificacoesStaff);
+
+    setInterval(() => {
+      window.nexusVerificarNovasNotificacoes(usuario, renderizarNotificacoesStaff);
+    }, 20000);
+  }
+
+  function renderizarNotificacoesStaff(lista) {
+    const container = document.getElementById("listaNotificacoesStaff");
+    if (!container) return;
+
+    if (!lista || !lista.length) {
+      container.innerHTML = `<p class="texto-fraco">Nenhuma notificação por enquanto.</p>`;
+      return;
+    }
+
+    container.innerHTML = lista.map((item) => `
+      <div class="notificacao-item ${item.status === "nao_lida" ? "nao-lida" : ""}">
+        <h3>${item.titulo || "Notificação Nexus"}</h3>
+        <p>${item.mensagem || ""}</p>
+        <small>${new Date(item.created_at).toLocaleString("pt-BR")}</small>
+        <button class="btn-secundario-clean" onclick="marcarNotificacaoLidaStaff('${item.id}')">Marcar como lida</button>
+      </div>
+    `).join("");
+  }
+
+  window.marcarNotificacaoLidaStaff = async function marcarNotificacaoLidaStaff(id) {
+    if (window.nexusMarcarNotificacaoLida) {
+      await window.nexusMarcarNotificacaoLida(id);
+      await carregarNotificacoesStaff();
+    }
+  };
+
 
   carregarStaff();
 }

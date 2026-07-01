@@ -16,17 +16,17 @@ function redirecionarUsuario(usuario) {
   const tipo = normalizarTipo(usuario);
 
   if (usuario.primeiro_acesso || usuario.alterar_senha) {
-    window.location.replace("pages/primeiro-acesso.html?v=rotas-master-3");
+    window.location.replace("pages/primeiro-acesso.html?v=fluxo-v2");
     return;
   }
 
   if (["master", "agencia", "contratante"].includes(tipo)) {
-    window.location.replace("pages/dashboard-master.html?v=rotas-master-3");
+    window.location.replace("pages/dashboard-master.html?v=fluxo-v2");
     return;
   }
 
   if (tipo === "staff") {
-    window.location.replace("pages/app-staff.html?v=rotas-master-3");
+    window.location.replace("pages/app-staff.html?v=fluxo-v2");
     return;
   }
 

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Contratantes - Nexus</title>
+
+  <link rel="stylesheet" href="../css/style.css?v=nexus-v1-admin-pages-1">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js?v=nexus-v1-admin-pages-1"></script>
+  <script src="../js/common.js?v=nexus-v1-admin-pages-1"></script>
+</head>
+
+<body class="sistema-body">
+  <script>document.write(menuSistemaHTML("contratantes"));</script>
+
+  <main class="conteudo">
+    
+<header class="topo">
+  <div>
+    <h1>Contratantes</h1>
+    <p>Clientes/expositores com acesso controlado ao casting.</p>
+  </div>
+
+  <button class="btn-topo" id="btnNovoContratante">+ Novo contratante</button>
+</header>
+
+<section class="cards-dashboard">
+  <div class="card-info">
+    <h3>Total</h3>
+    <strong id="totalContratantes">0</strong>
+    <span>contratantes cadastrados</span>
+  </div>
+
+  <div class="card-info">
+    <h3>Ativos</h3>
+    <strong id="ativosContratantes">0</strong>
+    <span>com acesso liberado</span>
+  </div>
+
+  <div class="card-info">
+    <h3>Eventos liberados</h3>
+    <strong id="eventosLiberados">0</strong>
+    <span>vínculos de acesso</span>
+  </div>
+
+  <div class="card-info">
+    <h3>Bloqueados</h3>
+    <strong id="bloqueadosContratantes">0</strong>
+    <span>sem acesso</span>
+  </div>
+</section>
+
+<section class="painel-filtro">
+  <div class="campo-busca">
+    <span>🔍</span>
+    <input id="campoPesquisa" placeholder="Pesquisar empresa, responsável, e-mail ou CNPJ">
+  </div>
+
+  <select id="filtroStatus" class="input-select" style="max-width:220px">
+    <option value="">Todos os status</option>
+    <option value="ativo">Ativo</option>
+    <option value="inativo">Inativo</option>
+    <option value="bloqueado">Bloqueado</option>
+  </select>
+
+  <div class="botoes-filtro">
+    <button id="btnPesquisar">Pesquisar</button>
+    <button class="btn-secundario-clean" id="btnMostrarTodos">Mostrar todos</button>
+  </div>
+</section>
+
+<section id="listaContratantes" class="grid-agencias">
+  <p class="mensagem-vazia">Pesquise ou clique em “Mostrar todos”.</p>
+</section>
+
+<div class="modal-overlay" id="modalContratante">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div>
+        <h2 id="tituloModalContratante">Novo contratante</h2>
+        <p>Acesso limitado aos eventos liberados.</p>
+      </div>
+
+      <button class="btn-fechar" id="btnFecharContratante">×</button>
+    </div>
+
+    <div class="modal-grid">
+      <div class="input-group">
+        <label>Nome empresa / expositor</label>
+        <input id="nomeEmpresa">
+      </div>
+
+      <div class="input-group">
+        <label>Razão social</label>
+        <input id="razaoSocial">
+      </div>
+
+      <div class="input-group">
+        <label>CNPJ</label>
+        <input id="cnpj">
+      </div>
+
+      <div class="input-group">
+        <label>Responsável</label>
+        <input id="responsavel">
+      </div>
+
+      <div class="input-group">
+        <label>E-mail de acesso</label>
+        <input id="email" type="email">
+      </div>
+
+      <div class="input-group">
+        <label>Telefone</label>
+        <input id="telefone">
+      </div>
+
+      <div class="input-group">
+        <label>Senha inicial</label>
+        <input id="senha" value="123456">
+      </div>
+
+      <div class="input-group">
+        <label>Data expiração do acesso</label>
+        <input id="dataExpiracao" type="date">
+      </div>
+
+      <div class="input-group">
+        <label>Status</label>
+        <select id="status">
+          <option value="ativo">Ativo</option>
+          <option value="inativo">Inativo</option>
+          <option value="bloqueado">Bloqueado</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Permissões</label>
+        <label class="check-linha"><input type="checkbox" id="podeVerCasting" checked><span>Ver casting</span></label>
+        <label class="check-linha"><input type="checkbox" id="podeFavoritar" checked><span>Favoritar</span></label>
+        <label class="check-linha"><input type="checkbox" id="podeSelecionar" checked><span>Selecionar</span></label>
+        <label class="check-linha"><input type="checkbox" id="podeAvaliar" checked><span>Avaliar</span></label>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Observação interna</label>
+      <textarea id="observacaoInterna"></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secundario-clean" id="btnCancelarContratante">Cancelar</button>
+      <button id="btnSalvarContratante">Salvar contratante</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalEventosContratante">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div>
+        <h2>Eventos liberados</h2>
+        <p id="subEventosContratante">Selecione os eventos que esse contratante pode acessar.</p>
+      </div>
+
+      <button class="btn-fechar" id="btnFecharEventosContratante">×</button>
+    </div>
+
+    <div id="listaEventosLiberacao" class="painel-lista" style="margin-bottom:0">
+      Carregando eventos...
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secundario-clean" id="btnCancelarEventosContratante">Fechar</button>
+      <button id="btnSalvarEventosContratante">Salvar acessos</button>
+    </div>
+  </div>
+</div>
+
+  </main>
+
+<script>
+const usuario = iniciarLayoutSistema("contratantes");
+
+
+if (usuario) {
+  let contratanteEditandoId = null;
+  let contratanteEventosId = null;
+  let eventosCache = [];
+  let acessosCache = [];
+
+  const modalContratante = document.getElementById("modalContratante");
+  const modalEventos = document.getElementById("modalEventosContratante");
+
+  document.getElementById("btnNovoContratante").addEventListener("click", abrirNovoContratante);
+  document.getElementById("btnFecharContratante").addEventListener("click", fecharModalContratante);
+  document.getElementById("btnCancelarContratante").addEventListener("click", fecharModalContratante);
+  document.getElementById("btnSalvarContratante").addEventListener("click", salvarContratante);
+  document.getElementById("btnPesquisar").addEventListener("click", () => carregarContratantes(false));
+  document.getElementById("btnMostrarTodos").addEventListener("click", () => carregarContratantes(true));
+  document.getElementById("filtroStatus").addEventListener("change", () => carregarContratantes(true));
+
+  document.getElementById("btnFecharEventosContratante").addEventListener("click", fecharModalEventos);
+  document.getElementById("btnCancelarEventosContratante").addEventListener("click", fecharModalEventos);
+  document.getElementById("btnSalvarEventosContratante").addEventListener("click", salvarEventosContratante);
+
+  function abrirNovoContratante() {
+    contratanteEditandoId = null;
+    document.getElementById("tituloModalContratante").textContent = "Novo contratante";
+    limparContratante();
+    modalContratante.classList.add("ativo");
+  }
+
+  function fecharModalContratante() {
+    modalContratante.classList.remove("ativo");
+    contratanteEditandoId = null;
+  }
+
+  function fecharModalEventos() {
+    modalEventos.classList.remove("ativo");
+    contratanteEventosId = null;
+  }
+
+  function limparContratante() {
+    [
+      "nomeEmpresa",
+      "razaoSocial",
+      "cnpj",
+      "responsavel",
+      "email",
+      "telefone",
+      "dataExpiracao",
+      "observacaoInterna"
+    ].forEach((id) => document.getElementById(id).value = "");
+
+    document.getElementById("senha").value = "123456";
+    document.getElementById("status").value = "ativo";
+    document.getElementById("podeVerCasting").checked = true;
+    document.getElementById("podeFavoritar").checked = true;
+    document.getElementById("podeSelecionar").checked = true;
+    document.getElementById("podeAvaliar").checked = true;
+  }
+
+  async function carregarResumo() {
+    const { data: contratantes } = await supabaseClient
+      .from("nexus_contratantes")
+      .select("id,status");
+
+    const { data: acessos } = await supabaseClient
+      .from("nexus_contratante_eventos_liberados")
+      .select("id,status");
+
+    const lista = contratantes || [];
+
+    document.getElementById("totalContratantes").textContent = lista.length;
+    document.getElementById("ativosContratantes").textContent = lista.filter((item) => item.status === "ativo").length;
+    document.getElementById("bloqueadosContratantes").textContent = lista.filter((item) => item.status === "bloqueado").length;
+    document.getElementById("eventosLiberados").textContent = (acessos || []).filter((item) => item.status !== "bloqueado").length;
+  }
+
+  async function salvarContratante() {
+    const nome_empresa = document.getElementById("nomeEmpresa").value.trim();
+    const nome_responsavel = document.getElementById("responsavel").value.trim();
+    const email = document.getElementById("email").value.trim().toLowerCase();
+
+    if (!nome_empresa || !nome_responsavel || !email) {
+      alert("Preencha empresa, responsável e e-mail.");
+      return;
+    }
+
+    const payload = {
+      agencia_id: usuario.agencia_id || null,
+      nome_empresa,
+      razao_social: document.getElementById("razaoSocial").value.trim(),
+      cnpj: document.getElementById("cnpj").value.trim(),
+      nome_responsavel,
+      email,
+      telefone: document.getElementById("telefone").value.trim(),
+      status: document.getElementById("status").value,
+      data_expiracao_acesso: document.getElementById("dataExpiracao").value || null,
+      pode_ver_casting: document.getElementById("podeVerCasting").checked,
+      pode_favoritar: document.getElementById("podeFavoritar").checked,
+      pode_selecionar: document.getElementById("podeSelecionar").checked,
+      pode_avaliar: document.getElementById("podeAvaliar").checked,
+      observacao_interna: document.getElementById("observacaoInterna").value.trim()
+    };
+
+    if (contratanteEditandoId) {
+      const { error } = await supabaseClient
+        .from("nexus_contratantes")
+        .update(payload)
+        .eq("id", contratanteEditandoId);
+
+      if (error) {
+        alert("Erro ao atualizar contratante: " + error.message);
+        return;
+      }
+
+      fecharModalContratante();
+      carregarContratantes(true);
+      carregarResumo();
+      return;
+    }
+
+    const { data: usuarioNovo, error: erroUsuario } = await supabaseClient
+      .from("nexus_usuarios")
+      .insert({
+        nome: nome_responsavel,
+        email,
+        senha: document.getElementById("senha").value.trim() || "123456",
+        tipo: "contratante",
+        status: "ativo",
+        primeiro_acesso: true,
+        alterar_senha: true
+      })
+      .select()
+      .single();
+
+    if (erroUsuario) {
+      alert("Erro ao criar usuário: " + erroUsuario.message);
+      return;
+    }
+
+    const { data: contratante, error } = await supabaseClient
+      .from("nexus_contratantes")
+      .insert({
+        ...payload,
+        usuario_id: usuarioNovo.id
+      })
+      .select()
+      .single();
+
+    if (error) {
+      alert("Usuário criado, mas erro no contratante: " + error.message);
+      return;
+    }
+
+    await supabaseClient
+      .from("nexus_usuarios")
+      .update({ contratante_id: contratante.id })
+      .eq("id", usuarioNovo.id);
+
+    fecharModalContratante();
+    carregarContratantes(true);
+    carregarResumo();
+  }
+
+  async function carregarContratantes(mostrar = false) {
+    const termo = document.getElementById("campoPesquisa").value.trim();
+    const status = document.getElementById("filtroStatus").value;
+
+    if (!mostrar && !termo && !status) {
+      document.getElementById("listaContratantes").innerHTML =
+        `<p class="mensagem-vazia">Pesquise ou clique em “Mostrar todos”.</p>`;
+      return;
+    }
+
+    let query = supabaseClient
+      .from("nexus_contratantes")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (usuario.tipo === "agencia" && usuario.agencia_id) {
+      query = query.eq("agencia_id", usuario.agencia_id);
+    }
+
+    if (status) {
+      query = query.eq("status", status);
+    }
+
+    if (termo) {
+      query = query.or(`nome_empresa.ilike.%${termo}%,nome_responsavel.ilike.%${termo}%,email.ilike.%${termo}%,cnpj.ilike.%${termo}%`);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      alert("Erro ao carregar contratantes: " + error.message);
+      return;
+    }
+
+    renderizarContratantes(data || []);
+  }
+
+  function renderizarContratantes(lista) {
+    const container = document.getElementById("listaContratantes");
+
+    if (!lista.length) {
+      container.innerHTML = `<p class="mensagem-vazia">Nenhum contratante encontrado.</p>`;
+      return;
+    }
+
+    container.innerHTML = lista.map((item) => `
+      <article class="card-agencia">
+        <div class="card-agencia-topo">
+          <div>
+            <h3>${item.nome_empresa || "-"}</h3>
+            <p>${item.nome_responsavel || "-"}</p>
+          </div>
+
+          <span class="badge-status ${item.status || ""}">${item.status || "-"}</span>
+        </div>
+
+        <div class="card-agencia-info">
+          <p><strong>E-mail:</strong> ${item.email || "-"}</p>
+          <p><strong>Telefone:</strong> ${item.telefone || "-"}</p>
+          <p><strong>CNPJ:</strong> ${item.cnpj || "-"}</p>
+          <p><strong>Expira em:</strong> ${dataBR(item.data_expiracao_acesso)}</p>
+          <p><strong>Permissões:</strong> ${item.pode_ver_casting ? "Ver casting" : ""} ${item.pode_selecionar ? "• Selecionar" : ""} ${item.pode_avaliar ? "• Avaliar" : ""}</p>
+        </div>
+
+        <div class="card-agencia-actions">
+          <button onclick="editarContratante('${item.id}')">Editar</button>
+          <button class="btn-secundario-clean" onclick="abrirEventosContratante('${item.id}', '${htmlEscape(item.nome_empresa || "-")}')">Eventos</button>
+          <button class="btn-secundario-clean" onclick="resetarSenhaContratante('${item.usuario_id || ""}')">Reset senha</button>
+          <button class="btn-alerta" onclick="alterarStatusContratante('${item.id}', '${item.status || ""}')">${item.status === "bloqueado" ? "Ativar" : "Bloquear"}</button>
+        </div>
+      </article>
+    `).join("");
+  }
+
+  window.editarContratante = async function editarContratante(id) {
+    const { data, error } = await supabaseClient
+      .from("nexus_contratantes")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error || !data) {
+      alert("Erro ao carregar contratante.");
+      return;
+    }
+
+    contratanteEditandoId = id;
+
+    document.getElementById("tituloModalContratante").textContent = "Editar contratante";
+    document.getElementById("nomeEmpresa").value = data.nome_empresa || "";
+    document.getElementById("razaoSocial").value = data.razao_social || "";
+    document.getElementById("cnpj").value = data.cnpj || "";
+    document.getElementById("responsavel").value = data.nome_responsavel || "";
+    document.getElementById("email").value = data.email || "";
+    document.getElementById("telefone").value = data.telefone || "";
+    document.getElementById("senha").value = "";
+    document.getElementById("dataExpiracao").value = data.data_expiracao_acesso || "";
+    document.getElementById("status").value = data.status || "ativo";
+    document.getElementById("podeVerCasting").checked = !!data.pode_ver_casting;
+    document.getElementById("podeFavoritar").checked = !!data.pode_favoritar;
+    document.getElementById("podeSelecionar").checked = !!data.pode_selecionar;
+    document.getElementById("podeAvaliar").checked = !!data.pode_avaliar;
+    document.getElementById("observacaoInterna").value = data.observacao_interna || "";
+
+    modalContratante.classList.add("ativo");
+  };
+
+  window.alterarStatusContratante = async function alterarStatusContratante(id, statusAtual) {
+    const novoStatus = statusAtual === "bloqueado" ? "ativo" : "bloqueado";
+
+    const { error } = await supabaseClient
+      .from("nexus_contratantes")
+      .update({ status: novoStatus })
+      .eq("id", id);
+
+    if (error) {
+      alert("Erro ao alterar status: " + error.message);
+      return;
+    }
+
+    carregarContratantes(true);
+    carregarResumo();
+  };
+
+  window.resetarSenhaContratante = async function resetarSenhaContratante(usuarioId) {
+    if (!usuarioId) {
+      alert("Contratante sem usuário vinculado.");
+      return;
+    }
+
+    if (!confirm("Resetar a senha para 123456 e exigir troca no próximo acesso?")) return;
+
+    const { error } = await supabaseClient
+      .from("nexus_usuarios")
+      .update({
+        senha: "123456",
+        primeiro_acesso: true,
+        alterar_senha: true
+      })
+      .eq("id", usuarioId);
+
+    if (error) {
+      alert("Erro ao resetar senha: " + error.message);
+      return;
+    }
+
+    alert("Senha resetada para 123456.");
+  };
+
+  window.abrirEventosContratante = async function abrirEventosContratante(id, nome) {
+    contratanteEventosId = id;
+    document.getElementById("subEventosContratante").textContent = `Eventos liberados para ${nome}`;
+    modalEventos.classList.add("ativo");
+
+    await carregarEventosLiberacao();
+  };
+
+  async function carregarEventosLiberacao() {
+    const [{ data: eventos }, { data: acessos }] = await Promise.all([
+      supabaseClient.from("nexus_eventos").select("*").order("data_inicio", { ascending: false }),
+      supabaseClient.from("nexus_contratante_eventos_liberados").select("*").eq("contratante_id", contratanteEventosId)
+    ]);
+
+    eventosCache = eventos || [];
+    acessosCache = acessos || [];
+
+    const liberados = new Set(acessosCache.filter((item) => item.status !== "bloqueado").map((item) => item.evento_id));
+
+    document.getElementById("listaEventosLiberacao").innerHTML = eventosCache.length
+      ? eventosCache.map((evento) => `
+        <label class="check-linha">
+          <input type="checkbox" name="eventoLiberado" value="${evento.id}" ${liberados.has(evento.id) ? "checked" : ""}>
+          <span>${evento.nome_evento || "Evento"} • ${evento.cidade || "-"}${evento.estado ? "/" + evento.estado : ""} • ${dataBR(evento.data_inicio)}</span>
+        </label>
+      `).join("")
+      : `<p class="texto-fraco">Nenhum evento cadastrado.</p>`;
+  }
+
+  async function salvarEventosContratante() {
+    const selecionados = Array.from(document.querySelectorAll("input[name='eventoLiberado']:checked")).map((item) => item.value);
+
+    await supabaseClient
+      .from("nexus_contratante_eventos_liberados")
+      .delete()
+      .eq("contratante_id", contratanteEventosId);
+
+    if (selecionados.length) {
+      const payload = selecionados.map((eventoId) => ({
+        contratante_id: contratanteEventosId,
+        evento_id: eventoId,
+        status: "liberado",
+        data_liberacao: new Date().toISOString()
+      }));
+
+      const { error } = await supabaseClient
+        .from("nexus_contratante_eventos_liberados")
+        .insert(payload);
+
+      if (error) {
+        alert("Erro ao salvar eventos: " + error.message);
+        return;
+      }
+    }
+
+    fecharModalEventos();
+    carregarResumo();
+    alert("Acessos salvos.");
+  }
+
+  carregarResumo();
+}
+
+</script>
+</body>
+</html>

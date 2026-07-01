@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Documentos - Nexus</title>
+
+  <link rel="stylesheet" href="../css/style.css?v=nexus-v1-admin-pages-1">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js?v=nexus-v1-admin-pages-1"></script>
+  <script src="../js/common.js?v=nexus-v1-admin-pages-1"></script>
+</head>
+
+<body class="sistema-body">
+  <script>document.write(menuSistemaHTML("documentos"));</script>
+
+  <main class="conteudo">
+    
+<header class="topo">
+  <div>
+    <h1>Documentos</h1>
+    <p>Contratos, documentos de staff, assinatura Gov.br e notas fiscais.</p>
+  </div>
+
+  <button class="btn-topo" id="btnNovoDocumento">+ Novo documento</button>
+</header>
+
+<section class="cards-dashboard">
+  <div class="card-info"><h3>Total</h3><strong id="docTotal">0</strong><span>documentos</span></div>
+  <div class="card-info"><h3>Pendentes</h3><strong id="docPendentes">0</strong><span>aguardando ação</span></div>
+  <div class="card-info"><h3>Aprovados</h3><strong id="docAprovados">0</strong><span>concluídos</span></div>
+  <div class="card-info"><h3>Recusados</h3><strong id="docRecusados">0</strong><span>com problema</span></div>
+</section>
+
+<section class="painel-filtro">
+  <div class="campo-busca">
+    <span>🔍</span>
+    <input id="campoPesquisa" placeholder="Pesquisar staff, evento, tipo ou status">
+  </div>
+
+  <select id="filtroStatus" class="input-select" style="max-width:220px">
+    <option value="">Todos os status</option>
+    <option value="pendente">Pendente</option>
+    <option value="baixado_para_assinatura">Baixado para assinatura</option>
+    <option value="assinado_enviado">Assinado enviado</option>
+    <option value="aprovado">Aprovado</option>
+    <option value="recusado">Recusado</option>
+  </select>
+
+  <div class="botoes-filtro">
+    <button id="btnPesquisar">Pesquisar</button>
+    <button class="btn-secundario-clean" id="btnMostrarTodos">Mostrar todos</button>
+  </div>
+</section>
+
+<section class="painel-lista">
+  <table class="tabela-simples">
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Staff</th>
+        <th>Evento</th>
+        <th>Status</th>
+        <th>Arquivo</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="listaDocumentos">
+      <tr><td colspan="6">Pesquise ou clique em “Mostrar todos”.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="modal-overlay" id="modalDocumento">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div>
+        <h2 id="tituloModalDocumento">Novo documento</h2>
+        <p>Registre contrato, documento pessoal, NF ou arquivo assinado.</p>
+      </div>
+
+      <button class="btn-fechar" id="btnFecharDocumento">×</button>
+    </div>
+
+    <div class="modal-grid">
+      <div class="input-group">
+        <label>Staff</label>
+        <select id="staffId"></select>
+      </div>
+
+      <div class="input-group">
+        <label>Evento</label>
+        <select id="eventoId"></select>
+      </div>
+
+      <div class="input-group">
+        <label>Tipo</label>
+        <select id="tipoDocumento">
+          <option value="contrato">Contrato</option>
+          <option value="documento_pessoal">Documento pessoal</option>
+          <option value="nota_fiscal">Nota fiscal</option>
+          <option value="termo">Termo</option>
+          <option value="outros">Outros</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Status</label>
+        <select id="statusDocumento">
+          <option value="pendente">Pendente</option>
+          <option value="baixado_para_assinatura">Baixado para assinatura</option>
+          <option value="assinado_enviado">Assinado enviado</option>
+          <option value="aprovado">Aprovado</option>
+          <option value="recusado">Recusado</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>URL arquivo original</label>
+        <input id="arquivoUrl" placeholder="Cole o link do arquivo">
+      </div>
+
+      <div class="input-group">
+        <label>URL documento assinado</label>
+        <input id="documentoAssinadoUrl" placeholder="Cole o link do arquivo assinado">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Observação</label>
+      <textarea id="observacao"></textarea>
+    </div>
+
+    <div class="box-aviso">
+      <p>Para assinar pelo Gov.br, o staff baixa o contrato e depois envia o arquivo assinado. Aqui a agência acompanha o status.</p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secundario-clean" id="btnCancelarDocumento">Cancelar</button>
+      <button id="btnSalvarDocumento">Salvar documento</button>
+    </div>
+  </div>
+</div>
+
+  </main>
+
+<script>
+const usuario = iniciarLayoutSistema("documentos");
+
+
+if (usuario) {
+  let documentoEditandoId = null;
+  let staffsCache = [];
+  let eventosCache = [];
+  let documentosCache = [];
+
+  const modal = document.getElementById("modalDocumento");
+
+  document.getElementById("btnNovoDocumento").addEventListener("click", abrirNovoDocumento);
+  document.getElementById("btnFecharDocumento").addEventListener("click", fecharModalDocumento);
+  document.getElementById("btnCancelarDocumento").addEventListener("click", fecharModalDocumento);
+  document.getElementById("btnSalvarDocumento").addEventListener("click", salvarDocumento);
+  document.getElementById("btnPesquisar").addEventListener("click", () => carregarDocumentos(false));
+  document.getElementById("btnMostrarTodos").addEventListener("click", () => carregarDocumentos(true));
+  document.getElementById("filtroStatus").addEventListener("change", () => carregarDocumentos(true));
+
+  async function carregarBases() {
+    const [staffs, eventos] = await Promise.all([
+      supabaseClient.from("nexus_staffs").select("id,nome_apresentacao,nome_documento,email").order("nome_apresentacao"),
+      supabaseClient.from("nexus_eventos").select("id,nome_evento,cidade,estado,data_inicio").order("data_inicio", { ascending: false })
+    ]);
+
+    staffsCache = staffs.data || [];
+    eventosCache = eventos.data || [];
+
+    document.getElementById("staffId").innerHTML =
+      `<option value="">Selecione</option>` +
+      staffsCache.map((staff) => `<option value="${staff.id}">${staff.nome_apresentacao || staff.nome_documento || staff.email}</option>`).join("");
+
+    document.getElementById("eventoId").innerHTML =
+      `<option value="">Sem evento vinculado</option>` +
+      eventosCache.map((evento) => `<option value="${evento.id}">${evento.nome_evento || "Evento"} • ${dataBR(evento.data_inicio)}</option>`).join("");
+  }
+
+  function abrirNovoDocumento() {
+    documentoEditandoId = null;
+    document.getElementById("tituloModalDocumento").textContent = "Novo documento";
+    limparDocumento();
+    modal.classList.add("ativo");
+  }
+
+  function fecharModalDocumento() {
+    modal.classList.remove("ativo");
+    documentoEditandoId = null;
+  }
+
+  function limparDocumento() {
+    document.getElementById("staffId").value = "";
+    document.getElementById("eventoId").value = "";
+    document.getElementById("tipoDocumento").value = "contrato";
+    document.getElementById("statusDocumento").value = "pendente";
+    document.getElementById("arquivoUrl").value = "";
+    document.getElementById("documentoAssinadoUrl").value = "";
+    document.getElementById("observacao").value = "";
+  }
+
+  async function salvarDocumento() {
+    const staffId = document.getElementById("staffId").value;
+
+    if (!staffId) {
+      alert("Selecione o staff.");
+      return;
+    }
+
+    const status = document.getElementById("statusDocumento").value;
+
+    const payload = {
+      staff_id: staffId,
+      evento_id: document.getElementById("eventoId").value || null,
+      agencia_id: usuario.agencia_id || null,
+      tipo_documento: document.getElementById("tipoDocumento").value,
+      arquivo_url: document.getElementById("arquivoUrl").value.trim(),
+      documento_assinado_url: document.getElementById("documentoAssinadoUrl").value.trim(),
+      status,
+      status_assinatura: status,
+      observacao: document.getElementById("observacao").value.trim(),
+      documento_baixado_para_assinatura: status === "baixado_para_assinatura" || status === "assinado_enviado" || status === "aprovado",
+      data_download_assinatura: status === "baixado_para_assinatura" ? new Date().toISOString() : null,
+      data_envio_documento_assinado: status === "assinado_enviado" ? new Date().toISOString() : null
+    };
+
+    let resultado;
+
+    if (documentoEditandoId) {
+      resultado = await supabaseClient
+        .from("nexus_documentos_staff")
+        .update(payload)
+        .eq("id", documentoEditandoId);
+    } else {
+      resultado = await supabaseClient
+        .from("nexus_documentos_staff")
+        .insert(payload);
+    }
+
+    if (resultado.error) {
+      alert("Erro ao salvar documento: " + resultado.error.message);
+      return;
+    }
+
+    fecharModalDocumento();
+    carregarDocumentos(true);
+  }
+
+  async function carregarDocumentos(mostrar = false) {
+    const termo = document.getElementById("campoPesquisa").value.trim().toLowerCase();
+    const status = document.getElementById("filtroStatus").value;
+
+    if (!mostrar && !termo && !status) {
+      document.getElementById("listaDocumentos").innerHTML =
+        `<tr><td colspan="6">Pesquise ou clique em “Mostrar todos”.</td></tr>`;
+      return;
+    }
+
+    let query = supabaseClient
+      .from("nexus_documentos_staff")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (usuario.tipo === "agencia" && usuario.agencia_id) {
+      query = query.eq("agencia_id", usuario.agencia_id);
+    }
+
+    if (status) {
+      query = query.eq("status", status);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      alert("Erro ao carregar documentos: " + error.message);
+      return;
+    }
+
+    documentosCache = (data || []).map((doc) => ({
+      ...doc,
+      staff: staffsCache.find((staff) => staff.id === doc.staff_id),
+      evento: eventosCache.find((evento) => evento.id === doc.evento_id)
+    }));
+
+    let lista = documentosCache;
+
+    if (termo) {
+      lista = lista.filter((doc) =>
+        [
+          doc.tipo_documento,
+          doc.status,
+          doc.observacao,
+          doc.staff?.nome_apresentacao,
+          doc.staff?.nome_documento,
+          doc.staff?.email,
+          doc.evento?.nome_evento
+        ].join(" ").toLowerCase().includes(termo)
+      );
+    }
+
+    renderizarDocumentos(lista);
+    carregarResumo(lista);
+  }
+
+  function carregarResumo(lista = documentosCache) {
+    document.getElementById("docTotal").textContent = lista.length;
+    document.getElementById("docPendentes").textContent = lista.filter((item) => item.status === "pendente").length;
+    document.getElementById("docAprovados").textContent = lista.filter((item) => item.status === "aprovado").length;
+    document.getElementById("docRecusados").textContent = lista.filter((item) => item.status === "recusado").length;
+  }
+
+  function renderizarDocumentos(lista) {
+    const tbody = document.getElementById("listaDocumentos");
+
+    if (!lista.length) {
+      tbody.innerHTML = `<tr><td colspan="6">Nenhum documento encontrado.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = lista.map((doc) => `
+      <tr>
+        <td>${doc.tipo_documento || "-"}</td>
+        <td>${doc.staff?.nome_apresentacao || doc.staff?.nome_documento || "-"}</td>
+        <td>${doc.evento?.nome_evento || "-"}</td>
+        <td><span class="badge-status ${doc.status || ""}">${doc.status || "-"}</span></td>
+        <td>
+          ${doc.arquivo_url ? `<a href="${doc.arquivo_url}" target="_blank">Original</a>` : "-"}
+          ${doc.documento_assinado_url ? ` • <a href="${doc.documento_assinado_url}" target="_blank">Assinado</a>` : ""}
+        </td>
+        <td>
+          <button class="btn-secundario-clean" onclick="editarDocumento('${doc.id}')">Editar</button>
+          <button onclick="alterarStatusDocumento('${doc.id}', 'aprovado')">Aprovar</button>
+          <button class="btn-alerta" onclick="alterarStatusDocumento('${doc.id}', 'recusado')">Recusar</button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  window.editarDocumento = function editarDocumento(id) {
+    const doc = documentosCache.find((item) => item.id === id);
+
+    if (!doc) {
+      alert("Documento não encontrado.");
+      return;
+    }
+
+    documentoEditandoId = id;
+    document.getElementById("tituloModalDocumento").textContent = "Editar documento";
+    document.getElementById("staffId").value = doc.staff_id || "";
+    document.getElementById("eventoId").value = doc.evento_id || "";
+    document.getElementById("tipoDocumento").value = doc.tipo_documento || "contrato";
+    document.getElementById("statusDocumento").value = doc.status || "pendente";
+    document.getElementById("arquivoUrl").value = doc.arquivo_url || "";
+    document.getElementById("documentoAssinadoUrl").value = doc.documento_assinado_url || "";
+    document.getElementById("observacao").value = doc.observacao || "";
+
+    modal.classList.add("ativo");
+  };
+
+  window.alterarStatusDocumento = async function alterarStatusDocumento(id, status) {
+    const { error } = await supabaseClient
+      .from("nexus_documentos_staff")
+      .update({
+        status,
+        status_assinatura: status
+      })
+      .eq("id", id);
+
+    if (error) {
+      alert("Erro ao alterar status: " + error.message);
+      return;
+    }
+
+    carregarDocumentos(true);
+  };
+
+  carregarBases().then(() => carregarResumo([]));
+}
+
+</script>
+</body>
+</html>

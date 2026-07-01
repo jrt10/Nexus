@@ -4,9 +4,20 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro Staff - Nexus</title>
   <link rel="stylesheet" href="../css/style.css?v=staff-cascata-1">
-  <link rel="manifest" href="../manifest.json">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/supabase.js?v=staff-cascata-1"></script>
+
+  <link rel="manifest" href="../manifest.json?v=nexus-v1-admin-pages-1">
+  <meta name="theme-color" content="#050505">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Nexus">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Nexus">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=nexus-v1-admin-pages-1">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/logo-192.png?v=nexus-v1-admin-pages-1">
+  <link rel="icon" type="image/png" sizes="512x512" href="../assets/logo-512.png?v=nexus-v1-admin-pages-1">
+
 </head>
 <body>
 <main class="login-container"><section class="login-card cadastro-staff-card">
@@ -27,7 +38,7 @@
 <section class="cadastro-section"><h2>Pagamento</h2><p>Preencha Pix. Ao preencher, abrimos dados bancários para conferência.</p><div class="cadastro-staff-grid"><div class="input-group"><label>Pix</label><input id="pix" placeholder="Chave Pix"></div></div><div id="boxBanco" class="cascata-box campo-oculto"><h2>Dados bancários</h2><p>Banco é campo aberto para evitar lista incompleta.</p><div class="cadastro-staff-grid"><div class="input-group"><label>Banco</label><input id="banco" placeholder="Ex: Nubank, Itaú, Bradesco"></div><div class="input-group"><label>Tipo de conta</label><select id="tipoConta"><option value="">Selecione</option><option>Corrente</option><option>Poupança</option><option>Pagamento</option></select></div><div class="input-group"><label>Agência</label><input id="agenciaBancaria"></div><div class="input-group"><label>Conta</label><input id="contaBancaria"></div><div class="input-group"><label>Titular da conta</label><input id="titularConta"></div><div class="input-group"><label>CPF/CNPJ do titular</label><input id="documentoTitularConta"></div></div></div></section>
 <section class="cadastro-section"><h2>MEI / Nota fiscal</h2><p>Escolha uma opção para abrir os campos corretos.</p><div class="opcoes-grid tres"><label class="opcao-check"><input type="radio" name="meiTipo" value="sem_mei" checked><span>Não tenho MEI</span></label><label class="opcao-check"><input type="radio" name="meiTipo" value="mei_proprio"><span>Tenho MEI próprio</span></label><label class="opcao-check"><input type="radio" name="meiTipo" value="mei_terceiro"><span>Uso MEI de terceiro</span></label></div><div id="boxMeiProprio" class="cascata-box campo-oculto"><h2>MEI próprio</h2><div class="cadastro-staff-grid"><div class="input-group"><label>CNPJ MEI</label><input id="meiProprioCnpj"></div><div class="input-group"><label>Razão social MEI</label><input id="meiProprioRazao"></div><div class="input-group"><label>Nome do titular</label><input id="meiProprioTitular"></div><div class="input-group"><label>E-mail fiscal</label><input id="meiProprioEmail" type="email"></div></div></div><div id="boxMeiTerceiro" class="cascata-box campo-oculto"><h2>MEI de terceiro</h2><div class="cadastro-staff-grid"><div class="input-group"><label>Nome do titular do MEI</label><input id="meiTerceiroTitular"></div><div class="input-group"><label>CPF do titular</label><input id="meiTerceiroCpf"></div><div class="input-group"><label>CNPJ MEI terceiro</label><input id="meiTerceiroCnpj"></div><div class="input-group"><label>Relação com o titular</label><input id="meiTerceiroRelacao" placeholder="Ex: mãe, irmão, empresa parceira"></div><div class="input-group"><label>E-mail fiscal do titular</label><input id="meiTerceiroEmail" type="email"></div></div><label class="check-linha"><input type="checkbox" id="meiTerceiroAutorizado"><span>Confirmo que tenho autorização para usar esse MEI.</span></label></div></section>
 <section class="cadastro-section"><h2>Observações</h2><div class="input-group"><textarea id="observacoes" placeholder="Experiência, restrições, informações importantes..."></textarea></div></section>
-<label class="check-linha"><input type="checkbox" id="termosUso" checked><span>Aceito os Termos de Uso</span></label><label class="check-linha"><input type="checkbox" id="politicaPrivacidade" checked><span>Aceito a Política de Privacidade/LGPD</span></label><button type="submit" id="btnCadastrarStaff">Cadastrar staff</button><button type="button" class="btn-link-login" onclick="window.location.href='../index.html'">Já tenho login</button>
+<label class="check-linha"><input type="checkbox" id="termosUso" checked><span>Aceito os <a href="#" onclick="abrirTermoCadastro('termos');return false;">Termos de Uso</a></span></label><label class="check-linha"><input type="checkbox" id="politicaPrivacidade" checked><span>Aceito a <a href="#" onclick="abrirTermoCadastro('privacidade');return false;">Política de Privacidade/LGPD</a></span></label><button type="submit" id="btnCadastrarStaff">Cadastrar staff</button><button type="button" class="btn-link-login" onclick="window.location.href='../index.html'">Já tenho login</button>
 </form></section></main>
 <script>
 let fotoBase64=null;let usandoNomeSocial=false;

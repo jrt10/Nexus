@@ -9,6 +9,18 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/supabase.js?v=senha-termos-1"></script>
+
+  <link rel="manifest" href="../manifest.json?v=nexus-v1-admin-pages-1">
+  <meta name="theme-color" content="#050505">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Nexus">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Nexus">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=nexus-v1-admin-pages-1">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/logo-192.png?v=nexus-v1-admin-pages-1">
+  <link rel="icon" type="image/png" sizes="512x512" href="../assets/logo-512.png?v=nexus-v1-admin-pages-1">
+
 </head>
 
 <body class="sistema-body">
@@ -239,6 +251,7 @@ const modalBloqueio = document.getElementById("modalBloqueio");
 const modalSelecionarStaff = document.getElementById("modalSelecionarStaff");
 
 let staffAtualId = null;
+let staffAtualCurriculo = null;
 let staffSelecionadoParaEvento = null;
 let eventosSelecaoLista = [];
 const paramsTalentos = new URLSearchParams(window.location.search);
@@ -264,9 +277,7 @@ document.getElementById("btnFecharSelecao").addEventListener("click", fecharSele
 document.getElementById("btnCancelarSelecao").addEventListener("click", fecharSelecaoStaff);
 document.getElementById("btnConfirmarSelecao").addEventListener("click", confirmarSelecaoStaff);
 
-document.getElementById("btnImprimirCurriculo").addEventListener("click", () => {
-  window.print();
-});
+document.getElementById("btnImprimirCurriculo").addEventListener("click", gerarPDFCurriculo);
 
 function fecharCurriculo() {
   modalCurriculo.classList.remove("ativo");
@@ -312,6 +323,7 @@ function selo(texto, classe = "") {
 function montarSelos(staff, resumo, idiomas) {
   let selos = "";
 
+  if (staff.favorito) selos += selo("★ Favorito", "dourado");
   if (resumo?.perfil_verificado) selos += selo("✔ Verificado", "azul");
   if (resumo?.selo_experiente) selos += selo("🏆 Experiente", "dourado");
   if (resumo?.selo_confiavel) selos += selo("⭐ Confiável", "azul");
@@ -362,8 +374,9 @@ function renderizarTalentos(lista) {
     const media = resumo?.media_avaliacao ? Number(resumo.media_avaliacao).toFixed(1) : "-";
 
     container.innerHTML += `
-      <article class="card-talento">
+      <article class="card-talento ${staff.favorito ? 'favorito' : ''}">
         <div class="foto-talento-wrap">
+          ${staff.favorito ? `<span class="favorito-label">★ Favorito</span>` : ""}
           <img src="${primeiraFoto(staff)}" alt="Foto staff" class="foto-talento">
         </div>
 
@@ -389,7 +402,7 @@ function renderizarTalentos(lista) {
 
           <div class="card-talento-actions">
             <button onclick="abrirCurriculo('${staff.id}')">Currículo</button>
-            <button class="btn-secundario-clean" onclick="favoritarStaff('${staff.id}')">Favoritar</button>
+            <button class="${staff.favorito ? 'btn-favorito-ativo' : 'btn-secundario-clean'}" onclick="favoritarStaff('${staff.id}')">${staff.favorito ? '★ Desfavoritar' : '☆ Favoritar'}</button>
             <button class="btn-secundario-clean" onclick="selecionarStaff('${staff.id}')">Selecionar</button>
           </div>
         </div>
@@ -478,6 +491,21 @@ async function carregarTalentos(mostrarTodos = false, somenteDisponiveisAgora = 
     );
   }
 
+  const ids = resultado.map(staff => staff.id);
+  if (ids.length) {
+    let qFav = supabaseClient
+      .from("nexus_staff_preferencias_agencia")
+      .select("id, staff_id, agencia_id")
+      .eq("tipo", "favorito")
+      .in("staff_id", ids);
+    if (usuario.agencia_id) qFav = qFav.eq("agencia_id", usuario.agencia_id);
+    const { data: favoritos } = await qFav;
+    resultado = resultado.map(staff => ({
+      ...staff,
+      favorito: (favoritos || []).some(f => f.staff_id === staff.id)
+    }));
+  }
+
   renderizarTalentos(resultado);
 }
 
@@ -545,6 +573,8 @@ async function abrirCurriculo(id) {
     alert("Erro ao carregar currículo.");
     return;
   }
+
+  staffAtualCurriculo = data;
 
   const idiomas = data.nexus_staff_idiomas || [];
   const perfis = data.nexus_staff_perfis || [];
@@ -667,23 +697,31 @@ async function favoritarStaff(id) {
     .from("nexus_staff_preferencias_agencia")
     .select("id")
     .eq("staff_id", id)
-    .eq("tipo", "favorito");
+    .eq("tipo", "favorito")
+    .limit(1);
 
-  if (agenciaId) {
-    busca = busca.eq("agencia_id", agenciaId);
-  } else {
-    busca = busca.is("agencia_id", null);
-  }
+  if (agenciaId) busca = busca.eq("agencia_id", agenciaId);
+  else busca = busca.is("agencia_id", null);
 
-  const { data: existente, error: erroBusca } = await busca.maybeSingle();
+  const { data: existente, error: erroBusca } = await busca;
 
   if (erroBusca) {
     alert("Erro ao verificar favorito: " + erroBusca.message);
     return;
   }
 
-  if (existente) {
-    alert("Esse talento já está nos favoritos.");
+  if (existente && existente.length) {
+    const { error } = await supabaseClient
+      .from("nexus_staff_preferencias_agencia")
+      .delete()
+      .eq("id", existente[0].id);
+
+    if (error) {
+      alert("Erro ao desfavoritar: " + error.message);
+      return;
+    }
+
+    await carregarTalentos(true, false);
     return;
   }
 
@@ -693,9 +731,7 @@ async function favoritarStaff(id) {
       agencia_id: agenciaId,
       staff_id: id,
       tipo: "favorito",
-      observacao: usuario.tipo === "master"
-        ? "Favoritado pelo Master"
-        : "Favoritado pela agência"
+      observacao: usuario.tipo === "master" ? "Favoritado pelo Master" : "Favoritado pela agência"
     });
 
   if (error) {
@@ -703,7 +739,7 @@ async function favoritarStaff(id) {
     return;
   }
 
-  alert("Talento favoritado com sucesso.");
+  await carregarTalentos(true, false);
 }
 
 async function selecionarStaff(id) {
@@ -818,8 +854,71 @@ async function confirmarSelecaoStaff() {
     return;
   }
 
+  await criarNotificacaoStaff(staffSelecionadoParaEvento, {
+    titulo: "Nova oportunidade no Nexus",
+    mensagem: `Você foi selecionado para o evento ${eventoSelecionado?.nome_evento || "Nexus"}. Abra a aba Jobs para responder.`,
+    referencia_id: null
+  });
+
   fecharSelecaoStaff();
-  alert("Talento adicionado ao casting do evento.");
+  alert("Talento adicionado ao casting. Uma notificação interna foi criada para o staff.");
+}
+
+
+async function criarNotificacaoStaff(staffId, payload) {
+  const { data: staff } = await supabaseClient
+    .from("nexus_staffs")
+    .select("usuario_id")
+    .eq("id", staffId)
+    .maybeSingle();
+
+  if (!staff?.usuario_id) return;
+
+  await supabaseClient
+    .from("nexus_notificacoes_usuarios")
+    .insert({
+      usuario_id: staff.usuario_id,
+      staff_id: staffId,
+      titulo: payload.titulo,
+      mensagem: payload.mensagem,
+      origem: "casting",
+      referencia_id: payload.referencia_id,
+      status: "nao_lida"
+    });
+}
+
+function gerarPDFCurriculo() {
+  if (!staffAtualCurriculo) {
+    alert("Abra um currículo primeiro.");
+    return;
+  }
+
+  const data = staffAtualCurriculo;
+  const idiomas = data.nexus_staff_idiomas || [];
+  const perfis = data.nexus_staff_perfis || [];
+  const resumo = data.nexus_staff_resumo?.[0];
+  const nome = data.nome_apresentacao || data.nome_social || data.nome_documento || "Currículo";
+  const foto = primeiraFoto(data);
+  const funcoes = perfis.map(p => p.perfil).filter(Boolean).join(", ") || data.funcoes_texto || "-";
+  const idiomaTexto = idiomas.map(i => i.idioma || i.outro_idioma).filter(Boolean).join(", ") || data.idiomas_texto || "-";
+
+  function linha(titulo, valor){
+    return `<div class="linha"><span>${titulo}</span><strong>${valor || "-"}</strong></div>`;
+  }
+
+  const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Currículo - ${nome}</title>
+  <style>
+  *{box-sizing:border-box;font-family:Arial,sans-serif}body{margin:0;background:#fff;color:#111}.page{width:210mm;min-height:297mm;margin:0 auto;padding:18mm}.top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #14bdd1;padding-bottom:16px;margin-bottom:18px}.brand{text-align:right;color:#666;font-size:13px}h1{margin:0;font-size:30px}.sub{color:#555;margin-top:6px}.grid{display:grid;grid-template-columns:150px 1fr;gap:22px}.foto{width:135px;height:170px;object-fit:cover;border-radius:16px;border:1px solid #ddd}.box{border:1px solid #ddd;border-radius:14px;padding:14px;margin-bottom:12px}h2{font-size:16px;margin:0 0 10px;color:#14bdd1}.tag{display:inline-block;border:1px solid #ddd;border-radius:999px;padding:6px 9px;margin:3px;font-size:12px}.linha{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:7px 0;gap:20px}.linha:last-child{border-bottom:0}.linha span{color:#666}.linha strong{text-align:right}.metricas{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.metrica{text-align:center;border:1px solid #ddd;border-radius:12px;padding:10px}.metrica strong{display:block;font-size:22px;color:#14bdd1}.metrica span{font-size:11px;color:#666}@media print{.page{margin:0;width:auto;min-height:auto}}
+  </style></head><body><main class="page"><section class="top"><div><h1>${nome}</h1><p class="sub">${data.cidade || "-"}${data.estado ? "/" + data.estado : ""} • ${funcoes}</p></div><div class="brand"><strong>Nexus</strong><br>Currículo profissional<br>${new Date().toLocaleDateString("pt-BR")}</div></section><section class="grid"><aside><img src="${foto}" class="foto"><div class="box"><h2>Resumo</h2><span class="tag">${data.tem_mei ? (data.mei_proprio ? "MEI próprio" : "MEI terceiro") : "Sem MEI"}</span><span class="tag">${data.disponivel_agora ? "Disponível agora" : "Disponibilidade sob consulta"}</span><span class="tag">${data.status || "em análise"}</span></div><div class="box"><h2>Contato</h2><p>${data.telefone || "-"}</p><p>${data.email || "-"}</p></div></aside><section><div class="box"><h2>Indicadores</h2><div class="metricas"><div class="metrica"><strong>${resumo?.total_eventos || 0}</strong><span>Eventos</span></div><div class="metrica"><strong>${resumo?.total_agencias || 0}</strong><span>Agências</span></div><div class="metrica"><strong>${resumo?.media_avaliacao || 0}</strong><span>Média</span></div><div class="metrica"><strong>${resumo?.total_faltas || 0}</strong><span>Faltas</span></div></div></div><div class="box"><h2>Perfil</h2>${linha("Nome documento",data.nome_documento)}${linha("Nome apresentação",data.nome_apresentacao)}${linha("Cidade/UF",(data.cidade||"-")+(data.estado?"/"+data.estado:""))}${linha("Funções",funcoes)}${linha("Idiomas",idiomaTexto)}${linha("Nível",data.nivel_experiencia)}${linha("Disponibilidade",data.disponibilidade_geral)}${linha("Cachê mínimo",data.valor_minimo_diaria?"R$ "+data.valor_minimo_diaria:"-")}</div><div class="box"><h2>Dados adicionais</h2>${linha("Altura",data.altura)}${linha("Peso",data.peso)}${linha("Veículo",data.possui_veiculo)}${linha("Camiseta",data.tamanho_camiseta)}${linha("Calçado",data.numero_calcado)}${linha("Observações",data.observacoes)}</div></section></section></main><script>window.onload=function(){setTimeout(function(){window.print()},400)}<\/script></body></html>`;
+
+  const janela = window.open("", "_blank");
+  if (!janela) {
+    alert("O navegador bloqueou a janela do PDF. Permita pop-ups para gerar o currículo.");
+    return;
+  }
+  janela.document.open();
+  janela.document.write(html);
+  janela.document.close();
 }
 
 async function confirmarBloqueioStaff() {

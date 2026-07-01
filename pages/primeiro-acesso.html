@@ -3,222 +3,421 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus - Trocar senha</title>
-  <link rel="stylesheet" href="../css/style.css?v=senha-termos-1">
+
+  <title>Notificações - Nexus</title>
+
+  <link rel="stylesheet" href="../css/style.css?v=nexus-v1-admin-pages-1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=senha-termos-1"></script>
+  <script src="../js/supabase.js?v=nexus-v1-admin-pages-1"></script>
+  <script src="../js/common.js?v=nexus-v1-admin-pages-1"></script>
 </head>
-<body>
 
-  <main class="login-container">
-    <section class="login-card">
+<body class="sistema-body">
+  <script>document.write(menuSistemaHTML("notificacoes"));</script>
 
-      <div class="logo-area">
-        <img src="../assets/logo.png" alt="Logo Nexus" class="logo">
-        <h1>NEXUS</h1>
-        <p class="marca"><span>JRT</span>ecnologia</p>
-      </div>
-
-      <form id="primeiroAcessoForm">
-        <div class="input-group">
-          <label for="novaSenha">Nova senha</label>
-          <input id="novaSenha" type="password" placeholder="Digite sua nova senha">
-        </div>
-
-        <div class="input-group">
-          <label for="confirmarSenha">Confirmar senha</label>
-          <input id="confirmarSenha" type="password" placeholder="Confirme sua nova senha">
-        </div>
-
-        <div class="box-aviso termos-box">
-          <label class="check-linha check-termo">
-            <input type="checkbox" id="aceiteTermosUso">
-            <span>Li e aceito os <button type="button" class="btn-termo-link" data-termo="uso">Termos de Uso</button></span>
-          </label>
-
-          <label class="check-linha check-termo">
-            <input type="checkbox" id="aceitePrivacidade">
-            <span>Li e aceito a <button type="button" class="btn-termo-link" data-termo="privacidade">Política de Privacidade/LGPD</button></span>
-          </label>
-        </div>
-
-        <button type="submit" id="btnSalvarSenha">Salvar nova senha</button>
-        <button type="button" class="btn-link-login" id="btnVoltarLogin">Voltar ao login</button>
-      </form>
-
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer-content">
-      <h3>Nexus v1.0</h3>
-      <p>© JRTecnologia - Soluções Criativas</p>
-      <p>Desenvolvido por Jessyca Rocha Tavares</p>
-    </div>
-  </footer>
-
-  <div class="modal-overlay" id="modalTermo">
-    <div class="modal-card modal-card-grande">
-      <div class="modal-header">
-        <div>
-          <h2 id="tituloTermo">Termo</h2>
-          <p>Leia antes de aceitar.</p>
-        </div>
-        <button class="btn-fechar" id="btnFecharTermo">×</button>
-      </div>
-
-      <div id="conteudoTermo" class="conteudo-termo"></div>
-
-      <div class="modal-actions">
-        <button id="btnLiTermo">Li e entendi</button>
-      </div>
-    </div>
+  <main class="conteudo">
+    
+<header class="topo">
+  <div>
+    <h1>Notificações</h1>
+    <p>Envio manual, avisos automáticos, push e acompanhamento de leitura.</p>
   </div>
 
+  <button class="btn-topo" id="btnNovaNotificacao">+ Nova notificação</button>
+</header>
+
+<section class="box-aviso">
+  <p><strong>Status:</strong> notificação interna funcionando. Push no app fechado depende da configuração VAPID/Edge Function. O app staff já pede permissão e registra o navegador.</p>
+</section>
+
+<section class="cards-dashboard">
+  <div class="card-info"><h3>Total</h3><strong id="notifTotal">0</strong><span>notificações</span></div>
+  <div class="card-info"><h3>Não lidas</h3><strong id="notifNaoLidas">0</strong><span>pendentes</span></div>
+  <div class="card-info"><h3>Push pendente</h3><strong id="notifPushPendente">0</strong><span>aguardando envio</span></div>
+  <div class="card-info"><h3>Push enviada</h3><strong id="notifPushEnviada">0</strong><span>enviadas</span></div>
+</section>
+
+<section class="painel-filtro">
+  <div class="campo-busca">
+    <span>🔍</span>
+    <input id="campoPesquisa" placeholder="Pesquisar título, mensagem, usuário ou origem">
+  </div>
+
+  <select id="filtroStatus" class="input-select" style="max-width:220px">
+    <option value="">Todos</option>
+    <option value="nao_lida">Não lida</option>
+    <option value="lida">Lida</option>
+  </select>
+
+  <div class="botoes-filtro">
+    <button id="btnPesquisar">Pesquisar</button>
+    <button class="btn-secundario-clean" id="btnMostrarTodas">Mostrar todas</button>
+  </div>
+</section>
+
+<section class="painel-lista">
+  <table class="tabela-simples">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Destino</th>
+        <th>Status</th>
+        <th>Push</th>
+        <th>Origem</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="listaNotificacoes">
+      <tr><td colspan="6">Pesquise ou clique em “Mostrar todas”.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="modal-overlay" id="modalNotificacao">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div>
+        <h2>Nova notificação</h2>
+        <p>Envie para um staff, todos os staffs ou staffs de um evento/casting.</p>
+      </div>
+
+      <button class="btn-fechar" id="btnFecharNotificacao">×</button>
+    </div>
+
+    <div class="modal-grid">
+      <div class="input-group">
+        <label>Destino</label>
+        <select id="tipoDestino">
+          <option value="staff">Um staff específico</option>
+          <option value="todos_staffs">Todos os staffs</option>
+          <option value="evento">Staffs de um evento/casting</option>
+        </select>
+      </div>
+
+      <div class="input-group" id="grupoStaffDestino">
+        <label>Staff</label>
+        <select id="staffDestino"></select>
+      </div>
+
+      <div class="input-group campo-escondido" id="grupoEventoDestino">
+        <label>Evento</label>
+        <select id="eventoDestino"></select>
+      </div>
+
+      <div class="input-group">
+        <label>Origem</label>
+        <select id="origem">
+          <option value="manual">Manual</option>
+          <option value="casting">Casting</option>
+          <option value="evento">Evento</option>
+          <option value="financeiro">Financeiro</option>
+          <option value="documento">Documento</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Título</label>
+      <input id="titulo" placeholder="Ex: Nova oportunidade no Nexus">
+    </div>
+
+    <div class="input-group">
+      <label>Mensagem</label>
+      <textarea id="mensagem" placeholder="Escreva a mensagem que o staff verá no app"></textarea>
+    </div>
+
+    <label class="check-linha">
+      <input type="checkbox" id="pushPendente" checked>
+      <span>Marcar para push quando a integração estiver ativa</span>
+    </label>
+
+    <div class="modal-actions">
+      <button class="btn-secundario-clean" id="btnCancelarNotificacao">Cancelar</button>
+      <button id="btnEnviarNotificacao">Enviar notificação</button>
+    </div>
+  </div>
+</div>
+
+  </main>
+
 <script>
-const usuarioLocal = JSON.parse(localStorage.getItem("nexus_usuario"));
-let termoAberto = null;
+const usuario = iniciarLayoutSistema("notificacoes");
 
-if (!usuarioLocal || !usuarioLocal.id) {
-  alert("Sessão não encontrada. Faça login novamente.");
-  window.location.href = "../index.html";
-}
 
-const textosTermos = {
-  uso: {
-    titulo: "Termos de Uso - Nexus",
-    html: `
-      <h3>1. Uso da plataforma</h3>
-      <p>O Nexus é uma plataforma para cadastro, consulta, seleção e gestão de profissionais para eventos.</p>
-      <h3>2. Responsabilidade</h3>
-      <p>Agências e usuários são responsáveis pelas informações cadastradas, seleção dos profissionais e validação de documentos.</p>
-      <h3>3. Conduta</h3>
-      <p>É proibido usar a plataforma para fraudes, informações falsas, assédio, discriminação ou qualquer prática irregular.</p>
-      <h3>4. Acesso</h3>
-      <p>O acesso pode ser suspenso em caso de uso indevido, inadimplência, informações inconsistentes ou violação das regras.</p>
-    `
-  },
-  privacidade: {
-    titulo: "Política de Privacidade/LGPD - Nexus",
-    html: `
-      <h3>1. Dados coletados</h3>
-      <p>O Nexus pode armazenar dados cadastrais, profissionais, documentos, disponibilidade, avaliações e histórico de eventos.</p>
-      <h3>2. Finalidade</h3>
-      <p>Os dados são usados para operação da plataforma, seleção de profissionais, gestão de eventos, contratos e relatórios.</p>
-      <h3>3. Compartilhamento</h3>
-      <p>Dados podem ser visualizados por usuários autorizados, conforme perfil de acesso e vínculo com evento, agência ou contratante.</p>
-      <h3>4. Segurança</h3>
-      <p>O acesso deve ser feito com credenciais individuais. Cada usuário é responsável por manter sua senha em segurança.</p>
-    `
-  }
-};
+if (usuario) {
+  let usuariosCache = [];
+  let staffsCache = [];
+  let eventosCache = [];
+  let castingCache = [];
+  let notificacoesCache = [];
 
-function abrirTermo(tipo) {
-  termoAberto = tipo;
-  document.getElementById("tituloTermo").textContent = textosTermos[tipo].titulo;
-  document.getElementById("conteudoTermo").innerHTML = textosTermos[tipo].html;
-  document.getElementById("modalTermo").classList.add("ativo");
-}
+  const modal = document.getElementById("modalNotificacao");
 
-function fecharTermo() {
-  document.getElementById("modalTermo").classList.remove("ativo");
-}
+  document.getElementById("btnNovaNotificacao").addEventListener("click", abrirModalNotificacao);
+  document.getElementById("btnFecharNotificacao").addEventListener("click", fecharModalNotificacao);
+  document.getElementById("btnCancelarNotificacao").addEventListener("click", fecharModalNotificacao);
+  document.getElementById("btnEnviarNotificacao").addEventListener("click", enviarNotificacao);
+  document.getElementById("btnPesquisar").addEventListener("click", () => carregarNotificacoes(false));
+  document.getElementById("btnMostrarTodas").addEventListener("click", () => carregarNotificacoes(true));
+  document.getElementById("filtroStatus").addEventListener("change", () => carregarNotificacoes(true));
+  document.getElementById("tipoDestino").addEventListener("change", atualizarDestino);
 
-document.querySelectorAll(".btn-termo-link").forEach(btn => {
-  btn.addEventListener("click", () => abrirTermo(btn.dataset.termo));
-});
-
-document.getElementById("btnFecharTermo").addEventListener("click", fecharTermo);
-document.getElementById("btnLiTermo").addEventListener("click", () => {
-  if (termoAberto === "uso") document.getElementById("aceiteTermosUso").checked = true;
-  if (termoAberto === "privacidade") document.getElementById("aceitePrivacidade").checked = true;
-  fecharTermo();
-});
-
-document.getElementById("btnVoltarLogin").addEventListener("click", () => {
-  localStorage.removeItem("nexus_usuario");
-  window.location.href = "../index.html";
-});
-
-document.getElementById("primeiroAcessoForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const btnSalvar = document.getElementById("btnSalvarSenha");
-  const novaSenha = document.getElementById("novaSenha").value.trim();
-  const confirmarSenha = document.getElementById("confirmarSenha").value.trim();
-  const aceiteTermosUso = document.getElementById("aceiteTermosUso").checked;
-  const aceitePrivacidade = document.getElementById("aceitePrivacidade").checked;
-
-  if (!novaSenha || !confirmarSenha) {
-    alert("Preencha a nova senha e a confirmação.");
-    return;
+  function abrirModalNotificacao() {
+    document.getElementById("titulo").value = "";
+    document.getElementById("mensagem").value = "";
+    document.getElementById("tipoDestino").value = "staff";
+    atualizarDestino();
+    modal.classList.add("ativo");
   }
 
-  if (novaSenha.length < 6) {
-    alert("A senha precisa ter pelo menos 6 caracteres.");
-    return;
+  function fecharModalNotificacao() {
+    modal.classList.remove("ativo");
   }
 
-  if (novaSenha !== confirmarSenha) {
-    alert("As senhas não conferem.");
-    return;
+  function atualizarDestino() {
+    const tipo = document.getElementById("tipoDestino").value;
+
+    document.getElementById("grupoStaffDestino").classList.toggle("campo-escondido", tipo !== "staff");
+    document.getElementById("grupoStaffDestino").classList.toggle("ativo", tipo === "staff");
+
+    document.getElementById("grupoEventoDestino").classList.toggle("campo-escondido", tipo !== "evento");
+    document.getElementById("grupoEventoDestino").classList.toggle("ativo", tipo === "evento");
   }
 
-  if (!aceiteTermosUso || !aceitePrivacidade) {
-    alert("Você precisa aceitar os dois termos para continuar.");
-    return;
-  }
-
-  btnSalvar.disabled = true;
-  btnSalvar.textContent = "Salvando...";
-
-  const { data: usuarioAtualizado, error: erroSenha } = await supabaseClient
-    .from("nexus_usuarios")
-    .update({
-      senha: novaSenha,
-      primeiro_acesso: false,
-      alterar_senha: false
-    })
-    .eq("id", usuarioLocal.id)
-    .select()
-    .single();
-
-  if (erroSenha) {
-    btnSalvar.disabled = false;
-    btnSalvar.textContent = "Salvar nova senha";
-    alert("Erro ao alterar senha: " + erroSenha.message);
-    return;
-  }
-
-  await supabaseClient
-    .from("nexus_aceites_termos")
-    .insert([
-      {
-        usuario_id: usuarioLocal.id,
-        termo: "termos_uso_nexus_v1",
-        aceite: true,
-        data_aceite: new Date().toISOString()
-      },
-      {
-        usuario_id: usuarioLocal.id,
-        termo: "politica_privacidade_lgpd_v1",
-        aceite: true,
-        data_aceite: new Date().toISOString()
-      }
+  async function carregarBases() {
+    const [usuarios, staffs, eventos, casting] = await Promise.all([
+      supabaseClient.from("nexus_usuarios").select("id,nome,email,tipo"),
+      supabaseClient.from("nexus_staffs").select("id,usuario_id,nome_apresentacao,nome_documento,email"),
+      supabaseClient.from("nexus_eventos").select("id,nome_evento,data_inicio,cidade,estado").order("data_inicio", { ascending: false }),
+      supabaseClient.from("nexus_casting_staffs").select("id,staff_id,evento_id")
     ]);
 
-  localStorage.setItem("nexus_usuario", JSON.stringify(usuarioAtualizado));
+    usuariosCache = usuarios.data || [];
+    staffsCache = staffs.data || [];
+    eventosCache = eventos.data || [];
+    castingCache = casting.data || [];
 
-  alert("Senha alterada com sucesso.");
+    document.getElementById("staffDestino").innerHTML =
+      `<option value="">Selecione</option>` +
+      staffsCache.map((staff) => `<option value="${staff.id}">${staff.nome_apresentacao || staff.nome_documento || staff.email}</option>`).join("");
 
-  if (usuarioAtualizado.tipo === "master" || usuarioAtualizado.tipo === "agencia") {
-    window.location.href = "dashboard-master.html";
-    return;
+    document.getElementById("eventoDestino").innerHTML =
+      `<option value="">Selecione</option>` +
+      eventosCache.map((evento) => `<option value="${evento.id}">${evento.nome_evento || "Evento"} • ${dataBR(evento.data_inicio)}</option>`).join("");
   }
 
-  window.location.href = "../index.html";
-});
-</script>
+  function usuariosDestino() {
+    const tipo = document.getElementById("tipoDestino").value;
 
+    if (tipo === "staff") {
+      const staffId = document.getElementById("staffDestino").value;
+      const staff = staffsCache.find((item) => item.id === staffId);
+      return staff?.usuario_id ? [{ usuario_id: staff.usuario_id, staff_id: staff.id }] : [];
+    }
+
+    if (tipo === "todos_staffs") {
+      return staffsCache
+        .filter((staff) => !!staff.usuario_id)
+        .map((staff) => ({ usuario_id: staff.usuario_id, staff_id: staff.id }));
+    }
+
+    if (tipo === "evento") {
+      const eventoId = document.getElementById("eventoDestino").value;
+      const staffIds = castingCache.filter((item) => item.evento_id === eventoId).map((item) => item.staff_id);
+
+      return staffsCache
+        .filter((staff) => staffIds.includes(staff.id) && !!staff.usuario_id)
+        .map((staff) => ({ usuario_id: staff.usuario_id, staff_id: staff.id }));
+    }
+
+    return [];
+  }
+
+  async function enviarNotificacao() {
+    const titulo = document.getElementById("titulo").value.trim();
+    const mensagem = document.getElementById("mensagem").value.trim();
+
+    if (!titulo || !mensagem) {
+      alert("Preencha título e mensagem.");
+      return;
+    }
+
+    const destinos = usuariosDestino();
+
+    if (!destinos.length) {
+      alert("Nenhum destino encontrado para essa seleção.");
+      return;
+    }
+
+    const payload = destinos.map((destino) => ({
+      usuario_id: destino.usuario_id,
+      staff_id: destino.staff_id,
+      titulo,
+      mensagem,
+      origem: document.getElementById("origem").value,
+      status: "nao_lida",
+      push_status: document.getElementById("pushPendente").checked ? "pendente" : "manual",
+      push_enviada: false,
+      url_alvo: "app-staff.html"
+    }));
+
+    const { error } = await supabaseClient
+      .from("nexus_notificacoes_usuarios")
+      .insert(payload);
+
+    if (error) {
+      alert("Erro ao enviar: " + error.message);
+      return;
+    }
+
+    fecharModalNotificacao();
+    carregarNotificacoes(true);
+    alert(`Notificação enviada para ${payload.length} usuário(s).`);
+  }
+
+  async function carregarNotificacoes(mostrar = false) {
+    const termo = document.getElementById("campoPesquisa").value.trim().toLowerCase();
+    const status = document.getElementById("filtroStatus").value;
+
+    if (!mostrar && !termo && !status) {
+      document.getElementById("listaNotificacoes").innerHTML =
+        `<tr><td colspan="6">Pesquise ou clique em “Mostrar todas”.</td></tr>`;
+      return;
+    }
+
+    let query = supabaseClient
+      .from("nexus_notificacoes_usuarios")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(300);
+
+    if (status) {
+      query = query.eq("status", status);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      alert("Erro ao carregar notificações: " + error.message);
+      return;
+    }
+
+    notificacoesCache = (data || []).map((notificacao) => ({
+      ...notificacao,
+      usuario: usuariosCache.find((item) => item.id === notificacao.usuario_id),
+      staff: staffsCache.find((item) => item.id === notificacao.staff_id)
+    }));
+
+    let lista = notificacoesCache;
+
+    if (termo) {
+      lista = lista.filter((item) =>
+        [
+          item.titulo,
+          item.mensagem,
+          item.origem,
+          item.status,
+          item.push_status,
+          item.usuario?.nome,
+          item.usuario?.email,
+          item.staff?.nome_apresentacao,
+          item.staff?.nome_documento
+        ].join(" ").toLowerCase().includes(termo)
+      );
+    }
+
+    renderizarNotificacoes(lista);
+    carregarResumo(lista);
+  }
+
+  function carregarResumo(lista = notificacoesCache) {
+    document.getElementById("notifTotal").textContent = lista.length;
+    document.getElementById("notifNaoLidas").textContent = lista.filter((item) => item.status === "nao_lida").length;
+    document.getElementById("notifPushPendente").textContent = lista.filter((item) => item.push_status === "pendente" && !item.push_enviada).length;
+    document.getElementById("notifPushEnviada").textContent = lista.filter((item) => item.push_enviada).length;
+  }
+
+  function renderizarNotificacoes(lista) {
+    const tbody = document.getElementById("listaNotificacoes");
+
+    if (!lista.length) {
+      tbody.innerHTML = `<tr><td colspan="6">Nenhuma notificação encontrada.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = lista.map((item) => `
+      <tr>
+        <td>
+          <strong>${item.titulo || "-"}</strong><br>
+          <span class="texto-fraco">${item.mensagem || ""}</span>
+        </td>
+        <td>${item.staff?.nome_apresentacao || item.staff?.nome_documento || item.usuario?.nome || item.usuario?.email || "-"}</td>
+        <td><span class="badge-status ${item.status || ""}">${item.status || "-"}</span></td>
+        <td>${item.push_status || "-"} ${item.push_enviada ? "✅" : ""}</td>
+        <td>${item.origem || "-"}</td>
+        <td>
+          <button class="btn-secundario-clean" onclick="marcarLida('${item.id}')">Lida</button>
+          <button onclick="reenviarPush('${item.id}')">Push pendente</button>
+          <button class="btn-alerta" onclick="excluirNotificacao('${item.id}')">Excluir</button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  window.marcarLida = async function marcarLida(id) {
+    const { error } = await supabaseClient
+      .from("nexus_notificacoes_usuarios")
+      .update({
+        status: "lida",
+        data_leitura: new Date().toISOString()
+      })
+      .eq("id", id);
+
+    if (error) {
+      alert("Erro ao marcar como lida: " + error.message);
+      return;
+    }
+
+    carregarNotificacoes(true);
+  };
+
+  window.reenviarPush = async function reenviarPush(id) {
+    const { error } = await supabaseClient
+      .from("nexus_notificacoes_usuarios")
+      .update({
+        push_status: "pendente",
+        push_enviada: false,
+        push_erro: null
+      })
+      .eq("id", id);
+
+    if (error) {
+      alert("Erro ao marcar push: " + error.message);
+      return;
+    }
+
+    carregarNotificacoes(true);
+  };
+
+  window.excluirNotificacao = async function excluirNotificacao(id) {
+    if (!confirm("Excluir esta notificação?")) return;
+
+    const { error } = await supabaseClient
+      .from("nexus_notificacoes_usuarios")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      alert("Erro ao excluir: " + error.message);
+      return;
+    }
+
+    carregarNotificacoes(true);
+  };
+
+  carregarBases().then(() => carregarResumo([]));
+}
+
+</script>
 </body>
 </html>

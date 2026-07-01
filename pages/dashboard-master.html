@@ -5,9 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Nexus</title>
 
-  <link rel="stylesheet" href="../css/style.css?v=rotas-master-3">
+  <link rel="stylesheet" href="../css/style.css?v=fluxo-v2">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js?v=rotas-master-3"></script>
+  <script src="../js/supabase.js?v=fluxo-v2"></script>
+
+  <link rel="manifest" href="../manifest.json?v=nexus-v1-admin-pages-1">
+  <meta name="theme-color" content="#050505">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Nexus">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Nexus">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=nexus-v1-admin-pages-1">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/logo-192.png?v=nexus-v1-admin-pages-1">
+  <link rel="icon" type="image/png" sizes="512x512" href="../assets/logo-512.png?v=nexus-v1-admin-pages-1">
+
 </head>
 
 <body class="sistema-body">
@@ -29,17 +41,17 @@
     </div>
 
     <nav class="menu">
-      <a href="dashboard-master.html?v=rotas-master-3" data-menu="dashboard" class="ativo"><span class="menu-ico">🏠</span><span class="menu-text">Dashboard</span></a>
-      <a href="agencias.html?v=rotas-master-3" data-menu="agencias"><span class="menu-ico">🏢</span><span class="menu-text">Agências</span></a>
-      <a href="talentos.html?v=rotas-master-3" data-menu="talentos"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a>
-      <a href="eventos.html?v=rotas-master-3" data-menu="eventos"><span class="menu-ico">📅</span><span class="menu-text">Eventos</span></a>
-      <a href="casting.html?v=rotas-master-3" data-menu="casting"><span class="menu-ico">⭐</span><span class="menu-text">Casting</span></a>
-      <a href="#"><span class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a>
-      <a href="#"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a>
-      <a href="#"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a>
-      <a href="#"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a>
-      <a href="#"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a>
-      <a href="#"><span class="menu-ico">⚙️</span><span class="menu-text">Configurações</span></a>
+      <a href="dashboard-master.html?v=fluxo-v2" data-menu="dashboard" class="ativo"><span class="menu-ico">🏠</span><span class="menu-text">Dashboard</span></a>
+      <a href="agencias.html?v=fluxo-v2" data-menu="agencias"><span class="menu-ico">🏢</span><span class="menu-text">Agências</span></a>
+      <a href="talentos.html?v=fluxo-v2" data-menu="talentos"><span class="menu-ico">👥</span><span class="menu-text">Talentos</span></a>
+      <a href="eventos.html?v=fluxo-v2" data-menu="eventos"><span class="menu-ico">📅</span><span class="menu-text">Eventos</span></a>
+      <a href="casting.html?v=fluxo-v2" data-menu="casting"><span class="menu-ico">⭐</span><span class="menu-text">Casting</span></a>
+      <a href="contratantes.html?v=fluxo-v2" data-menu="contratantes"><span class="menu-ico">🏢</span><span class="menu-text">Contratantes</span></a>
+      <a href="documentos.html?v=fluxo-v2" data-menu="documentos"><span class="menu-ico">📄</span><span class="menu-text">Documentos</span></a>
+      <a href="notificacoes.html?v=fluxo-v2" data-menu="notificacoes"><span class="menu-ico">🔔</span><span class="menu-text">Notificações</span></a>
+      <a href="financeiro.html?v=fluxo-v2" data-menu="financeiro"><span class="menu-ico">💳</span><span class="menu-text">Financeiro</span></a>
+      <a href="relatorios.html?v=fluxo-v2" data-menu="relatorios"><span class="menu-ico">📊</span><span class="menu-text">Relatórios</span></a>
+      <a href="configuracoes.html?v=fluxo-v2" data-menu="configuracoes"><span class="menu-ico">⚙️</span><span class="menu-text">Configurações</span></a>
     </nav>
 
     <div class="sidebar-footer">
@@ -101,12 +113,12 @@
       <h2>Ações rápidas</h2>
 
       <div class="atalhos-grid">
-        <button onclick="window.location.href='agencias.html?v=rotas-master-3'">Criar Agência</button>
-        <button onclick="window.location.href='eventos.html?v=rotas-master-3'">Criar Evento</button>
-        <button onclick="window.location.href='talentos.html?v=rotas-master-3'">Ver Talentos</button>
-        <button onclick="window.location.href='casting.html?v=rotas-master-3'">Ver Casting</button>
-        <button onclick="window.location.href='cadastro-staff.html?v=rotas-master-3'">Cadastrar Staff Teste</button>
-        <button>Relatórios</button>
+        <button onclick="window.location.href='agencias.html?v=fluxo-v2'">Criar Agência</button>
+        <button onclick="window.location.href='eventos.html?v=fluxo-v2'">Criar Evento</button>
+        <button onclick="window.location.href='talentos.html?v=fluxo-v2'">Ver Talentos</button>
+        <button onclick="window.location.href='casting.html?v=fluxo-v2'">Ver Casting</button>
+        <button onclick="window.location.href='cadastro-staff.html?v=fluxo-v2'">Cadastrar Staff Teste</button>
+        <button onclick="window.location.href='relatorios.html'">Relatórios</button>
       </div>
     </section>
 
@@ -139,7 +151,7 @@ if (!usuario) {
   const tipo = String(usuario.tipo || "").toLowerCase();
 
   if (tipo === "staff") {
-    window.location.replace("app-staff.html?v=rotas-master-3");
+    window.location.replace("app-staff.html?v=fluxo-v2");
   }
 
   if (!["master", "agencia", "contratante"].includes(tipo)) {

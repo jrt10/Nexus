@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Configurações - Nexus</title>
+
+  <link rel="stylesheet" href="../css/style.css?v=nexus-v1-admin-pages-1">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js?v=nexus-v1-admin-pages-1"></script>
+  <script src="../js/common.js?v=nexus-v1-admin-pages-1"></script>
+</head>
+
+<body class="sistema-body">
+  <script>document.write(menuSistemaHTML("configuracoes"));</script>
+
+  <main class="conteudo">
+    
+<header class="topo">
+  <div>
+    <h1>Configurações</h1>
+    <p>Catálogos, funções, textos, planos e parâmetros do Nexus.</p>
+  </div>
+
+  <button class="btn-topo" id="btnSalvarConfiguracoes">Salvar textos</button>
+</header>
+
+<section class="config-grid">
+  <div class="config-card">
+    <h2>Funções padrão</h2>
+    <p>Catálogo usado no cadastro de staff e nos filtros do banco de talentos.</p>
+
+    <div class="input-group">
+      <label>Categoria</label>
+      <input id="categoriaFuncao" placeholder="Ex: Eventos">
+    </div>
+
+    <div class="input-group">
+      <label>Nova função</label>
+      <input id="novaFuncao" placeholder="Ex: Coordenador bilíngue">
+    </div>
+
+    <button id="btnAdicionarFuncao">Adicionar função</button>
+  </div>
+
+  <div class="config-card">
+    <h2>Texto do app</h2>
+    <p>Frase exibida no app staff sobre notificações.</p>
+
+    <div class="input-group">
+      <label>Frase</label>
+      <textarea id="fraseApp">Para receber notificações de oportunidades, adicione o Nexus à tela inicial do celular e ative as notificações.</textarea>
+    </div>
+  </div>
+
+  <div class="config-card">
+    <h2>Termos</h2>
+    <p>Textos exibidos nos links de aceite.</p>
+
+    <div class="input-group">
+      <label>Termos de Uso</label>
+      <textarea id="textoTermos"></textarea>
+    </div>
+
+    <div class="input-group">
+      <label>Política de Privacidade/LGPD</label>
+      <textarea id="textoPrivacidade"></textarea>
+    </div>
+  </div>
+
+  <div class="config-card">
+    <h2>Planos</h2>
+    <p>Valores de referência para financeiro.</p>
+
+    <div class="modal-grid">
+      <div class="input-group">
+        <label>Mensal</label>
+        <input id="valorMensal" type="number" step="0.01" value="297">
+      </div>
+
+      <div class="input-group">
+        <label>Trimestral</label>
+        <input id="valorTrimestral" type="number" step="0.01" value="747">
+      </div>
+
+      <div class="input-group">
+        <label>Anual</label>
+        <input id="valorAnual" type="number" step="0.01" value="2388">
+      </div>
+
+      <div class="input-group">
+        <label>Staff Premium</label>
+        <input id="valorStaffPremium" type="number" step="0.01" value="19.90">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="painel-lista">
+  <h2>Funções cadastradas</h2>
+
+  <table class="tabela-simples">
+    <thead>
+      <tr>
+        <th>Categoria</th>
+        <th>Função</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="listaFuncoes">
+      <tr><td colspan="4">Carregando...</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="painel-lista">
+  <h2>Configurações salvas</h2>
+
+  <table class="tabela-simples">
+    <thead>
+      <tr>
+        <th>Chave</th>
+        <th>Valor</th>
+        <th>Atualização</th>
+      </tr>
+    </thead>
+    <tbody id="listaConfiguracoes">
+      <tr><td colspan="3">Carregando...</td></tr>
+    </tbody>
+  </table>
+</section>
+
+  </main>
+
+<script>
+const usuario = iniciarLayoutSistema("configuracoes");
+
+
+if (usuario) {
+  document.getElementById("btnAdicionarFuncao").addEventListener("click", adicionarFuncao);
+  document.getElementById("btnSalvarConfiguracoes").addEventListener("click", salvarConfiguracoes);
+
+  async function carregarConfiguracoes() {
+    const { data, error } = await supabaseClient
+      .from("nexus_configuracoes")
+      .select("*")
+      .order("chave", { ascending: true });
+
+    if (error) {
+      console.warn(error);
+      return;
+    }
+
+    const mapa = {};
+    (data || []).forEach((item) => mapa[item.chave] = item.valor);
+
+    if (mapa.frase_app_notificacao) document.getElementById("fraseApp").value = mapa.frase_app_notificacao;
+    if (mapa.termos_uso) document.getElementById("textoTermos").value = mapa.termos_uso;
+    if (mapa.politica_privacidade) document.getElementById("textoPrivacidade").value = mapa.politica_privacidade;
+    if (mapa.valor_plano_mensal) document.getElementById("valorMensal").value = mapa.valor_plano_mensal;
+    if (mapa.valor_plano_trimestral) document.getElementById("valorTrimestral").value = mapa.valor_plano_trimestral;
+    if (mapa.valor_plano_anual) document.getElementById("valorAnual").value = mapa.valor_plano_anual;
+    if (mapa.valor_staff_premium) document.getElementById("valorStaffPremium").value = mapa.valor_staff_premium;
+
+    document.getElementById("listaConfiguracoes").innerHTML = data && data.length
+      ? data.map((item) => `
+        <tr>
+          <td>${item.chave || "-"}</td>
+          <td>${(item.valor || "").slice(0, 120)}${(item.valor || "").length > 120 ? "..." : ""}</td>
+          <td>${item.updated_at ? new Date(item.updated_at).toLocaleString("pt-BR") : "-"}</td>
+        </tr>
+      `).join("")
+      : `<tr><td colspan="3">Nenhuma configuração salva.</td></tr>`;
+  }
+
+  async function salvarConfiguracoes() {
+    const payload = [
+      {
+        chave: "frase_app_notificacao",
+        valor: document.getElementById("fraseApp").value.trim(),
+        categoria: "app",
+        descricao: "Frase exibida no app staff"
+      },
+      {
+        chave: "termos_uso",
+        valor: document.getElementById("textoTermos").value.trim(),
+        categoria: "termos",
+        descricao: "Termos de uso do Nexus"
+      },
+      {
+        chave: "politica_privacidade",
+        valor: document.getElementById("textoPrivacidade").value.trim(),
+        categoria: "termos",
+        descricao: "Política de privacidade/LGPD"
+      },
+      {
+        chave: "valor_plano_mensal",
+        valor: document.getElementById("valorMensal").value,
+        categoria: "financeiro",
+        descricao: "Valor plano mensal"
+      },
+      {
+        chave: "valor_plano_trimestral",
+        valor: document.getElementById("valorTrimestral").value,
+        categoria: "financeiro",
+        descricao: "Valor plano trimestral"
+      },
+      {
+        chave: "valor_plano_anual",
+        valor: document.getElementById("valorAnual").value,
+        categoria: "financeiro",
+        descricao: "Valor plano anual"
+      },
+      {
+        chave: "valor_staff_premium",
+        valor: document.getElementById("valorStaffPremium").value,
+        categoria: "financeiro",
+        descricao: "Valor plano staff premium"
+      }
+    ].map((item) => ({
+      ...item,
+      updated_at: new Date().toISOString()
+    }));
+
+    const { error } = await supabaseClient
+      .from("nexus_configuracoes")
+      .upsert(payload, { onConflict: "chave" });
+
+    if (error) {
+      alert("Erro ao salvar configurações: " + error.message);
+      return;
+    }
+
+    alert("Configurações salvas.");
+    carregarConfiguracoes();
+  }
+
+  async function adicionarFuncao() {
+    const categoria = document.getElementById("categoriaFuncao").value.trim() || "Geral";
+    const nome = document.getElementById("novaFuncao").value.trim();
+
+    if (!nome) {
+      alert("Informe a função.");
+      return;
+    }
+
+    const { error } = await supabaseClient
+      .from("nexus_funcoes_catalogo")
+      .insert({
+        categoria,
+        nome_funcao: nome,
+        ativo: true
+      });
+
+    if (error) {
+      alert("Erro ao adicionar função: " + error.message);
+      return;
+    }
+
+    document.getElementById("novaFuncao").value = "";
+    carregarFuncoes();
+  }
+
+  async function carregarFuncoes() {
+    const { data, error } = await supabaseClient
+      .from("nexus_funcoes_catalogo")
+      .select("*")
+      .order("categoria", { ascending: true })
+      .order("nome_funcao", { ascending: true });
+
+    if (error) {
+      alert("Erro ao carregar funções: " + error.message);
+      return;
+    }
+
+    document.getElementById("listaFuncoes").innerHTML = data && data.length
+      ? data.map((item) => `
+        <tr>
+          <td>${item.categoria || "-"}</td>
+          <td>${item.nome_funcao || "-"}</td>
+          <td>${item.ativo ? "Ativo" : "Inativo"}</td>
+          <td>
+            <button class="btn-secundario-clean" onclick="alternarFuncao('${item.id}', ${item.ativo ? "false" : "true"})">${item.ativo ? "Desativar" : "Ativar"}</button>
+            <button class="btn-alerta" onclick="excluirFuncao('${item.id}')">Excluir</button>
+          </td>
+        </tr>
+      `).join("")
+      : `<tr><td colspan="4">Nenhuma função cadastrada.</td></tr>`;
+  }
+
+  window.alternarFuncao = async function alternarFuncao(id, ativo) {
+    const { error } = await supabaseClient
+      .from("nexus_funcoes_catalogo")
+      .update({ ativo })
+      .eq("id", id);
+
+    if (error) {
+      alert("Erro ao alterar função: " + error.message);
+      return;
+    }
+
+    carregarFuncoes();
+  };
+
+  window.excluirFuncao = async function excluirFuncao(id) {
+    if (!confirm("Excluir esta função do catálogo?")) return;
+
+    const { error } = await supabaseClient
+      .from("nexus_funcoes_catalogo")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      alert("Erro ao excluir: " + error.message);
+      return;
+    }
+
+    carregarFuncoes();
+  };
+
+  carregarFuncoes();
+  carregarConfiguracoes();
+}
+
+</script>
+</body>
+</html>
